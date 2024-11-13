@@ -11,17 +11,17 @@
                     </label>
                     <form method="#" action="#" class="mt-5">
                         <div class="input-group relative mb-5">
-                            <input required="" type="text" name="text" autocomplete="off" class="input" [required]="true">
+                            <input [(ngModel)]="email" type="text" name="text" autocomplete="off" class="input" [required]="true">
                             <label class="user-label">Correo electrónico</label>
                         </div>
 
                         <div class="input-group relative mb-5">
-                            <input required="" type="password" name="text" autocomplete="off" class="input" [required]="true">
+                            <input [(ngModel)]="password" type="password" name="text" autocomplete="off" class="input" [required]="true">
                             <label class="user-label">Contraseña</label>
                         </div>
             
                         <div class="mt-7">
-                            <button class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out font-semibold transform hover:-translate-x hover:scale-105">
+                            <button (click)="login()" class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out font-semibold transform hover:-translate-x hover:scale-105">
                                 Ingresar
                             </button>
                         </div>
