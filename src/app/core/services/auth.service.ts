@@ -7,47 +7,95 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private LOGIN_URL = 'http://localhost:8080/api/auth/login';
+  private LOGIN_URL = 'http://localhost:8080/api/v1/auth/login';
   private tokenKey = 'authToken';
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
-  
-  login(email: string, password:string): Observable<any>{
-    return this.httpClient.post<any>(this.LOGIN_URL,{email, password}).pipe(
+  private REFRESH_URL = 'http://localhost:8080/api/v1/auth/refresh';
+  private refreshTokenKey = 'refreshToken';
+
+  constructor(private httpClient: HttpClient, private router: Router) { }
+
+  login(email: string, password: string): Observable<any>{
+    return this.httpClient.post<any>(this.LOGIN_URL, {email, password}).pipe(
       tap(response => {
-        if (response.token) {
-          console.log(response.token)    
-          this.setToken(response.token)      
+        if(response.token){
+          console.log(response.token);
+          this.setToken(response.token);
+          this.setRefreshToken(response.refreshToken)
+          this.autoRefreshToken();
         }
       })
     )
   }
 
-  private setToken(token:string):void{
+  private setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
-  }
+  } 
 
-  private getToken():String | null{
+  private getToken(): string | null {
     if(typeof window !== 'undefined'){
       return localStorage.getItem(this.tokenKey);
-    }else{
+    }else {
       return null;
     }
   }
 
-  isAuthenticated():boolean{
+  private setRefreshToken(token: string): void {
+    localStorage.setItem(this.refreshTokenKey, token);
+  } 
+
+  private getRefreshToken(): string | null {
+    if(typeof window !== 'undefined'){
+      return localStorage.getItem(this.refreshTokenKey);
+    }else {
+      return null;
+    }
+  }
+
+  refreshToken(): Observable<any> {
+    const refreshToken = this.getRefreshToken();
+    return this.httpClient.post<any>(this.REFRESH_URL, { refreshToken: refreshToken }).pipe(
+      tap(response => {
+        if (response.token) {
+          console.log('Refresh token'+response.token);
+          this.setToken(response.token);
+          this.setRefreshToken(response.refreshToken);
+          this.autoRefreshToken();
+        }
+      })
+    );
+  }
+  
+
+  autoRefreshToken(): void {
     const token = this.getToken();
-    if (!token) {
+    if(!token){
+      return;
+    }
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const exp = payload.exp * 1000;
+
+    const timeout = exp - Date.now() - (60 * 1000);
+
+    setTimeout(() => {
+      this.refreshToken().subscribe()
+    }, timeout);
+   
+  }
+
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    if(!token){
       return false;
     }
-
-    const payload = JSON.parse(atob(token.split('.')[1]))
+    const payload = JSON.parse(atob(token.split('.')[1]));
     const exp = payload.exp * 1000;
     return Date.now() < exp;
   }
 
   logout(): void{
     localStorage.removeItem(this.tokenKey);
-    this.router.navigate(['login']);
+    localStorage.removeItem(this.refreshTokenKey);
+    this.router.navigate(['/login']);
   }
 }
