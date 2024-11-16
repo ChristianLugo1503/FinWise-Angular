@@ -3,20 +3,20 @@
         <div class="bg-[#0A1232]">
             <h1 class="relative text-white text-5xl p-5"><b>Fin</b>Wise</h1>
         </div>
-        <div class="relative flex flex-col sm:justify-center items-center bg-[#0A1232] h-full ">
-            <div class="relative sm:max-w-lg w-full">
-                <div class="relative w-full rounded-3xl  px-6 py-4">
+        <div class="relative flex flex-col sm:justify-center items-center bg-[#0A1232] h-full">
+            <div class="relative sm:max-w-lg w-full h-full mt-10">
+                <div class="relative w-full px-6 py-4">
                     <label for="" class="block mt-3 text-2xl text-white font-extrabold">
                         Iniciar sesión
                     </label>
-                    <form method="#" action="#" class="mt-5">
+                    <form [formGroup]="form()" action="#" class="mt-5">
                         <div class="input-group relative mb-5">
-                            <input [(ngModel)]="email" type="text" name="text" autocomplete="off" class="input" [required]="true">
+                            <input formControlName="email" type="text" name="text" autocomplete="off" class="input" >
                             <label class="user-label">Correo electrónico</label>
                         </div>
 
                         <div class="input-group relative mb-5">
-                            <input [(ngModel)]="password" type="password" name="text" autocomplete="off" class="input" [required]="true">
+                            <input formControlName="password" type="password" name="text" autocomplete="off" class="input">
                             <label class="user-label">Contraseña</label>
                         </div>
             
@@ -35,6 +35,8 @@
                             </div>
                         </div>
                     </form>
+                    <pre>{{form().value | json}}</pre>
+                    <pre>{{form().valid}}</pre>
                 </div>
             </div>
         </div>
