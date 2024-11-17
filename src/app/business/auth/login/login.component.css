@@ -34,3 +34,19 @@
     padding: 0 .2em;
     color: #ffffff;
    }
+
+   .input.error{
+    border: solid 1.5px #C92628;
+    border-radius: .5rem;
+    background: none;
+    padding: 1rem;
+    font-size: 1rem;
+    color: #ffffff;
+    transition: border 150ms cubic-bezier(0.4,0,0.2,1);
+    width: 100%;
+   }
+
+   .input.error ~ label{
+        color: #C92628 ;
+   }
+   

@@ -39,6 +39,11 @@ export default class LoginComponent {
     })
   }
 
+  hasRequiredError(fiel: string){
+    const control = this.form().get(fiel);
+    return control?.hasError('required') && control.touched
+  }
+
 }
 
 
