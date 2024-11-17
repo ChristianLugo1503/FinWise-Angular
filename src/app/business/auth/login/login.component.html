@@ -11,35 +11,29 @@
                     </label>
                     <form [formGroup]="form()" action="#" class="mt-5">
                         <div class="input-group relative mb-9">
-                            <input formControlName="email" type="text" name="text" autocomplete="off" class="input" >
-                            <label class="user-label" >Correo electrónico</label>
-                           
-                            <div *ngIf="hasRequiredError('email')" class=" absolute flex items-center mt-1 text-sm text-red-600 " role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="w-full">
+                                <input [ngClass]="{'error': checkEmail() !== ''}"  formControlName="email" type="text" name="text" autocomplete="off" class="input" >
+                                <label class="user-label" >Correo electrónico</label>
+                            </div>
+                            <div *ngIf="checkEmail()" class="absolute top-5 end-0 text-sm text-red-600" role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3 cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <title>{{checkEmail()}}</title>
                                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                                 </svg>
-                                <span class="sr-only">Info</span>
-                                <div>
-                                    <span class="font-medium">Correo electrónico requerido!</span>
-                                </div>
                             </div>
-
                         </div>
 
                         <div class="input-group relative mb-9">
-                            <input formControlName="password" type="password" name="text" autocomplete="off" class="input">
-                            <label class="user-label">Contraseña</label>
-
-                            <div *ngIf="hasRequiredError('password')" class=" absolute flex items-center mt-1 text-sm text-red-600 " role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="w-full">
+                                <input [ngClass]="{'error': hasRequiredError('password')}"  formControlName="password" type="password" name="text" autocomplete="off" class="input" >
+                                <label class="user-label" >Contraseña</label>
+                            </div>
+                            <div *ngIf="hasRequiredError('password')" class="absolute top-5 end-0 text-sm text-red-600" role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3 cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <title>Contraseña requerida!</title>
                                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                                 </svg>
-                                <span class="sr-only">Info</span>
-                                <div>
-                                    <span class="font-medium">Contraseña requerida!</span>
-                                </div>
                             </div>
-
                         </div>
             
                         <div class="mt-7">
@@ -47,17 +41,16 @@
                                 Ingresar
                             </button>
                         </div>
-            
-                        <div class="mt-7">
-                            <div class="flex justify-center items-center">
-                                <label class="mr-2 text-white" >¿Aun no tienes cuenta?</label>
-                                <a href="#" class=" text-[#FF8682] transition duration-300 ease-in-out  transform hover:-translate-x hover:scale-105 font-semibold">
-                                    Registrate!
-                                </a>
-                            </div>
-                        </div>
                         
                     </form>
+                    <div class="mt-7">
+                        <div class="flex justify-center items-center">
+                            <label class="mr-2 text-white" >¿Aun no tienes cuenta?</label>
+                            <a (click)="openRegister()" class="cursor-pointer text-[#FF8682] transition duration-300 ease-in-out  transform hover:-translate-x hover:scale-105 font-semibold">
+                                Registrate!
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

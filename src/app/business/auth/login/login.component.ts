@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 export default class LoginComponent {
   form = signal<FormGroup>(
     new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
       password: new FormControl('', [Validators.required])
     })
   );
@@ -39,9 +39,24 @@ export default class LoginComponent {
     })
   }
 
+  checkEmail():string{
+    const control = this.form().get('email');
+    if (control?.hasError('required') && control.touched) {
+      return 'Correo requerido!';
+    }else if(control?.hasError('pattern')){
+      return 'Correo inválido: (ejemplo@dominio.com).';
+    }else{
+      return '';
+    }
+  }
+
   hasRequiredError(fiel: string){
     const control = this.form().get(fiel);
     return control?.hasError('required') && control.touched
+  }
+
+  openRegister(){
+    this.router.navigate(['/register'])
   }
 
 }
