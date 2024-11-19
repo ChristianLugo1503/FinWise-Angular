@@ -1,13 +1,22 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    ReactiveFormsModule, 
+    AlertComponent, 
+    MatButtonModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -19,24 +28,41 @@ export default class LoginComponent {
     })
   );
 
-  constructor(private authService: AuthService, private router: Router){}
+  constructor(private authService: AuthService, private router: Router, public dialog: MatDialog){}
 
   login(): void {
-    const {email, password} = this.form().value;
-    //console.log(email,password)
-    this.authService.login(email, password).subscribe({
-      next: (response)=> {
+    this.authService.login(this.form().value).subscribe({
+      next: (response) => {
+        console.log('Login successful', response);
         const token = response.token;
         const payload = JSON.parse(atob(token.split('.')[1]));
         const role = payload.role;
-        if(role === 'admin') {
-          this.router.navigate(['/dashboard'])
-        }else {
-          this.router.navigate(['/profile'])
+  
+        if (role === 'admin') {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/profile']);
         }
       },
-      error: (err) => console.error('Login failed', err)
-    })
+      error: (err) => {
+        if (err.status === 401 && err.error?.error) {
+          // Verificar el tipo de error basado en el campo "error"
+          switch (err.error.error) {
+            case 'Email not found':
+              this.openCustomDialog('Error','La dirección de correo proporcionada no pertenece a ningún usuario.','error');
+              break;
+            case 'Incorrect password':
+              this.openCustomDialog('Error','La contraseña ingresada es incorrecta. Por favor, verifica tus datos e inténtalo nuevamente.','error');
+              break;
+            default:
+              this.openCustomDialog('Error','Por favor revise sus credenciales.','error');
+          }
+        } else {
+          console.error('Unexpected error:', err);
+          this.openCustomDialog('Error','Se ha producido un error inesperado. Inténtelo de nuevo más tarde.','error');
+        }
+      },
+    });
   }
 
   checkEmail():string{
@@ -59,6 +85,15 @@ export default class LoginComponent {
     this.router.navigate(['/register'])
   }
 
+  openCustomDialog(titulo:string, mensage:string, icono:string): void {
+    this.dialog.open(AlertComponent, {
+        data: {
+        title:titulo,
+        message: mensage,
+        icon: icono
+      }
+    });
+  }
 }
 
 

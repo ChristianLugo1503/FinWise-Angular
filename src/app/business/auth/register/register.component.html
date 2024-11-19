@@ -82,7 +82,7 @@
                         </div>
             
                         <div class="mt-7">
-                            <button [disabled]="form().invalid || checkconfPassword() !== ''" class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x hover:enabled:scale-105 disabled:opacity-75 disabled:cursor-not-allowed">
+                            <button (click)="register()" [disabled]="form().invalid || checkconfPassword() !== ''" class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x hover:enabled:scale-105 disabled:opacity-75 disabled:cursor-not-allowed">
                                 Ingresar
                             </button>
                         </div>

@@ -3,12 +3,21 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    ReactiveFormsModule,
+    AlertComponent,
+    MatButtonModule
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -35,12 +44,11 @@ export default class RegisterComponent {
     })
   );
 
-  constructor(private authService: AuthService, private router: Router){}
+  constructor(private authService: AuthService, private router: Router,public dialog: MatDialog){}
 
   register(): void {
-    const {email, password} = this.form().value;
-    //console.log(email,password)
-    this.authService.login(email, password).subscribe({
+    const {name, lastname, email, password} = this.form().value;
+    this.authService.register({name, lastname, email, password}).subscribe({
       next: (response)=> {
         const token = response.token;
         const payload = JSON.parse(atob(token.split('.')[1]));
@@ -51,7 +59,16 @@ export default class RegisterComponent {
           this.router.navigate(['/profile'])
         }
       },
-      error: (err) => console.error('Login failed', err)
+      error: (err) => {
+        if (err.status === 401 && err.error?.error) {
+          if(err.error.error === 'Email exist'){
+            this.openCustomDialog('Error','El correo electrónico proporcionado ya está asociado a una cuenta. Por favor, utiliza un correo diferente o inicia sesión con tus credenciales existentes.','error');
+          }
+        } else {
+          console.error('Unexpected error:', err);
+          this.openCustomDialog('Error','Se ha producido un error inesperado. Inténtelo de nuevo más tarde.','error');
+        }
+      }
     })
   }
 
@@ -98,6 +115,16 @@ export default class RegisterComponent {
 
       return false
     }
+  }
+
+  openCustomDialog(titulo:string, mensage:string, icono:string): void {
+    this.dialog.open(AlertComponent, {
+        data: {
+        title:titulo,
+        message: mensage,
+        icon: icono
+      }
+    });
   }
 
   openLogin(){

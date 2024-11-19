@@ -7,16 +7,28 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private LOGIN_URL = 'http://localhost:8080/api/v1/auth/login';
+  private BASE_URL = 'http://localhost:8080/api/v1/auth';
+  
   private tokenKey = 'authToken';
-
-  private REFRESH_URL = 'http://localhost:8080/api/v1/auth/refresh';
   private refreshTokenKey = 'refreshToken';
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
-  login(email: string, password: string): Observable<any>{
-    return this.httpClient.post<any>(this.LOGIN_URL, {email, password}).pipe(
+  login(data:any): Observable<any>{
+    return this.httpClient.post<any>(`${this.BASE_URL}/login`, data).pipe(
+      tap(response => {
+        if(response.token){
+          console.log(response.token);
+          this.setToken(response.token);
+          this.setRefreshToken(response.refreshToken)
+          this.autoRefreshToken();
+        }
+      })
+    )
+  }
+
+  register(data: any): Observable<any>{
+    return this.httpClient.post<any>(`${this.BASE_URL}/register`, data).pipe(
       tap(response => {
         if(response.token){
           console.log(response.token);
@@ -54,7 +66,7 @@ export class AuthService {
 
   refreshToken(): Observable<any> {
     const refreshToken = this.getRefreshToken();
-    return this.httpClient.post<any>(this.REFRESH_URL, { refreshToken: refreshToken }).pipe(
+    return this.httpClient.post<any>(`${this.BASE_URL}/refresh`, { refreshToken: refreshToken }).pipe(
       tap(response => {
         if (response.token) {
           console.log('Refresh token'+response.token);
@@ -65,7 +77,6 @@ export class AuthService {
       })
     );
   }
-  
 
   autoRefreshToken(): void {
     const token = this.getToken();
