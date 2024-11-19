@@ -26,7 +26,9 @@ export const routes: Routes = [
     },
     {
         path:'register', 
-        loadComponent: ()=> import('./business/auth/register/register.component')},
+        loadComponent: ()=> import('./business/auth/register/register.component'),
+        canActivate: [AuthenticatedGuard]
+    },
     {
         path: '**',
         redirectTo: 'dashboard'
