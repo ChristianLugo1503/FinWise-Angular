@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
+import { DataUserService } from '../../../core/services/data-user.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,11 +10,21 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  email: string = '';
-  password: string = '';
+  user: any;
 
-  constructor(private authService: AuthService){
-
+  constructor(
+    private authService: AuthService,
+    private dataUserService: DataUserService
+  ){
+    this.dataUserService.loadUserData().subscribe({
+      next: (response) => {
+        console.log('Datos del usuario cargados:', response);
+        this.user = response;
+      },
+      error: (error) => {
+        console.error('Error al cargar datos del usuario:', error);
+      },
+    });
   }
 
   logout():void{

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { DataUserService } from '../../../core/services/data-user.service';
 
 
 @Component({
@@ -44,7 +45,12 @@ export default class RegisterComponent {
     })
   );
 
-  constructor(private authService: AuthService, private router: Router,public dialog: MatDialog){}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    public dialog: MatDialog,
+    public dataUserService: DataUserService
+  ){}
 
   register(): void {
     const {name, lastname, email, password} = this.form().value;
@@ -53,6 +59,17 @@ export default class RegisterComponent {
         const token = response.token;
         const payload = JSON.parse(atob(token.split('.')[1]));
         const role = payload.role;
+        localStorage.setItem('Email',payload.sub);
+
+        this.dataUserService.loadUserData().subscribe({
+          next: (response) => {
+            console.log('Datos del usuario cargados:', response);
+          },
+          error: (error) => {
+            console.error('Error al cargar datos del usuario:', error);
+          },
+        });
+
         if(role === 'admin') {
           this.router.navigate(['/dashboard'])
         }else {

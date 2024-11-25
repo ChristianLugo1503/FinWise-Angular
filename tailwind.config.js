@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins'],
+        sans: ['Poppins', 'sans-serif'],
+        dm: ['DM Sans', 'sans-serif']
       },
       animation: {
         'fade-in': 'fadeIn 300ms ease-out',

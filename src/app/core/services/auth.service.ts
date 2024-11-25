@@ -44,7 +44,7 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, token);
   } 
 
-  private getToken(): string | null {
+  public getToken(): string | null {
     if(typeof window !== 'undefined'){
       return localStorage.getItem(this.tokenKey);
     }else {
@@ -107,6 +107,7 @@ export class AuthService {
   logout(): void{
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.refreshTokenKey);
+    localStorage.removeItem('Email')
     this.router.navigate(['/login']);
   }
 }
