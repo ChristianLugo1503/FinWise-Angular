@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
-import { DataUserService } from '../../../core/services/data-user.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { DataUserService } from '../../../core/services/dataUser/data-user.service';
 
 @Component({
   selector: 'app-sidebar',

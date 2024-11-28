@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { DataUserService } from '../../../core/services/data-user.service';
+import { DataUserService } from '../../../core/services/dataUser/data-user.service';
 
 @Component({
   selector: 'app-login',
@@ -100,8 +100,6 @@ export default class LoginComponent {
   openRegister(){
     this.router.navigate(['/register'])
   }
-
-  
 
   openCustomDialog(titulo:string, mensage:string, icono:string): void {
     this.dialog.open(AlertComponent, {

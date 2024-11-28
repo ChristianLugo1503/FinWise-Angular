@@ -1,63 +1,8 @@
 <div class="flex flex-col md:flex-row justify-between md:space-x-10">
   <div class="w-full mb-4 md:mb-0">
-    <div class="flex flex-col sm:flex-row justify-end">
-
-      <div class="flex items-center w-full">
-        <h1 class="ml-4 font-dm font-bold text-3xl text-white">Hola {{name}} 👋🏼</h1>
-      </div>
-
-      <div class="tabs flex flex-row justify-end">
-        <div 
-          (click)="setActiveTab('Gastos')" 
-          [ngClass]="{'bg-[#111A3D]': activeTab === 'Gastos', 'bg-[#0E1635]': activeTab !== 'Gastos'}" 
-          class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out">
-          <p>Gastos</p>
-        </div>
-        
-        <div 
-          (click)="setActiveTab('Ingresos')" 
-          [ngClass]="{'bg-[#111A3D]': activeTab === 'Ingresos', 'bg-[#0E1635]': activeTab !== 'Ingresos'}" 
-          class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out mr-2">
-          <p>Ingresos</p>
-        </div>
-      </div>
-    </div>
-    
-    <div *ngIf="activeTab === 'Gastos'" class="bg-[#111A3D] rounded-md p-5">
-      <h1>contenido 1</h1>
-    </div>
-    
-    <div *ngIf="activeTab === 'Ingresos'" class="bg-[#111A3D] rounded-md p-5">
-      <h1>contenido 2</h1>
-    </div>
+    <app-charts/>
   </div>
-
   <div class="flex flex-col w-full m-0 md:w-4/6">
-    <div class="flex flex-col items-end ">
-      <p class="text-xs text-white font-bold font-dm">Balance General</p>
-      <h1 class="text-3xl text-white font-bold font-dm">$1075</h1>
-    </div>
-
-    <div>
-      <h2 class="text-sm text-white font-semibold mb-4">Gastos por categorías:</h2>
-      <!-- Tarjeta: Educación -->
-      <div class="flex w-full items-center justify-between bg-[#111A3D] p-3 rounded-lg mb-3">
-        <div class="flex items-center space-x-3">
-          <div class="bg-green-500 text-white p-2 rounded-full">
-            <!-- Icono -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 7v-6m0 6H6m6 0h6" />
-            </svg>
-          </div>
-          <div>
-            <p class="text-sm font-semibold">Educación</p>
-            <p class="text-xs text-gray-400">70%</p>
-          </div>
-        </div>
-        <p class="text-sm font-semibold">$400</p>
-      </div>
-    
-    </div>
-
+    <app-expenses-by-category/>  
   </div>
 </div>

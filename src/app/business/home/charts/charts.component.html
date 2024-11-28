@@ -1,0 +1,35 @@
+<div class="flex flex-col sm:flex-row justify-end">
+
+    <div class="flex items-center w-full">
+        <h1 class="ml-4 font-dm font-bold text-3xl text-white">Hola {{name}} 👋🏼</h1>
+    </div>
+
+    <div class="tabs flex flex-row justify-end">
+        <div 
+            (click)="setActiveTab('Gasto')" 
+            [ngClass]="{'bg-[#111A3D]': activeTab === 'Gasto', 'bg-[#0E1635]': activeTab !== 'Gastos'}" 
+            class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out">
+            <p>Gastos</p>
+        </div>
+        
+        <div 
+            (click)="setActiveTab('Ingreso')" 
+            [ngClass]="{'bg-[#111A3D]': activeTab === 'Ingreso', 'bg-[#0E1635]': activeTab !== 'Ingresos'}" 
+            class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out mr-2">
+            <p>Ingresos</p>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="activeTab === 'Gasto'" class="bg-[#111A3D] rounded-t-lg p-5">
+    <h1>contenido 2</h1>
+</div>
+
+<div *ngIf="activeTab === 'Ingreso'" class="bg-[#111A3D] rounded-t-lg p-5">
+    <h1>contenido 2</h1>
+</div>
+
+<div class="bg-[#111A3D] rounded-b-lg pb-5 px-5 flex justify-end">
+    <button (click)="openCustomDialog(activeTab)" class="bg-white h-7 w-7 rounded-full text-[#0A1232] text-black text-2xl hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center">+</button>
+</div>
+  
