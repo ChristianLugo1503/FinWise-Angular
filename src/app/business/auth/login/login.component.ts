@@ -7,6 +7,7 @@ import { AlertComponent } from '../../../shared/components/alert/alert.component
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { DataUserService } from '../../../core/services/dataUser/data-user.service';
+import { ModalAlertService } from '../../../core/services/alert/modal-alert.service';
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,15 @@ import { DataUserService } from '../../../core/services/dataUser/data-user.servi
   imports: [
     FormsModule, 
     CommonModule, 
-    ReactiveFormsModule, 
-    AlertComponent, 
+    ReactiveFormsModule,  
     MatButtonModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export default class LoginComponent {
+  private modalAlertSrv = inject(ModalAlertService)
+
   form = signal<FormGroup>(
     new FormGroup({
       email: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
@@ -102,13 +104,7 @@ export default class LoginComponent {
   }
 
   openCustomDialog(titulo:string, mensage:string, icono:string): void {
-    this.dialog.open(AlertComponent, {
-        data: {
-        title:titulo,
-        message: mensage,
-        icon: icono
-      }
-    });
+    this.modalAlertSrv.openCustomDialog(titulo, mensage, icono)  
   }
 }
 

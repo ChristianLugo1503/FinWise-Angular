@@ -46,7 +46,7 @@
    }
 
    .input.error ~ label{
-        color: #C92628 ;
+      color: #C92628 ;
    }
 
    .radio-input {
@@ -57,3 +57,7 @@
     border: 2px solid #ffffff; 
     box-shadow: 0 0 10px rgba(255, 255, 255, 1);  
   }  
+
+  .errorCategory{
+    border-color: #C92628;
+  }

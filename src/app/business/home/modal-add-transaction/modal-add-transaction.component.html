@@ -21,7 +21,7 @@
             <input 
               class="input px-6 py-1"
               [ngClass]="{'error': checkMount() !== ''}"
-              formControlName="mount" 
+              formControlName="amount" 
               type="number"
               step="0.01" min="0"
             />
@@ -29,7 +29,7 @@
         </div>
 
         <!-- MENSAJE ERROR -->
-        <div *ngIf="checkMount()" class="absolute top-3 end-0 text-sm text-red-600" role="alert">
+        <div *ngIf="checkMount() !== ''" class="absolute top-3 end-0 text-sm text-red-600" role="alert">
             <svg class="flex-shrink-0 inline w-4 h-4 me-1 cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <title>{{checkMount()}}</title>
                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
@@ -39,25 +39,25 @@
       </div>
 
       <!-- INPUT CATEGORIA -->
-      <div class="h-40 relative mb-5 border-2 border-white rounded-lg px-2 pb-2 flex">
-        <label class="user-label font-semibold text-lg">Seleccione una categoría</label>
+      <div [ngClass]="{'errorCategory': this.form().get('categoryID')?.invalid &&  this.form().get('categoryID')?.touched}" class="group h-40 relative mb-5 border-2 border-white rounded-lg px-2 pb-2 flex">
+        <label class="user-label font-semibold text-lg group-[.errorCategory]:text-[#C92628]">Seleccione una categoría</label>
 
         <div class="flex flex-wrap overflow-auto justify-start mt-[11px]">
           <div class="uno mt-3 flex w-full w-1/5 px-2" *ngFor="let category of categories">
-            <ng-container *ngIf="category.type === 'Gastos'">
+            <ng-container *ngIf="category.type === (data.title+'s')">
               <label class="cursor-pointer flex flex-col items-center break-all w-12 text-sm hover:scale-105 transition ease-in-out duration-500">
                 <input
                   type="radio"
-                  name="category"
-                  [value]="category.name"
-                  formControlName="category"
+                  name="categoryID"
+                  [value]="category.id"
+                  formControlName="categoryID"
                   class="radio-input"
-                  (change)="selectCategory(category.name)"
+                  (change)="selectCategory(category.id)"
                 />
                 <img
                   [src]="category.image"
-                  [alt]="category.name"
-                  [class.selected]="form().get('category')?.value === category.name"
+                  [alt]="category.id"
+                  [class.selected]="form().get('categoryID')?.value === category.id"
                   class="category-image w-12 h-12 rounded-full mt-2 border-[1px] border-[transparent]"
                 />
                 {{category.name}}
@@ -85,10 +85,10 @@
       <!-- INPUT COMENTARIO -->
       <div class="input-group relative mb-5">
         <div class="w-full">
-            <input [ngClass]="{'error': hasRequiredError('comment')}"  formControlName="comment" type="text" name="text" autocomplete="off" class="input " >
+            <input [ngClass]="{'error': hasRequiredError('description')}"  formControlName="description" type="text" name="text" autocomplete="off" class="input " >
             <label class="user-label font-semibold text-lg" >Comentario</label>
         </div>
-        <div *ngIf="hasRequiredError('comment')" class="absolute top-3 end-0 text-sm text-red-600" role="alert">
+        <div *ngIf="hasRequiredError('description')" class="absolute top-3 end-0 text-sm text-red-600" role="alert">
             <svg class="flex-shrink-0 inline w-4 h-4 me-3 cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <title>Campo obligatorio</title>
                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
@@ -97,22 +97,26 @@
       </div>
 
       <div class="mt-7">
-          <button [disabled]="form().invalid || (form().get('mount')?.value === 0)" class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed" >
+          <button 
+            (click)="sendForm()" 
+            [disabled]="form().invalid || (form().get('amount')?.value === 0)" 
+            [title]="form().get('categoryID')?.invalid ? 'No seleccionó ninguna categoría' : ''"
+            class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed" >
               Aceptar
           </button>
       </div>
 
-      <!-- <p>Monto: {{this.form().get('mount')?.value}}</p>
-      <p>Categoria: {{this.form().get('category')?.value}}</p>
+      <!-- <p>Tipo de transaccion: {{data.title}}</p>
+      <p>Monto: {{this.form().get('amount')?.value}}</p>
+      <p>Categoria: {{this.form().get('categoryID')?.value}}</p>
       <p>Fecha: {{this.form().get('date')?.value}}</p>
-      <p>Comentario: {{this.form().get('comment')?.value}}</p>
-      
+      <p>Comentario: {{this.form().get('description')?.value}}</p>
       <p>formulario invalido: {{form().invalid}}</p>
-      <p>El monto es valido ?: {{this.form().get('mount')?.valid}}</p>
-      <p>La categoria es valida ?: {{this.form().get('category')?.valid}}</p>
+      <p>El monto es valido ?: {{this.form().get('amount')?.valid}}</p>
+      <p>La categoria es valida ?: {{this.form().get('categoryID')?.valid}}</p>
       <p>La fecha es valida ?: {{this.form().get('date')?.valid}}</p>
-      <p>El comentario es valido ?: {{this.form().get('comment')?.valid}}</p>  -->
-      
+      <p>El comentario es valido ?: {{this.form().get('description')?.valid}}</p> 
+       -->
 
     </form>
     

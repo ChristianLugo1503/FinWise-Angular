@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { AlertComponent } from '../../../shared/components/alert/alert.component
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { DataUserService } from '../../../core/services/dataUser/data-user.service';
+import { ModalAlertService } from '../../../core/services/alert/modal-alert.service';
 
 
 @Component({
@@ -16,13 +17,14 @@ import { DataUserService } from '../../../core/services/dataUser/data-user.servi
     FormsModule, 
     CommonModule, 
     ReactiveFormsModule,
-    AlertComponent,
     MatButtonModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export default class RegisterComponent {
+  private modalAlertSrv = inject(ModalAlertService);
+
   form = signal<FormGroup>(
     new FormGroup({
       name: new FormControl('',[
@@ -135,13 +137,7 @@ export default class RegisterComponent {
   }
 
   openCustomDialog(titulo:string, mensage:string, icono:string): void {
-    this.dialog.open(AlertComponent, {
-        data: {
-        title:titulo,
-        message: mensage,
-        icon: icono
-      }
-    });
+    this.modalAlertSrv.openCustomDialog(titulo, mensage, icono)  
   }
 
   openLogin(){
