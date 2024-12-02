@@ -1,35 +1,120 @@
-<div class="flex flex-col sm:flex-row justify-end">
+<div class="h-full w-full">
+    <div class="flex flex-col sm:flex-row justify-end">
 
-    <div class="flex items-center w-full">
-        <h1 class="ml-4 font-dm font-bold text-3xl text-white">Hola {{name}} 👋🏼</h1>
+        <div class="flex items-center w-full">
+            <h1 class="ml-4 font-dm font-bold text-3xl text-white">Hola {{name}} 👋🏼</h1>
+        </div>
+
+        <div class="tabs flex flex-row justify-end">
+            <div 
+                (click)="setActiveTab('Gasto')" 
+                [ngClass]="{'bg-[#111A3D] text-white font-bold': activeTab === 'Gasto', 'bg-[#0E1635]': activeTab !== 'Gastos'}"
+            
+                class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out">
+                <p>Gastos</p>
+            </div>
+            
+            <div 
+                (click)="setActiveTab('Ingreso')" 
+                [ngClass]="{'bg-[#111A3D] text-white font-bold': activeTab === 'Ingreso', 'bg-[#0E1635]': activeTab !== 'Ingresos'}" 
+                class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out mr-2">
+                <p>Ingresos</p>
+            </div>
+        </div>
     </div>
 
-    <div class="tabs flex flex-row justify-end">
-        <div 
-            (click)="setActiveTab('Gasto')" 
-            [ngClass]="{'bg-[#111A3D]': activeTab === 'Gasto', 'bg-[#0E1635]': activeTab !== 'Gastos'}" 
-            class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out">
-            <p>Gastos</p>
-        </div>
+    <div class="h-5/6 bg-[#111A3D] rounded-lg flex flex-col p-5">
         
-        <div 
-            (click)="setActiveTab('Ingreso')" 
-            [ngClass]="{'bg-[#111A3D]': activeTab === 'Ingreso', 'bg-[#0E1635]': activeTab !== 'Ingresos'}" 
-            class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out mr-2">
-            <p>Ingresos</p>
+        <div class="flex-shrink-0">
+            <div class="flex flex-col items-center justify-center">
+                
+                <h1 class="mb-2">Ver por:</h1>
+                <form class="flex flex-row content-center justify-center space-x-4">
+                    <!-- Día -->
+                    <input class="peer/day hidden" type="radio" id="day" name="filters" value="day" checked>
+                    <label 
+                        class="cursor-pointer px-4 py-1 text-white text-center text-base rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/day:bg-white peer-checked/day:text-[#0A1232] hover:scale-105" 
+                        for="day"
+                    >Día</label>
+                    <!-- Semana -->
+                    <input class="peer/week hidden" type="radio" id="week" name="filters" value="week">
+                    <label 
+                        class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/week:bg-white peer-checked/week:text-[#0A1232] hover:scale-105" 
+                        for="week"
+                    >Semana</label>
+                    <!-- Mes -->
+                    <input class="peer/month hidden" type="radio" id="month" name="filters" value="month">
+                    <label 
+                        class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/month:bg-white peer-checked/month:text-[#0A1232] hover:scale-105" 
+                        for="month"
+                    >Mes</label>
+                    <!-- Año -->
+                    <input class="peer/year hidden" type="radio" id="year" name="filters" value="year">
+                    <label 
+                        class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/year:bg-white peer-checked/year:text-[#0A1232] hover:scale-105" 
+                        for="year"
+                    >Año</label>
+                </form>
+            </div>
+        </div>
+    
+        
+        <div *ngIf="activeTab === 'Gasto'" class="flex-1 p-5 h-full">
+            <div *ngIf="activeTab === 'Gasto'" class="flex flex-col lg:flex-row items-center w-full">
+                <div id="chart" class="w-full lg:w-1/2">
+                    <apx-chart
+                    [series]="chartOptions.series!"
+                    [chart]="chartOptions.chart!"
+                    [labels]="chartOptions.labels!"
+                    [responsive]="chartOptions.responsive!"
+                    [legend]="chartOptions2.legend!"
+                    ></apx-chart>
+                </div>
+                <div id="chart2" class="w-full lg:w-1/2">
+                    <apx-chart
+                    [series]="chartOptions2.series!"
+                    [chart]="chartOptions2.chart!"
+                    [dataLabels]="chartOptions2.dataLabels!"
+                    [plotOptions]="chartOptions2.plotOptions!"
+                    [responsive]="chartOptions2.responsive!"
+                    [xaxis]="chartOptions2.xaxis!"
+                    [legend]="chartOptions2.legend!"
+                    [fill]="chartOptions2.fill!"
+                    ></apx-chart>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="activeTab === 'Ingreso'" class="flex-1 p-5 h-full">
+            <div *ngIf="activeTab === 'Ingreso'" class="flex flex-col lg:flex-row items-center w-full">
+                <div id="chart" class="w-full lg:w-1/2">
+                    <apx-chart
+                    [series]="chartOptions.series!"
+                    [chart]="chartOptions.chart!"
+                    [labels]="chartOptions.labels!"
+                    [responsive]="chartOptions.responsive!"
+                    [legend]="chartOptions2.legend!"
+                    ></apx-chart>
+                </div>
+                <div id="chart2" class="w-full lg:w-1/2">
+                    <apx-chart
+                    [series]="chartOptions2.series!"
+                    [chart]="chartOptions2.chart!"
+                    [dataLabels]="chartOptions2.dataLabels!"
+                    [plotOptions]="chartOptions2.plotOptions!"
+                    [responsive]="chartOptions2.responsive!"
+                    [xaxis]="chartOptions2.xaxis!"
+                    [legend]="chartOptions2.legend!"
+                    [fill]="chartOptions2.fill!"
+                    ></apx-chart>
+                </div>
+            </div>
+        </div>
+    
+        
+        <div class="flex-shrink-0 flex justify-end">
+            <button (click)="openCustomDialog(activeTab)" class="bg-white p-2 rounded-lg text-[#0A1232] text-black text-xs font-bold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center">+ Agregar {{activeTab}}</button>
         </div>
     </div>
+    
 </div>
-
-<div *ngIf="activeTab === 'Gasto'" class="bg-[#111A3D] rounded-t-lg p-5">
-    <h1>contenido 2</h1>
-</div>
-
-<div *ngIf="activeTab === 'Ingreso'" class="bg-[#111A3D] rounded-t-lg p-5">
-    <h1>contenido 2</h1>
-</div>
-
-<div class="bg-[#111A3D] rounded-b-lg pb-5 px-5 flex justify-end">
-    <button (click)="openCustomDialog(activeTab)" class="bg-white h-7 w-7 rounded-full text-[#0A1232] text-black text-2xl hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center">+</button>
-</div>
-  

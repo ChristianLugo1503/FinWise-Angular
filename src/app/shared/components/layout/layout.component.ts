@@ -5,11 +5,10 @@ import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from '../footer/footer.component';
 
 @Component({
-  selector: 'app-layout',
-  standalone: true,
-  imports: [HeaderComponent, SidebarComponent, FooterComponent, RouterOutlet],
-  templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
+    selector: 'app-layout',
+    imports: [SidebarComponent, RouterOutlet],
+    templateUrl: './layout.component.html',
+    styleUrl: './layout.component.css'
 })
 export default class LayoutComponent {
 

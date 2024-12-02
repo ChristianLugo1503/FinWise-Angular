@@ -9,18 +9,17 @@ import { TransactionsService } from '../../../core/services/transactions/transac
 import { ModalAlertService } from '../../../core/services/alert/modal-alert.service';
 
 @Component({
-  selector: 'app-modal-add-transaction',
-  standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-],
-  templateUrl: './modal-add-transaction.component.html',
-  styleUrl: './modal-add-transaction.component.css'
+    selector: 'app-modal-add-transaction',
+    imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        MatDialogModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    templateUrl: './modal-add-transaction.component.html',
+    styleUrl: './modal-add-transaction.component.css'
 })
 export class ModalAddTransactionComponent implements OnInit{
   private modalAlertSrv = inject(ModalAlertService);

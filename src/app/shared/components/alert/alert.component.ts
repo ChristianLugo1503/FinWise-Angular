@@ -6,17 +6,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-alert',
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
-  ],
-  templateUrl: './alert.component.html',
-  styleUrl: './alert.component.css'
+    selector: 'app-alert',
+    imports: [
+        MatButtonModule,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDialogModule,
+    ],
+    templateUrl: './alert.component.html',
+    styleUrl: './alert.component.css'
 })
 export class AlertComponent {
   

@@ -11,16 +11,15 @@ import { ModalAlertService } from '../../../core/services/alert/modal-alert.serv
 
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [
-    FormsModule, 
-    CommonModule, 
-    ReactiveFormsModule,
-    MatButtonModule
-  ],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+    selector: 'app-register',
+    imports: [
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        MatButtonModule
+    ],
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.css'
 })
 export default class RegisterComponent {
   private modalAlertSrv = inject(ModalAlertService);

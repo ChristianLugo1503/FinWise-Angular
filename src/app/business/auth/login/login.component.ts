@@ -10,16 +10,15 @@ import { DataUserService } from '../../../core/services/dataUser/data-user.servi
 import { ModalAlertService } from '../../../core/services/alert/modal-alert.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    FormsModule, 
-    CommonModule, 
-    ReactiveFormsModule,  
-    MatButtonModule
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+    selector: 'app-login',
+    imports: [
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        MatButtonModule
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export default class LoginComponent {
   private modalAlertSrv = inject(ModalAlertService)

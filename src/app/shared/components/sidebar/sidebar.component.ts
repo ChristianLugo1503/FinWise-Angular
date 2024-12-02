@@ -3,11 +3,10 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { DataUserService } from '../../../core/services/dataUser/data-user.service';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+    selector: 'app-sidebar',
+    imports: [],
+    templateUrl: './sidebar.component.html',
+    styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
   user: any;
