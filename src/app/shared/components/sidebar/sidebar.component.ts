@@ -4,9 +4,10 @@ import { DataUserService } from '../../../core/services/dataUser/data-user.servi
 
 @Component({
     selector: 'app-sidebar',
-    imports: [],
+    standalone: true,
+    imports: [], // Sin dependencias externas
     templateUrl: './sidebar.component.html',
-    styleUrl: './sidebar.component.css'
+    styleUrls: ['./sidebar.component.css'] // Corregido: styleUrls
 })
 export class SidebarComponent {
   user: any;
@@ -14,7 +15,7 @@ export class SidebarComponent {
   constructor(
     private authService: AuthService,
     private dataUserService: DataUserService
-  ){
+  ) {
     this.dataUserService.loadUserData().subscribe({
       next: (response) => {
         console.log('Datos del usuario cargados:', response);
@@ -26,8 +27,7 @@ export class SidebarComponent {
     });
   }
 
-  logout():void{
-    this.authService.logout()
+  logout(): void {
+    this.authService.logout();
   }
-
 }

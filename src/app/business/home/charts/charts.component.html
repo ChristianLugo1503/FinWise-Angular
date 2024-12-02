@@ -23,13 +23,13 @@
         </div>
     </div>
 
-    <div class="h-5/6 bg-[#111A3D] rounded-lg flex flex-col p-5">
+    <div class="h-5/6 bg-[#111A3D] rounded-lg flex flex-col p-5 sm:pt-1">
         
         <div class="flex-shrink-0">
             <div class="flex flex-col items-center justify-center">
                 
                 <h1 class="mb-2">Ver por:</h1>
-                <form class="flex flex-row content-center justify-center space-x-4">
+                <form class="flex w-full flex-row content-center justify-center space-x-4">
                     <!-- Día -->
                     <input class="peer/day hidden" type="radio" id="day" name="filters" value="day" checked>
                     <label 
@@ -56,11 +56,21 @@
                     >Año</label>
                 </form>
             </div>
+
+            <div class="w-full flex items-center justify-center mt-4">
+                <label class="color-white font-semibold" >Fecha:</label>
+                <input 
+                    class="input m-2 h-5 bg-transparent " 
+                    type="date" 
+                    name="text" 
+                    autocomplete="off" >
+            </div>
+
         </div>
     
         
-        <div *ngIf="activeTab === 'Gasto'" class="flex-1 p-5 h-full">
-            <div *ngIf="activeTab === 'Gasto'" class="flex flex-col lg:flex-row items-center w-full">
+        <div *ngIf="activeTab === 'Gasto'" class="flex-1 h-full">
+            <div class="flex flex-col lg:flex-row items-center w-full">
                 <div id="chart" class="w-full lg:w-1/2">
                     <apx-chart
                     [series]="chartOptions.series!"
@@ -68,6 +78,7 @@
                     [labels]="chartOptions.labels!"
                     [responsive]="chartOptions.responsive!"
                     [legend]="chartOptions2.legend!"
+                    [plotOptions]="chartOptions.plotOptions!"
                     ></apx-chart>
                 </div>
                 <div id="chart2" class="w-full lg:w-1/2">
@@ -86,7 +97,7 @@
         </div>
 
         <div *ngIf="activeTab === 'Ingreso'" class="flex-1 p-5 h-full">
-            <div *ngIf="activeTab === 'Ingreso'" class="flex flex-col lg:flex-row items-center w-full">
+            <div class="flex flex-col lg:flex-row items-center w-full">
                 <div id="chart" class="w-full lg:w-1/2">
                     <apx-chart
                     [series]="chartOptions.series!"
@@ -94,6 +105,7 @@
                     [labels]="chartOptions.labels!"
                     [responsive]="chartOptions.responsive!"
                     [legend]="chartOptions2.legend!"
+                    [plotOptions]="chartOptions.plotOptions!"
                     ></apx-chart>
                 </div>
                 <div id="chart2" class="w-full lg:w-1/2">
@@ -113,7 +125,7 @@
     
         
         <div class="flex-shrink-0 flex justify-end">
-            <button (click)="openCustomDialog(activeTab)" class="bg-white p-2 rounded-lg text-[#0A1232] text-black text-xs font-bold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center">+ Agregar {{activeTab}}</button>
+            <button (click)="openCustomDialog(activeTab)" class="bg-white p-2 rounded-lg text-[#0A1232] text-xs font-semibold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center">+ Agregar {{activeTab}}</button>
         </div>
     </div>
     

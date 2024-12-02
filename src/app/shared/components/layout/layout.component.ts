@@ -6,10 +6,9 @@ import { FooterComponent } from '../footer/footer.component';
 
 @Component({
     selector: 'app-layout',
+    standalone: true,
     imports: [SidebarComponent, RouterOutlet],
     templateUrl: './layout.component.html',
-    styleUrl: './layout.component.css'
+    styleUrls: ['./layout.component.css'] // Corregido: styleUrls
 })
-export default class LayoutComponent {
-
-}
+export default class LayoutComponent { }
