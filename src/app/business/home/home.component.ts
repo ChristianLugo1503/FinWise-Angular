@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import ChartsComponent from './charts/charts.component';
+import ChartsComponent from './charts-section/charts.component';
 import ExpensesByCategoryComponent from './expenses-by-category/expenses-by-category.component';
 
 @Component({

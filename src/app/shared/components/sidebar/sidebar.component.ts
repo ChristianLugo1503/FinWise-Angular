@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { DataUserService } from '../../../core/services/dataUser/data-user.service';
+import { TransactionsService } from '../../../core/services/transactions/transactions.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -14,11 +15,12 @@ export class SidebarComponent {
 
   constructor(
     private authService: AuthService,
-    private dataUserService: DataUserService
+    private dataUserService: DataUserService,
+    private transactionsSrv: TransactionsService,
   ) {
     this.dataUserService.loadUserData().subscribe({
       next: (response) => {
-        console.log('Datos del usuario cargados:', response);
+        //console.log('Datos del usuario cargados:', response);
         this.user = response;
       },
       error: (error) => {

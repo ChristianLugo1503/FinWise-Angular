@@ -4,9 +4,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CategoriesService } from '../../../core/services/categories/categories.service';
-import { TransactionsService } from '../../../core/services/transactions/transactions.service';
-import { ModalAlertService } from '../../../core/services/alert/modal-alert.service';
+import { ModalAlertService } from '../../../../core/services/alert/modal-alert.service';
+import { CategoriesService } from '../../../../core/services/categories/categories.service';
+import { TransactionsService } from '../../../../core/services/transactions/transactions.service';
+
 
 @Component({
     selector: 'app-modal-add-transaction',
@@ -22,6 +23,7 @@ import { ModalAlertService } from '../../../core/services/alert/modal-alert.serv
     styleUrl: './modal-add-transaction.component.css'
 })
 export class ModalAddTransactionComponent implements OnInit{
+  public currentDate!: string;
   private modalAlertSrv = inject(ModalAlertService);
   categories: { id: number, name: string, image: Blob , type: string}[] = [];
 
@@ -31,8 +33,7 @@ export class ModalAddTransactionComponent implements OnInit{
     private categorieSrv: CategoriesService,
     private transactionSrv: TransactionsService,
     @Inject(MAT_DIALOG_DATA) public data: { title: string }
-
-  ) {}
+  ) { this.getCurrentDate()}
 
   ngOnInit(): void {
     this.categorieSrv.getUserData().subscribe(data => {
@@ -63,6 +64,13 @@ export class ModalAddTransactionComponent implements OnInit{
     console.log('Categoría seleccionada:', categoryName);
   }
 
+  getCurrentDate() : string {
+    const today = new Date();
+    today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Ajuste para la zona horaria
+    return this.currentDate = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
+    
+  }
+
   closeModal(): void {
     this.dialogRef.close();
   }
@@ -77,7 +85,7 @@ export class ModalAddTransactionComponent implements OnInit{
       categoryID: new FormControl('',[
         Validators.required
       ]),
-      date: new FormControl('',[
+      date: new FormControl(this.getCurrentDate(),[
         Validators.required
       ]),
       description: new FormControl('',[
@@ -97,6 +105,12 @@ export class ModalAddTransactionComponent implements OnInit{
         this.closeModal();
         this.modalAlertSrv.openCustomDialog('Éxito','Transacción añadida con éxito','success');
         console.log(response);
+        // Llamar a getTransactionsByUserId() para cargar datos iniciales
+        this.transactionSrv.getTransactionsByUserId().subscribe({
+          error: (error) => {
+            console.error('Error al cargar las transacciones iniciales:', error);
+          }
+        });
       },
       error: (err) => {
         console.error(err);
@@ -111,7 +125,6 @@ export class ModalAddTransactionComponent implements OnInit{
     const userId = userData.id;
     return userId;
   }
-
 
   //VALIDACIONES FORMULARIO
   checkMount(){

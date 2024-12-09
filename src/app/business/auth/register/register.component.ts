@@ -3,7 +3,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { AlertComponent } from '../../../shared/components/modales/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { DataUserService } from '../../../core/services/dataUser/data-user.service';

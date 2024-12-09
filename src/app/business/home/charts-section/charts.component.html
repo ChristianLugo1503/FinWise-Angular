@@ -31,25 +31,25 @@
                 <h1 class="mb-2">Ver por:</h1>
                 <form class="flex w-full flex-row content-center justify-center space-x-4">
                     <!-- Día -->
-                    <input class="peer/day hidden" type="radio" id="day" name="filters" value="day" checked>
+                    <input (click)="filterDay()"  class="peer/day hidden" type="radio" id="day" name="filters" value="day" checked>
                     <label 
                         class="cursor-pointer px-4 py-1 text-white text-center text-base rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/day:bg-white peer-checked/day:text-[#0A1232] hover:scale-105" 
                         for="day"
                     >Día</label>
                     <!-- Semana -->
-                    <input class="peer/week hidden" type="radio" id="week" name="filters" value="week">
+                    <input (click)="filterWeek()" class="peer/week hidden" type="radio" id="week" name="filters" value="week">
                     <label 
                         class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/week:bg-white peer-checked/week:text-[#0A1232] hover:scale-105" 
                         for="week"
                     >Semana</label>
                     <!-- Mes -->
-                    <input class="peer/month hidden" type="radio" id="month" name="filters" value="month">
+                    <input (click)="filterMonth()" class="peer/month hidden" type="radio" id="month" name="filters" value="month">
                     <label 
                         class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/month:bg-white peer-checked/month:text-[#0A1232] hover:scale-105" 
                         for="month"
                     >Mes</label>
                     <!-- Año -->
-                    <input class="peer/year hidden" type="radio" id="year" name="filters" value="year">
+                    <input (click)="filterYear()" class="peer/year hidden" type="radio" id="year" name="filters" value="year">
                     <label 
                         class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/year:bg-white peer-checked/year:text-[#0A1232] hover:scale-105" 
                         for="year"
@@ -57,13 +57,35 @@
                 </form>
             </div>
 
-            <div class="w-full flex items-center justify-center mt-4">
+            <div *ngIf="activeFilter === 'day'" class="w-full flex items-center justify-center mt-4">
                 <label class="color-white font-semibold" >Fecha:</label>
                 <input 
                     class="input m-2 h-5 bg-transparent " 
                     type="date" 
                     name="text" 
-                    autocomplete="off" >
+                    autocomplete="off" 
+                    [value]="currentDate"
+                    [(ngModel)]="currentDate"
+                    (change)="filterDay()">
+            </div>
+
+            <div *ngIf="activeFilter === 'week'" class="w-full flex items-center justify-center">
+                <app-week-picker
+                (dateRangeSelected)="onDateRangeSelected($event)"
+                (change)="filterWeek()"
+                />
+            </div>
+
+            <div *ngIf="activeFilter === 'month'" class="w-full flex items-center justify-center mt-4">
+
+                <h1>mes</h1>
+
+            </div>
+
+            <div *ngIf="activeFilter === 'year'" class="w-full flex items-center justify-center mt-4">
+
+                <h1>año</h1>
+
             </div>
 
         </div>
@@ -72,26 +94,18 @@
         <div *ngIf="activeTab === 'Gasto'" class="flex-1 h-full">
             <div class="flex flex-col lg:flex-row items-center w-full">
                 <div id="chart" class="w-full lg:w-1/2">
-                    <apx-chart
-                    [series]="chartOptions.series!"
-                    [chart]="chartOptions.chart!"
-                    [labels]="chartOptions.labels!"
-                    [responsive]="chartOptions.responsive!"
-                    [legend]="chartOptions2.legend!"
-                    [plotOptions]="chartOptions.plotOptions!"
-                    ></apx-chart>
+                    <app-donut-chart 
+                        *ngIf="transactions"
+                        [amounts]="amounts"
+                        [categories]="categories"
+                    />
                 </div>
                 <div id="chart2" class="w-full lg:w-1/2">
-                    <apx-chart
-                    [series]="chartOptions2.series!"
-                    [chart]="chartOptions2.chart!"
-                    [dataLabels]="chartOptions2.dataLabels!"
-                    [plotOptions]="chartOptions2.plotOptions!"
-                    [responsive]="chartOptions2.responsive!"
-                    [xaxis]="chartOptions2.xaxis!"
-                    [legend]="chartOptions2.legend!"
-                    [fill]="chartOptions2.fill!"
-                    ></apx-chart>
+                    <app-bar-chart
+                        *ngIf="transactions"
+                        [series]="series"
+                        [dates]="dates"
+                    />
                 </div>
             </div>
         </div>
@@ -99,34 +113,22 @@
         <div *ngIf="activeTab === 'Ingreso'" class="flex-1 p-5 h-full">
             <div class="flex flex-col lg:flex-row items-center w-full">
                 <div id="chart" class="w-full lg:w-1/2">
-                    <apx-chart
-                    [series]="chartOptions.series!"
-                    [chart]="chartOptions.chart!"
-                    [labels]="chartOptions.labels!"
-                    [responsive]="chartOptions.responsive!"
-                    [legend]="chartOptions2.legend!"
-                    [plotOptions]="chartOptions.plotOptions!"
-                    ></apx-chart>
+                    <app-donut-chart 
+                        *ngIf="transactions"
+                        [amounts]="amounts"
+                        [categories]="categories"
+                    />
                 </div>
                 <div id="chart2" class="w-full lg:w-1/2">
-                    <apx-chart
-                    [series]="chartOptions2.series!"
-                    [chart]="chartOptions2.chart!"
-                    [dataLabels]="chartOptions2.dataLabels!"
-                    [plotOptions]="chartOptions2.plotOptions!"
-                    [responsive]="chartOptions2.responsive!"
-                    [xaxis]="chartOptions2.xaxis!"
-                    [legend]="chartOptions2.legend!"
-                    [fill]="chartOptions2.fill!"
-                    ></apx-chart>
+                    <app-bar-chart></app-bar-chart>
                 </div>
             </div>
         </div>
     
-        
         <div class="flex-shrink-0 flex justify-end">
             <button (click)="openCustomDialog(activeTab)" class="bg-white p-2 rounded-lg text-[#0A1232] text-xs font-semibold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center">+ Agregar {{activeTab}}</button>
         </div>
+
     </div>
     
 </div>

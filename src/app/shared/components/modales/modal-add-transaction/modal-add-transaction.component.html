@@ -42,7 +42,7 @@
       <div [ngClass]="{'errorCategory': this.form().get('categoryID')?.invalid &&  this.form().get('categoryID')?.touched}" class="group h-40 relative mb-5 border-2 border-white rounded-lg px-2 pb-2 flex">
         <label class="user-label font-semibold text-lg group-[.errorCategory]:text-[#C92628]">Seleccione una categoría</label>
 
-        <div class="flex flex-wrap overflow-auto justify-start mt-[11px]">
+        <div class="flex w-full flex-wrap overflow-auto justify-start mt-[11px]">
           <div class="uno mt-3 flex w-full w-1/5 px-2" *ngFor="let category of categories">
             <ng-container *ngIf="category.type === (data.title+'s')">
               <label class="cursor-pointer flex flex-col items-center break-all w-12 text-sm hover:scale-105 transition ease-in-out duration-500">
@@ -71,7 +71,7 @@
       <!-- INPUT DATE -->
       <div class="input-group relative mb-5">
         <div class="w-full">
-            <input [ngClass]="{'error': hasRequiredError('date')}"  formControlName="date" type="date" name="text" autocomplete="off" class="input px-6 py-1" >
+            <input [ngClass]="{'error': hasRequiredError('date')}"  formControlName="date" type="date" name="text" autocomplete="off" class="input px-6 py-1" [value]="currentDate" >
             <label class="user-label font-semibold text-lg" >Fecha</label>
         </div>
         <div *ngIf="hasRequiredError('date')" class="absolute top-3 end-0 text-sm text-red-600" role="alert">

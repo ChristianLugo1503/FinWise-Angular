@@ -7,33 +7,41 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 })
 export class TransactionsService {
   private BASE_URL = 'http://localhost:8080/api/v1/transactions';
-  private userDataSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
+  private userData: any | null = null; // Cambiado a una variable simple
+  private transactionsSubject: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
 
   constructor(private httpClient: HttpClient) {
     const userData = localStorage.getItem('userData');
     if (userData) {
-      this.userDataSubject.next(JSON.parse(userData));
+      this.userData = JSON.parse(userData); // Guarda los datos del usuario directamente en la variable
     }
   }
 
-  getTransactionsByUserId(): Observable<any> {
-    const userData = this.userDataSubject.value;
-    if (userData) {
-      return this.httpClient.get<any>(`${this.BASE_URL}/user/${userData.id}`).pipe(
+  // Obtener las transacciones por usuario
+  getTransactionsByUserId(): Observable<any[]> {
+    if (this.userData) {
+      return this.httpClient.get<any[]>(`${this.BASE_URL}/user/${this.userData.id}`).pipe(
         tap((data) => {
-          this.userDataSubject.next(data); // Emite los datos de las transacciones a los suscriptores
+          this.transactionsSubject.next(data); // Actualiza las transacciones en el BehaviorSubject
         })
       );
     } else {
-      throw new Error('Transactions data not found');
+      throw new Error('User data not found');
     }
   }
 
-  getTransactionsData(): Observable<any> {
-    return this.userDataSubject.asObservable();
+  // Obtener las transacciones observables
+  getTransactionsData(): Observable<any[] | null> {
+    return this.transactionsSubject.asObservable();
   }
 
+  // Crear una nueva transacción
   createTransaction(data: any): Observable<any> {
-    return this.httpClient.post<any>(`${this.BASE_URL}/create`, data);
+    return this.httpClient.post<any>(`${this.BASE_URL}/create`, data).pipe(
+      tap(() => {
+        // Refresca las transacciones después de crear una nueva
+        this.getTransactionsByUserId().subscribe();
+      })
+    );
   }
 }

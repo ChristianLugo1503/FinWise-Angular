@@ -1,0 +1,11 @@
+<mat-form-field>
+    <mat-label>Seleccione una semana</mat-label>
+    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+      <input matStartDate formControlName="start" [value]="startDate" placeholder="Fecha de inicio">
+      <input matEndDate formControlName="end" [value]="endDate" placeholder="Fecha de fin">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker (dateChange)="emitDateRange()"></mat-date-range-picker>
+  </mat-form-field>
+<!-- <p>Selected range: {{range.value | json}}</p> -->
+

@@ -19,7 +19,6 @@ export class DataUserService {
   loadUserData(): Observable<any> {
     const userEmail = localStorage.getItem('Email');
     if (!userEmail) {
-      console.error('No se encontró el email en localStorage.');
       throw new Error('El email no está definido en localStorage.');
     }
 
@@ -30,7 +29,6 @@ export class DataUserService {
         
         // Guardar los datos en localStorage para persistencia
         localStorage.setItem('userData', JSON.stringify(data));
-        console.log('Data loaded and stored:', data);
       })
     );
   }

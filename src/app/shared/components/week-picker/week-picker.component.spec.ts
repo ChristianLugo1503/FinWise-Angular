@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChartsComponent } from './charts.component';
+import { WeekPickerComponent } from './week-picker.component';
 
-describe('ChartsComponent', () => {
-  let component: ChartsComponent;
-  let fixture: ComponentFixture<ChartsComponent>;
+describe('WeekPickerComponent', () => {
+  let component: WeekPickerComponent;
+  let fixture: ComponentFixture<WeekPickerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChartsComponent]
+      imports: [WeekPickerComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ChartsComponent);
+    fixture = TestBed.createComponent(WeekPickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
