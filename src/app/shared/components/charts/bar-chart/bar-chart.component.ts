@@ -14,6 +14,7 @@ import {
   ApexFill,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+import { CategoriesService } from '../../../../core/services/categories/categories.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -25,6 +26,7 @@ export type ChartOptions = {
   yaxis: ApexYAxis;
   legend: ApexLegend;
   fill: ApexFill;
+  colors:any;
 };
 
 @Component({
@@ -43,7 +45,27 @@ export class BarChartComponent implements OnChanges {
   @Input() series:any;
   @Input() dates:any;
 
+  constructor(private categoriesSrv: CategoriesService) {}
+
   ngOnChanges(): void {
+
+    this.categoriesSrv.getUserData().subscribe(data => {
+      console.log(data);
+    
+      // Crear el objeto de colores a partir de los datos recibidos
+      const categoryColors: { [key: string]: string } = data.reduce((acc:any, category:any) => {
+        acc[category.name] = category.color;
+        return acc;
+      }, {} as { [key: string]: string });
+
+      console.log(categoryColors);
+
+      // Crear un array de colores para las categorías de series
+      const colors = this.series.map((seriesItem: any) => {
+        return categoryColors[seriesItem.name] || '#000000';  // Color por defecto
+      });
+
+
     this.chartOptions = {
       series: this.series,
       chart: {
@@ -69,6 +91,7 @@ export class BarChartComponent implements OnChanges {
           }
         }
       ],
+      colors: colors,
       plotOptions: {
         bar: {
           horizontal: false
@@ -110,6 +133,7 @@ export class BarChartComponent implements OnChanges {
         opacity: 1
       }
     };
+  });
   }
 
 }

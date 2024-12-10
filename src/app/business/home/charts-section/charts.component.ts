@@ -10,6 +10,8 @@ import { DonutChartComponent } from '../../../shared/components/charts/donut-cha
 import { BarChartComponent } from '../../../shared/components/charts/bar-chart/bar-chart.component';
 import { WeekPickerComponent } from '../../../shared/components/dates/week-picker/week-picker.component';
 import { RangePickerComponent } from '../../../shared/components/dates/range-picker/range-picker.component';
+import { MonthPickerComponent } from '../../../shared/components/dates/month-picker/month-picker.component';
+import { YearPickerComponent } from '../../../shared/components/dates/year-picker/year-picker.component';
 
 @Component({
   selector: 'app-charts',
@@ -21,6 +23,8 @@ import { RangePickerComponent } from '../../../shared/components/dates/range-pic
     BarChartComponent,
     WeekPickerComponent,
     RangePickerComponent,
+    MonthPickerComponent,
+    YearPickerComponent,
   ],
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.css']
@@ -34,7 +38,7 @@ export default class ChartsComponent {
   public activeFilter: string = 'day';
   public transactions = false;
   public selectedRange: { start: string, end: string } | null = null; //variable para las fechas con rango
-
+  public selectedYear! : number;
 // ************ DATA DONUT CHART ************
   public categories = ['vacio'];
   public amounts!: number[];
@@ -64,8 +68,13 @@ export default class ChartsComponent {
 
   onDateRangeSelected(dateRange: { start: string, end: string }) {
     this.selectedRange = dateRange;
-    this.filterRange(null);
+    this.filterWithRange(null);
     //console.log('Rango recibido del hijo (objeto):', dateRange);
+  }
+
+  onYearSelected(year: number) {
+    this.selectedYear = year;
+    this.filterYear();
   }
   
   getTransactionsByUserId(){
@@ -135,7 +144,7 @@ export default class ChartsComponent {
     });
   }
 
-  filterRange(Filter:string | null){
+  filterWithRange(Filter:string | null){
     if (Filter) this.activeFilter = Filter;
   
     if(this.selectedRange !== null){
@@ -237,12 +246,116 @@ export default class ChartsComponent {
     return dateArray;
   }
 
-  filterMonth(){
-    this.activeFilter = 'month'
+  filterYear() {
+    this.activeFilter = 'year';
+    if (this.selectedYear !== undefined) {
+      this.transactionsSrv.getTransactionsData().subscribe({
+        next: (response) => {
+          if (response) {
+            this.series = [];
+            this.dates = [
+              'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+              'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ];
+            console.log('FECHAAA SELECCIONADAAAAA AÑO ', this.selectedYear);
+  
+            // ******** FILTRO INICIAL POR CATEGORIA Y AÑO ******** 
+            const { categoriesData, amountsData, datesData } = response.reduce((acc, transaction: any) => {
+              const normalizedDbDate = new Date(transaction.date);
+              const year = normalizedDbDate.getFullYear(); // Año de la transacción
+              console.log('fechaaaaaaaa', year);
+  
+              if (transaction.type !== this.activeTab) {
+                console.log('DAto descartado ', transaction);
+                return acc; // Se filtra por tipo de transacción
+              }
+  
+              // Filtrar por el año seleccionado
+              if (year !== this.selectedYear) {
+                console.log('DAto descartado ', transaction);
+                console.log('year', year, 'selectedYear', this.selectedYear);
+                return acc;
+              }
+  
+              acc.categoriesData.push(transaction.categoryID.name);
+              acc.amountsData.push(transaction.amount);
+              acc.datesData.push(normalizedDbDate);
+              return acc;
+            }, { categoriesData: [], amountsData: [], datesData: [] });
+  
+            console.log('Filtro por categorías, montos y fechas:', categoriesData, amountsData, datesData);
+  
+            // ******** AGRUPAR Y SUMAR MONTOS POR CATEGORÍAS EN TOTAL ******** 
+            const categorySums = categoriesData.reduce((acc: any, category: any, index: any) => {
+              if (!acc[category]) {
+                acc[category] = 0;
+              }
+              acc[category] += amountsData[index];
+              return acc;
+            }, {} as Record<string, number>);
+  
+            console.log('Montos agrupados por categoría:', categorySums);
+  
+            // ******** ENVIAR DATOS A DONUT CHART ******** 
+            this.categories = Object.keys(categorySums);
+            this.amounts = Object.values(categorySums);
+  
+            // ******** AGRUPAR Y SUMAR MONTOS POR CATEGORÍA Y MES ******** 
+            const categorySumsMonth = categoriesData.reduce((acc: any, category: any, index: any) => {
+              const date = datesData[index];
+              const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`; // Formato 'YYYY-MM'
+  
+              const key = `${category}_${monthYear}`; // Crear una clave única combinando categoría y mes/año
+  
+              // Inicializar acumulador si la clave no existe
+              if (!acc[key]) {
+                acc[key] = 0;
+              }
+  
+              // Sumar el monto correspondiente
+              acc[key] += amountsData[index];
+              return acc;
+            }, {} as Record<string, number>);
+  
+            // Convertir el objeto en un arreglo de objetos
+            const categorySumsArrayMonth = Object.entries(categorySumsMonth).map(([key, amount]) => {
+              const [category, monthYear] = key.split('_'); // Dividir la clave en categoría y mes/año
+              const [year, month] = monthYear.split('-').map(Number);
+              return { category, year, month: month - 1, amount }; // Mes ajustado (0-11)
+            });
+            console.log('Arreglo con categoría, mes/año y monto:', categorySumsArrayMonth);
+  
+            // ******** LLENAR ARRAY DE MESES PARA EL GRÁFICO ******** 
+            this.series = this.categories.map(category => {
+              const data = new Array(12).fill(0); // 12 meses por categoría
+              categorySumsArrayMonth.forEach(({ category: cat, month, amount }) => {
+                if (cat === category) {
+                  data[month] = amount;
+                }
+              });
+  
+              return { name: category, data };
+            });
+  
+            console.log('Datos construidos en array series:', this.series);
+          }
+        },
+        error: (error) => console.error('Error al cargar las transacciones del usuario:', error)
+      });
+    }
   }
+  
+  // Método para generar todos los meses del año en formato 'YYYY-MM'
+  generarMeses(): string[] {
+    const months = [];
+    for (let i = 0; i < 12; i++) {
+      const month = new Date(2024, i).toISOString().split('T')[0]; // Usa un año fijo o `this.selectedYear`
+      months.push(month);
+    }
+    return months;
+  }
+  
 
-  filterYear(){
-    this.activeFilter = 'year'
-  }
+  
 
 }
