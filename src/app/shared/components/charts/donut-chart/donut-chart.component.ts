@@ -91,6 +91,7 @@ export class DonutChartComponent implements OnChanges{
             }
           }
         },
+        labels: this.categories,
         colors: colors,  // Agrega los colores configurados
         responsive: [
           {

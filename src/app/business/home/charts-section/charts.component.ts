@@ -12,6 +12,7 @@ import { WeekPickerComponent } from '../../../shared/components/dates/week-picke
 import { RangePickerComponent } from '../../../shared/components/dates/range-picker/range-picker.component';
 import { MonthPickerComponent } from '../../../shared/components/dates/month-picker/month-picker.component';
 import { YearPickerComponent } from '../../../shared/components/dates/year-picker/year-picker.component';
+import { DayPickerComponent } from '../../../shared/components/dates/day-picker/day-picker.component';
 
 @Component({
   selector: 'app-charts',
@@ -21,10 +22,11 @@ import { YearPickerComponent } from '../../../shared/components/dates/year-picke
     ReactiveFormsModule,
     DonutChartComponent,
     BarChartComponent,
+    DayPickerComponent,
     WeekPickerComponent,
-    RangePickerComponent,
     MonthPickerComponent,
     YearPickerComponent,
+    RangePickerComponent,
   ],
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.css']
@@ -32,13 +34,13 @@ import { YearPickerComponent } from '../../../shared/components/dates/year-picke
 export default class ChartsComponent {
 // ************ VARIABLES ************
   private modalSvc = inject(ModalAddTransactionService);
-  public currentDate!: string;
   public name: any;
   public activeTab: string = 'Gasto';
   public activeFilter: string = 'day';
   public transactions = false;
   public selectedRange: { start: string, end: string } | null = null; //variable para las fechas con rango
   public selectedYear! : number;
+  public selectedDay! : string;
 // ************ DATA DONUT CHART ************
   public categories = ['vacio'];
   public amounts!: number[];
@@ -57,14 +59,25 @@ export default class ChartsComponent {
     this.getTransactionsByUserId(); // Llamar a getTransactionsByUserId() para cargar datos iniciales
     this.getUserData(); // Cargar datos de usuario
     this.getCategoriesByUserID(); // Cargar categorías de usuario
-    this.getCurrentDate(); //obtener fecha
     this.filterDay();  //se llama a filter day ya que es el el filtro inicial
   }
   
 // ************** FUNCIONES ************
-  setActiveTab(tab: string): void { this.activeTab = tab }
+  setActiveTab(tab: string): void { 
+    this.activeTab = tab 
+    this.getTransactionsByUserId(); // Llamar a getTransactionsByUserId() para cargar datos iniciales
+    this.getUserData(); // Cargar datos de usuario
+    this.getCategoriesByUserID(); // Cargar categorías de usuario
+    this.filterDay();
+  }
 
   openCustomDialog(type: string) { this.modalSvc.openModal(type) }
+
+
+  onDaySelected(day:any){
+    this.selectedDay = day;
+    this.filterDay();
+  }
 
   onDateRangeSelected(dateRange: { start: string, end: string }) {
     this.selectedRange = dateRange;
@@ -97,51 +110,48 @@ export default class ChartsComponent {
     });
   }
 
-  getCurrentDate(){
-    const today = new Date();
-    today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Ajuste para la zona horaria
-    this.currentDate = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
-  }
-
   filterDay(): void{
+    //console.log('Fecha seleccionada;;;;;;;;;;;',this.selectedDay)
     this.activeFilter = 'day'
-    this.transactionsSrv.getTransactionsData().subscribe({ // Suscribirse al Observable de transacciones
-      next: (response) => {
-        if (response) {
-          const { categoriesData, amountsData } = response.reduce((acc, transaction: any) => {
-            const normalizedDbDate = new Date(transaction.date).toISOString().split('T')[0]; // Se normaliza la fecha de la bd
-            if (transaction.type !== this.activeTab) return acc; // Se filtra por categoría
-            if(normalizedDbDate !== this.currentDate) return acc;
+    if (this.selectedDay) {
+      this.transactionsSrv.getTransactionsData().subscribe({ // Suscribirse al Observable de transacciones
+        next: (response) => {
+          if (response) {
+            const { categoriesData, amountsData } = response.reduce((acc, transaction: any) => {
+              const normalizedDbDate = new Date(transaction.date).toISOString().split('T')[0]; // Se normaliza la fecha de la bd
+              if (transaction.type !== this.activeTab) return acc; // Se filtra por categoría
+              if(normalizedDbDate !== this.selectedDay) return acc;
 
-            acc.categoriesData.push(transaction.categoryID.name);
-            acc.amountsData.push(transaction.amount);
-            return acc;
-          }, { categoriesData: [], amountsData: [] });
-        
-          // Agrupar y sumar montos por categoría
-          const categorySums = categoriesData.reduce((acc:any, category:any, index:any) => {
-            if (!acc[category]) {
-              acc[category] = 0;
-            }
-            acc[category] += amountsData[index];
-            return acc;
-          }, {} as Record<string, number>);
+              acc.categoriesData.push(transaction.categoryID.name);
+              acc.amountsData.push(transaction.amount);
+              return acc;
+            }, { categoriesData: [], amountsData: [] });
+          
+            // Agrupar y sumar montos por categoría
+            const categorySums = categoriesData.reduce((acc:any, category:any, index:any) => {
+              if (!acc[category]) {
+                acc[category] = 0;
+              }
+              acc[category] += amountsData[index];
+              return acc;
+            }, {} as Record<string, number>);
 
-          // Convertir las claves y valores del objeto en arrays separados
-          this.categories = Object.keys(categorySums);
-          this.amounts = Object.values(categorySums);
+            // Convertir las claves y valores del objeto en arrays separados
+            this.categories = Object.keys(categorySums);
+            this.amounts = Object.values(categorySums);
 
-          // Construir la serie de datos con categorías y montos
-          this.series = this.categories.map((categoria: string, index: number) => ({
-            name: categoria,
-            data: [this.amounts[index]]
-          }));
+            // Construir la serie de datos con categorías y montos
+            this.series = this.categories.map((categoria: string, index: number) => ({
+              name: categoria,
+              data: [this.amounts[index]]
+            }));
 
-          this.dates = [this.currentDate]
-        } 
-      },
-      error: (error) => console.error('Error al cargar las transacciones del usuario:', error)
-    });
+            this.dates = [this.selectedDay]
+          } 
+        },
+        error: (error) => console.error('Error al cargar las transacciones del usuario:', error)
+      });
+    }
   }
 
   filterWithRange(Filter:string | null){

@@ -43,6 +43,10 @@
     /* height: 4rem !important;  */
 }
 
+::ng-deep.mdc-floating-label mat-label{
+    font-size: 1rem !important;
+}
+
 ::ng-deep.mdc-floating-label{
     color: white !important;
     font-size: small !important;
