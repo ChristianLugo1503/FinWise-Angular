@@ -37,7 +37,7 @@
                         for="day"
                     >Día</label>
                     <!-- Semana -->
-                    <input (click)="filterWeek()" class="peer/week hidden" type="radio" id="week" name="filters" value="week">
+                    <input (click)="filterRange('week')" class="peer/week hidden" type="radio" id="week" name="filters" value="week">
                     <label 
                         class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/week:bg-white peer-checked/week:text-[#0A1232] hover:scale-105" 
                         for="week"
@@ -54,6 +54,12 @@
                         class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/year:bg-white peer-checked/year:text-[#0A1232] hover:scale-105" 
                         for="year"
                     >Año</label>
+                    <!-- range -->
+                    <input (click)="filterRange('range')" class="peer/range hidden" type="radio" id="range" name="filters" value="range">
+                    <label 
+                        class="cursor-pointer px-4 py-1 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/range:bg-white peer-checked/range:text-[#0A1232] hover:scale-105" 
+                        for="range"
+                    >Rango</label>
                 </form>
             </div>
 
@@ -72,7 +78,7 @@
             <div *ngIf="activeFilter === 'week'" class="w-full flex items-center justify-center">
                 <app-week-picker
                 (dateRangeSelected)="onDateRangeSelected($event)"
-                (change)="filterWeek()"
+                (change)="filterRange('week')"
                 />
             </div>
 
@@ -86,6 +92,13 @@
 
                 <h1>año</h1>
 
+            </div>
+
+            <div *ngIf="activeFilter === 'range'" class="w-full flex items-center justify-center mt-4">
+                <app-range-picker
+                (dateRangeSelected)="onDateRangeSelected($event)"
+                (change)="filterRange('week')"
+                />
             </div>
 
         </div>

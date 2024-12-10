@@ -46,7 +46,7 @@ export class SundayWeekRangeSelectionStrategy<D> implements MatDateRangeSelectio
     { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, // Calendario en español
     provideNativeDateAdapter(),
   ],
-  imports: [MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule, JsonPipe],
+  imports: [MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './week-picker.component.html',
   styleUrls: ['./week-picker.component.css'],
@@ -91,6 +91,7 @@ export class WeekPickerComponent implements OnInit {
       };
 
       this.dateRangeSelected.emit(dateRange);
+      console.log(this.dateRangeSelected)
     }
   }
 
