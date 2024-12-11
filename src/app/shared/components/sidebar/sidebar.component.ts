@@ -2,15 +2,18 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { DataUserService } from '../../../core/services/dataUser/data-user.service';
 import { TransactionsService } from '../../../core/services/transactions/transactions.service';
+import { FormsModule, NgModel } from '@angular/forms';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
-    imports: [], // Sin dependencias externas
+    imports: [FormsModule, NgClass,], // Sin dependencias externas
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.css'] // Corregido: styleUrls
 })
 export class SidebarComponent {
+  selectedFilter: string = 'inicio';
   user: any;
 
   constructor(
@@ -27,6 +30,11 @@ export class SidebarComponent {
         console.error('Error al cargar datos del usuario:', error);
       },
     });
+    console.log(this.selectedFilter)
+  }
+  
+  selected(selected:string){
+    this.selectedFilter = selected;
   }
 
   logout(): void {

@@ -8,11 +8,12 @@
       <ul class="flex flex-col py-4 space-y-1 p-4">
         
         <!-- INICIO -->
-        <li>
-          <a href="#" class="group relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg hover:bg-white hover:text-[#111C3A] transition duration-500 ease-in-out focus:outline-none">
+        <li (click)="selected('inicio')">
+          <a [ngClass]="{'selected' : selectedFilter === 'inicio'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                class="w-5 h-5 fill-current text-white transition duration-500 group-hover:text-[#111C3A]"
+                [ngClass]="{'selected' : selectedFilter === 'inicio'}"
+                class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
               >
@@ -31,11 +32,12 @@
         </li>
 
         <!-- PAGOS RECURRENTES -->
-        <li>
-          <a href="#" class="group relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg hover:bg-white hover:text-[#111C3A] transition duration-500 ease-in-out focus:outline-none">
+        <li (click)="selected('pagos')">
+          <a [ngClass]="{'selected' : selectedFilter === 'pagos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg 
-              class="w-5 h-5 fill-current text-white transition duration-500 group-hover:text-[#111C3A]"
+              [ngClass]="{'selected' : selectedFilter === 'pagos'}"
+              class="w-5 h-5 fill-current text-white transition duration-200"
               viewBox="0 0 18 19" 
               xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M5.66669 1.66671C5.66669 1.20647 5.29359 0.833374 4.83335 0.833374C4.37312 0.833374 4.00002 1.20647 4.00002 1.66671V2.50004H3.16669C2.50365 2.50004 1.86776 2.76343 1.39892 3.23227C0.930079 3.70111 0.666687 4.337 0.666687 5.00004V15.8334C0.666687 16.4964 0.930079 17.1323 1.39892 17.6011C1.86776 18.07 2.50365 18.3334 3.16669 18.3334H14.8334C15.4964 18.3334 16.1323 18.07 16.6011 17.6011C17.07 17.1323 17.3334 16.4964 17.3334 15.8334V5.00004C17.3334 4.337 17.07 3.70111 16.6011 3.23227C16.1323 2.76343 15.4964 2.50004 14.8334 2.50004H14.4167C13.9564 2.50004 13.5834 2.87314 13.5834 3.33337C13.5834 3.79361 13.9564 4.16671 14.4167 4.16671H14.8334C15.0544 4.16671 15.2663 4.2545 15.4226 4.41079C15.5789 4.56707 15.6667 4.77903 15.6667 5.00004V7.50004H2.33335V5.00004C2.33335 4.77903 2.42115 4.56707 2.57743 4.41079C2.73371 4.2545 2.94567 4.16671 3.16669 4.16671H4.00002V5.00004C4.00002 5.46028 4.37312 5.83337 4.83335 5.83337C5.29359 5.83337 5.66669 5.46028 5.66669 5.00004V1.66671ZM2.57743 16.4226C2.42115 16.2663 2.33335 16.0544 2.33335 15.8334V9.16671H15.6667V15.8334C15.6667 16.0544 15.5789 16.2663 15.4226 16.4226C15.2663 16.5789 15.0544 16.6667 14.8334 16.6667H3.16669C2.94567 16.6667 2.73371 16.5789 2.57743 16.4226Z" />
@@ -50,11 +52,12 @@
         </li>
 
         <!-- GRUPOS DE PAGO -->
-        <li>
-          <a href="#" class="group relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg hover:bg-white hover:text-[#111C3A] transition duration-500 ease-in-out focus:outline-none">
+        <li (click)="selected('grupos')">
+          <a [ngClass]="{'selected' : selectedFilter === 'grupos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                class="w-5 h-5 fill-current text-white transition duration-500 group-hover:text-[#111C3A]"
+                [ngClass]="{'selected' : selectedFilter === 'grupos'}"
+                class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
               >
@@ -69,11 +72,12 @@
         </li>
 
         <!-- AHORROS -->
-        <li>
-          <a href="#" class="group relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg hover:bg-white hover:text-[#111C3A] transition duration-500 ease-in-out focus:outline-none">
+        <li (click)="selected('ahorros')">
+          <a [ngClass]="{'selected' : selectedFilter === 'ahorros'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                class="w-5 h-5 fill-current text-white transition duration-500 group-hover:text-[#111C3A]"
+                [ngClass]="{'selected' : selectedFilter === 'ahorros'}"
+                class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
               >
@@ -90,11 +94,12 @@
         </li>
 
         <!-- Categorias -->
-        <li>
-          <a href="#" class="group relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg hover:bg-white hover:text-[#111C3A] transition duration-500 ease-in-out focus:outline-none">
+        <li (click)="selected('Categorias')">
+          <a [ngClass]="{'selected' : selectedFilter === 'Categorias'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                class="w-5 h-5 fill-current text-white transition duration-500 group-hover:text-[#111C3A]"
+                [ngClass]="{'selected' : selectedFilter === 'Categorias'}"
+                class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
               >
@@ -112,10 +117,13 @@
         </li>
 
         <!-- Notificaciones -->
-        <li>
-          <a href="#" class="group relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg hover:bg-white hover:text-[#111C3A] transition duration-500 ease-in-out focus:outline-none">
+        <li (click)="selected('Notificaciones')">
+          <a [ngClass]="{'selected' : selectedFilter === 'Notificaciones'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+              <svg 
+              [ngClass]="{'selected' : selectedFilter === 'Notificaciones'}"
+              class="w-5 h-5 fill-current text-white transition duration-200"
+              class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
             </span>
             <div class="flex flex-row justify-between w-full tracking-wide truncate ">
               <span class="ml-2 text-sm ">Notificaciones</span>
