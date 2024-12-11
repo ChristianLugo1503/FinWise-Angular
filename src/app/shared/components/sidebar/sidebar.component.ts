@@ -21,7 +21,7 @@ export class SidebarComponent {
     private dataUserService: DataUserService,
     private transactionsSrv: TransactionsService,
   ) {
-    this.dataUserService.loadUserData().subscribe({
+    dataUserService.loadUserData().subscribe({
       next: (response) => {
         //console.log('Datos del usuario cargados:', response);
         this.user = response;
@@ -30,7 +30,7 @@ export class SidebarComponent {
         console.error('Error al cargar datos del usuario:', error);
       },
     });
-    console.log(this.selectedFilter)
+    //console.log(this.selectedFilter)
   }
   
   selected(selected:string){

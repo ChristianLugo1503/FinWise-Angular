@@ -9,10 +9,10 @@
         
         <!-- INICIO -->
         <li (click)="selected('inicio')">
-          <a [ngClass]="{'selected' : selectedFilter === 'inicio'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
+          <a [ngClass]="{'selectedBack' : selectedFilter === 'inicio'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                [ngClass]="{'selected' : selectedFilter === 'inicio'}"
+                [ngClass]="{'selectedText' : selectedFilter === 'inicio'}"
                 class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
@@ -25,7 +25,7 @@
               </svg>
             </span>
             <div class="flex flex-row justify-between w-full tracking-wide truncate ">
-              <span class="ml-2 text-sm ">Inicio</span>
+              <span [ngClass]="{'selectedText' : selectedFilter === 'inicio'}"  class="ml-2 text-sm ">Inicio</span>
               <span class="ml-2 text-sm text-[#111C3A]">></span>
             </div>
           </a>
@@ -33,10 +33,10 @@
 
         <!-- PAGOS RECURRENTES -->
         <li (click)="selected('pagos')">
-          <a [ngClass]="{'selected' : selectedFilter === 'pagos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
+          <a [ngClass]="{'selectedBack' : selectedFilter === 'pagos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg 
-              [ngClass]="{'selected' : selectedFilter === 'pagos'}"
+              [ngClass]="{'selectedText' : selectedFilter === 'pagos'}"
               class="w-5 h-5 fill-current text-white transition duration-200"
               viewBox="0 0 18 19" 
               xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +45,7 @@
                 </svg>
             </span>
             <div class="flex flex-row justify-between w-full tracking-wide truncate ">
-              <span class="ml-2 text-sm ">Pagos recurrentes</span>
+              <span [ngClass]="{'selectedText' : selectedFilter === 'pagos'}"  class="ml-2 text-sm ">Pagos recurrentes</span>
               <span class="ml-2 text-sm text-[#111C3A]">></span>
             </div>
           </a>
@@ -53,10 +53,10 @@
 
         <!-- GRUPOS DE PAGO -->
         <li (click)="selected('grupos')">
-          <a [ngClass]="{'selected' : selectedFilter === 'grupos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
+          <a [ngClass]="{'selectedBack' : selectedFilter === 'grupos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                [ngClass]="{'selected' : selectedFilter === 'grupos'}"
+                [ngClass]="{'selectedText' : selectedFilter === 'grupos'}"
                 class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
@@ -65,7 +65,7 @@
               </svg>
             </span>
             <div class="flex flex-row justify-between w-full tracking-wide truncate ">
-              <span class="ml-2 text-sm ">Grupos de pago</span>
+              <span [ngClass]="{'selectedText' : selectedFilter === 'grupos'}"  class="ml-2 text-sm ">Grupos de pago</span>
               <span class="ml-2 text-sm text-[#111C3A]">></span>
             </div>
           </a>
@@ -73,10 +73,10 @@
 
         <!-- AHORROS -->
         <li (click)="selected('ahorros')">
-          <a [ngClass]="{'selected' : selectedFilter === 'ahorros'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
+          <a [ngClass]="{'selectedBack' : selectedFilter === 'ahorros'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                [ngClass]="{'selected' : selectedFilter === 'ahorros'}"
+                [ngClass]="{'selectedText' : selectedFilter === 'ahorros'}"
                 class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
@@ -87,7 +87,7 @@
               </svg>
             </span>
             <div class="flex flex-row justify-between w-full tracking-wide truncate ">
-              <span class="ml-2 text-sm ">Ahorros</span>
+              <span [ngClass]="{'selectedText' : selectedFilter === 'ahorros'}"  class="ml-2 text-sm ">Ahorros</span>
               <span class="ml-2 text-sm text-[#111C3A]">></span>
             </div>
           </a>
@@ -95,10 +95,10 @@
 
         <!-- Categorias -->
         <li (click)="selected('Categorias')">
-          <a [ngClass]="{'selected' : selectedFilter === 'Categorias'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
+          <a [ngClass]="{'selectedBack' : selectedFilter === 'Categorias'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
-                [ngClass]="{'selected' : selectedFilter === 'Categorias'}"
+                [ngClass]="{'selectedText' : selectedFilter === 'Categorias'}"
                 class="w-5 h-5 fill-current text-white transition duration-200"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 18 17"
@@ -110,7 +110,7 @@
               </svg>
             </span>
             <div class="flex flex-row justify-between w-full tracking-wide truncate ">
-              <span class="ml-2 text-sm ">Categorías</span>
+              <span [ngClass]="{'selectedText' : selectedFilter === 'Categorias'}"  class="ml-2 text-sm ">Categorías</span>
               <span class="ml-2 text-sm text-[#111C3A]">></span>
             </div>
           </a>
@@ -118,15 +118,15 @@
 
         <!-- Notificaciones -->
         <li (click)="selected('Notificaciones')">
-          <a [ngClass]="{'selected' : selectedFilter === 'Notificaciones'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
+          <a [ngClass]="{'selectedBack' : selectedFilter === 'Notificaciones'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg 
-              [ngClass]="{'selected' : selectedFilter === 'Notificaciones'}"
+              [ngClass]="{'selectedText' : selectedFilter === 'Notificaciones'}"
               class="w-5 h-5 fill-current text-white transition duration-200"
               class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
             </span>
             <div class="flex flex-row justify-between w-full tracking-wide truncate ">
-              <span class="ml-2 text-sm ">Notificaciones</span>
+              <span [ngClass]="{'selectedText' : selectedFilter === 'Notificaciones'}"  class="ml-2 text-sm ">Notificaciones</span>
               <span class="ml-2 text-sm text-[#111C3A]">></span>
             </div>
           </a>
@@ -141,8 +141,8 @@
             <img class="w-10 rounded-full" src="https://w7.pngwing.com/pngs/536/90/png-transparent-black-logo-computer-icons-user-profile-login-avatar-description-heroes-monochrome-black.png" alt="avatar" />
           </div>
           <div class="flex justify-start flex-col items-start">
-            <p class="text-sm leading-5 text-white">{{user.name}} {{user.lastname}}</p>
-            <p class="text-xs leading-3 text-gray-300">{{user.email}}</p>
+            <p class="text-sm leading-5 text-white">{{user?.name ?? 'User'}} {{user?.lastname ?? ' '}}</p>
+            <p class="text-xs leading-3 text-gray-300">{{user?.email ?? ' '}}</p>
           </div>
         </div>
 

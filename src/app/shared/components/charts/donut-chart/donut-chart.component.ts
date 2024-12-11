@@ -49,8 +49,8 @@ export class DonutChartComponent implements OnChanges{
       this.amounts = [0];
     }
 
-    this.categoriesSrv.getUserData().subscribe(data => {
-      console.log(data);
+    this.categoriesSrv.getCategoriesData().subscribe(data => {
+      //console.log(data);
     
       // Crear el objeto de colores a partir de los datos recibidos
       const categoryColors = data.reduce((acc:any, category:any) => {
@@ -58,7 +58,7 @@ export class DonutChartComponent implements OnChanges{
         return acc;
       }, {} as { [key: string]: string });
     
-      console.log(categoryColors);
+      //console.log(categoryColors);
     
       // Puedes usar `categoryColors` para configurar los colores de la gráfica.
       const colors = this.categories.map(category => categoryColors[category] || '#000000');  // #000000 es color por defecto

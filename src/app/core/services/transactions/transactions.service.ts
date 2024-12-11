@@ -1,33 +1,42 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap, catchError, of, tap } from 'rxjs';
+import { DataUserService } from '../dataUser/data-user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionsService {
   private BASE_URL = 'http://localhost:8080/api/v1/transactions';
-  private userData: any | null = null; // Cambiado a una variable simple
   private transactionsSubject: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
 
-  constructor(private httpClient: HttpClient) {
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      this.userData = JSON.parse(userData); // Guarda los datos del usuario directamente en la variable
-    }
-  }
+  constructor(
+    private httpClient: HttpClient,
+    private dataUserSrv: DataUserService
+  ) {}
 
-  // Obtener las transacciones por usuario
+  // Obtener las transacciones por usuario, solo si los datos del usuario están disponibles
   getTransactionsByUserId(): Observable<any[]> {
-    if (this.userData) {
-      return this.httpClient.get<any[]>(`${this.BASE_URL}/user/${this.userData.id}`).pipe(
-        tap((data) => {
-          this.transactionsSubject.next(data); // Actualiza las transacciones en el BehaviorSubject
-        })
-      );
-    } else {
-      throw new Error('User data not found');
-    }
+    return this.dataUserSrv.getUserData().pipe(
+      switchMap((userData) => {
+        if (userData && userData.id) {
+          // Si los datos del usuario están listos, obtenemos las transacciones
+          return this.httpClient.get<any[]>(`${this.BASE_URL}/user/${userData.id}`).pipe(
+            tap((data) => {
+              //console.log('Transacciones Cargadas', data);
+              this.transactionsSubject.next(data); // Actualizamos el BehaviorSubject con los datos de transacciones
+            }),
+            catchError((error) => {
+              console.error('Error al cargar transacciones:', error);
+              return of([]); // Devuelve un array vacío en caso de error
+            })
+          );
+        } else {
+          // Si no se encuentran los datos del usuario, devolvemos un array vacío
+          return of([]);
+        }
+      })
+    );
   }
 
   // Obtener las transacciones observables
@@ -43,5 +52,9 @@ export class TransactionsService {
         this.getTransactionsByUserId().subscribe();
       })
     );
+  }
+
+  clearData(): void {
+    this.transactionsSubject.next(null);
   }
 }

@@ -40,20 +40,11 @@ export default class LoginComponent {
   login(): void {
     this.authService.login(this.form().value).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
+        //console.log('Login successful', response);
         const token = response.token;
         const payload = JSON.parse(atob(token.split('.')[1]));
         const role = payload.role;
         localStorage.setItem('Email',payload.sub);
-
-        this.dataUserService.loadUserData().subscribe({
-          next: (response) => {
-            console.log('Datos del usuario cargados:', response);
-          },
-          error: (error) => {
-            console.error('Error al cargar datos del usuario:', error);
-          },
-        });
 
         if (role === 'admin') {
           this.router.navigate(['/dashboard']);

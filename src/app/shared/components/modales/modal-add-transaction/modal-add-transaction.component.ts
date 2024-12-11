@@ -8,7 +8,6 @@ import { ModalAlertService } from '../../../../core/services/alert/modal-alert.s
 import { CategoriesService } from '../../../../core/services/categories/categories.service';
 import { TransactionsService } from '../../../../core/services/transactions/transactions.service';
 
-
 @Component({
     selector: 'app-modal-add-transaction',
     imports: [
@@ -36,8 +35,8 @@ export class ModalAddTransactionComponent implements OnInit{
   ) { this.getCurrentDate()}
 
   ngOnInit(): void {
-    this.categorieSrv.getUserData().subscribe(data => {
-      console.log('Categorias del usuario cargadas desde el modal', data);
+    this.categorieSrv.getCategoriesData().subscribe(data => {
+      //console.log('Categorias del usuario cargadas desde el modal', data);
       this.categories = data.map((category: { id: number, name: any; image: any; type: any }) => {
         const blob = this.base64ToBlob(category.image, 'image/jpeg');
         return {
@@ -47,7 +46,7 @@ export class ModalAddTransactionComponent implements OnInit{
           type: category.type,
         }
       });
-      console.log('ngonit',this.categories)
+      //console.log('ngonit',this.categories)
     });
   }
 
@@ -61,7 +60,7 @@ export class ModalAddTransactionComponent implements OnInit{
   }
 
   selectCategory(categoryName: number): void {
-    console.log('Categoría seleccionada:', categoryName);
+    //console.log('Categoría seleccionada:', categoryName);
   }
 
   getCurrentDate() : string {
@@ -104,7 +103,7 @@ export class ModalAddTransactionComponent implements OnInit{
       next: (response) => {
         this.closeModal();
         this.modalAlertSrv.openCustomDialog('Éxito','Transacción añadida con éxito','success');
-        console.log(response);
+        //console.log(response);
         // Llamar a getTransactionsByUserId() para cargar datos iniciales
         this.transactionSrv.getTransactionsByUserId().subscribe({
           error: (error) => {

@@ -59,6 +59,6 @@ export class YearPickerComponent implements OnInit {
 
     // Emitir el año seleccionado
     this.yearSelected.emit(selectedYear);
-    console.log("Año seleccionado:", selectedYear);
+    //console.log("Año seleccionado:", selectedYear);
   }
 }

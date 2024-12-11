@@ -91,7 +91,7 @@ export class WeekPickerComponent implements OnInit {
       };
 
       this.dateRangeSelected.emit(dateRange);
-      console.log(this.dateRangeSelected)
+      //console.log(this.dateRangeSelected)
     }
   }
 

@@ -31,7 +31,7 @@ import { DayPickerComponent } from '../../../shared/components/dates/day-picker/
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.css']
 })
-export default class ChartsComponent {
+export default class ChartsComponent implements OnInit {
 // ************ VARIABLES ************
   private modalSvc = inject(ModalAddTransactionService);
   public name: any;
@@ -56,23 +56,38 @@ export default class ChartsComponent {
     private transactionsSrv: TransactionsService,
     public dialog: MatDialog
   ) {
-    this.getTransactionsByUserId(); // Llamar a getTransactionsByUserId() para cargar datos iniciales
-    this.getUserData(); // Cargar datos de usuario
-    this.getCategoriesByUserID(); // Cargar categorías de usuario
-    this.filterDay();  //se llama a filter day ya que es el el filtro inicial
+    this.getUserData()
+    
   }
   
 // ************** FUNCIONES ************
+  ngOnInit(): void {
+    //this.getUserData(); // Cargar datos de usuario
+  }
+
+  getUserData(){
+    this.dataUserService.loadUserData().subscribe({
+      next: (data) => {
+        if (data !== null) {
+          this.name = data.name
+          this.getTransactionsByUserId(); // Llamar a getTransactionsByUserId() para cargar datos iniciales
+          this.getCategoriesByUserID(); // Cargar categorías de usuario
+          this.filterDay();  //se llama a filter day ya que es el el filtro inicial
+        }
+      },
+      error: (error) => console.error(error)
+    });
+  }
+
   setActiveTab(tab: string): void { 
     this.activeTab = tab 
     this.getTransactionsByUserId(); // Llamar a getTransactionsByUserId() para cargar datos iniciales
-    this.getUserData(); // Cargar datos de usuario
+    //this.getUserData(); // Cargar datos de usuario
     this.getCategoriesByUserID(); // Cargar categorías de usuario
     this.filterDay();
   }
 
   openCustomDialog(type: string) { this.modalSvc.openModal(type) }
-
 
   onDaySelected(day:any){
     this.selectedDay = day;
@@ -82,7 +97,6 @@ export default class ChartsComponent {
   onDateRangeSelected(dateRange: { start: string, end: string }) {
     this.selectedRange = dateRange;
     this.filterWithRange(null);
-    //console.log('Rango recibido del hijo (objeto):', dateRange);
   }
 
   onYearSelected(year: number) {
@@ -92,15 +106,10 @@ export default class ChartsComponent {
   
   getTransactionsByUserId(){
     this.transactionsSrv.getTransactionsByUserId().subscribe({
-      next:() => this.transactions = true,
+      next:(data) => {
+        this.transactions = true
+      },
       error: (error) => console.error('Error al cargar las transacciones iniciales:', error)
-    });
-  }
-
-  getUserData(){
-    this.dataUserService.getUserData().subscribe({
-      next: (data) => this.name = data.name,
-      error: (error) => console.error(error)
     });
   }
 
@@ -111,7 +120,6 @@ export default class ChartsComponent {
   }
 
   filterDay(): void{
-    //console.log('Fecha seleccionada;;;;;;;;;;;',this.selectedDay)
     this.activeFilter = 'day'
     if (this.selectedDay) {
       this.transactionsSrv.getTransactionsData().subscribe({ // Suscribirse al Observable de transacciones
@@ -158,11 +166,9 @@ export default class ChartsComponent {
     if (Filter) this.activeFilter = Filter;
   
     if(this.selectedRange !== null){
-      console.log(this.selectedRange)
       this.transactionsSrv.getTransactionsData().subscribe({ // Suscribirse al Observable de transacciones
         next: (response) => {
           if (response) {
-            console.log('Array original',response)
 
           // ******** FILTRO INICIAL POR CATEGORIA, RANGO DE FECHAS Y MONTOS ******** 
             const { categoriesData, amountsData, datesData } = response.reduce((acc, transaction: any) => {
@@ -174,7 +180,6 @@ export default class ChartsComponent {
               acc.datesData.push(normalizedDbDate);
               return acc;
             }, { categoriesData: [], amountsData: [], datesData:[] });
-            //console.log('Filtro por categorias, montos y fechas:', categoriesData, amountsData, datesData)
           
           // ********  AGRUPAR Y SUMAR MONTOS POR CATEGORIAS EN TOTAL ******** 
             const categorySums = categoriesData.reduce((acc:any, category:any, index:any) => {
@@ -184,7 +189,6 @@ export default class ChartsComponent {
               acc[category] += amountsData[index];
               return acc;
             }, {} as Record<string, number>);
-            //console.log('Montos agrupados por categoria', categorySums)
 
           // ********  ENVIAR DATOS A DONUT CHART ******** 
             this.categories = Object.keys(categorySums);
@@ -209,7 +213,6 @@ export default class ChartsComponent {
               const [category, date] = key.split('_'); // Dividir la clave en categoría y fecha
               return { category, date, amount };
             });
-            console.log('Arreglo con categoría, fecha y monto:', categorySumsArray);            
             
           // LLENAR ARRAY DE FECHAS DEL ***BAR CHART*** CON LAS FECHAS COMPLETAS DEL RANGO 
             this.dates = this.generarFechas();
@@ -232,8 +235,6 @@ export default class ChartsComponent {
 
               return acc;
             }, [] as { name: string, data: number[] }[]);
-
-            console.log('Datos contruido array series', this.series) 
           } 
         },
         error: (error) => console.error('Error al cargar las transacciones del usuario:', error)
@@ -266,24 +267,18 @@ export default class ChartsComponent {
             this.dates = [
               'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-            ];
-            console.log('FECHAAA SELECCIONADAAAAA AÑO ', this.selectedYear);
-  
+            ];  
             // ******** FILTRO INICIAL POR CATEGORIA Y AÑO ******** 
             const { categoriesData, amountsData, datesData } = response.reduce((acc, transaction: any) => {
               const normalizedDbDate = new Date(transaction.date);
               const year = normalizedDbDate.getFullYear(); // Año de la transacción
-              console.log('fechaaaaaaaa', year);
-  
+
               if (transaction.type !== this.activeTab) {
-                console.log('DAto descartado ', transaction);
                 return acc; // Se filtra por tipo de transacción
               }
   
               // Filtrar por el año seleccionado
               if (year !== this.selectedYear) {
-                console.log('DAto descartado ', transaction);
-                console.log('year', year, 'selectedYear', this.selectedYear);
                 return acc;
               }
   
@@ -292,9 +287,7 @@ export default class ChartsComponent {
               acc.datesData.push(normalizedDbDate);
               return acc;
             }, { categoriesData: [], amountsData: [], datesData: [] });
-  
-            console.log('Filtro por categorías, montos y fechas:', categoriesData, amountsData, datesData);
-  
+    
             // ******** AGRUPAR Y SUMAR MONTOS POR CATEGORÍAS EN TOTAL ******** 
             const categorySums = categoriesData.reduce((acc: any, category: any, index: any) => {
               if (!acc[category]) {
@@ -303,9 +296,7 @@ export default class ChartsComponent {
               acc[category] += amountsData[index];
               return acc;
             }, {} as Record<string, number>);
-  
-            console.log('Montos agrupados por categoría:', categorySums);
-  
+    
             // ******** ENVIAR DATOS A DONUT CHART ******** 
             this.categories = Object.keys(categorySums);
             this.amounts = Object.values(categorySums);
@@ -333,7 +324,6 @@ export default class ChartsComponent {
               const [year, month] = monthYear.split('-').map(Number);
               return { category, year, month: month - 1, amount }; // Mes ajustado (0-11)
             });
-            console.log('Arreglo con categoría, mes/año y monto:', categorySumsArrayMonth);
   
             // ******** LLENAR ARRAY DE MESES PARA EL GRÁFICO ******** 
             this.series = this.categories.map(category => {
@@ -347,7 +337,6 @@ export default class ChartsComponent {
               return { name: category, data };
             });
   
-            console.log('Datos construidos en array series:', this.series);
           }
         },
         error: (error) => console.error('Error al cargar las transacciones del usuario:', error)

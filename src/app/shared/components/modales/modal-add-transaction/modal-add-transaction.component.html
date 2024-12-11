@@ -44,7 +44,7 @@
 
         <div class="flex w-full flex-wrap overflow-auto justify-start mt-[11px]">
           <div class="uno mt-3 flex w-full w-1/5 px-2" *ngFor="let category of categories">
-            <ng-container *ngIf="category.type === (data.title+'s')">
+            <ng-container *ngIf="category.type === (data.title)">
               <label class="cursor-pointer flex flex-col items-center break-all w-12 text-sm hover:scale-105 transition ease-in-out duration-500">
                 <input
                   type="radio"

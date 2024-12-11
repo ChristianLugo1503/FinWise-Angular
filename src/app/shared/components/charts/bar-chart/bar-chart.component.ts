@@ -49,8 +49,8 @@ export class BarChartComponent implements OnChanges {
 
   ngOnChanges(): void {
 
-    this.categoriesSrv.getUserData().subscribe(data => {
-      console.log(data);
+    this.categoriesSrv.getCategoriesData().subscribe(data => {
+      //console.log(data);
     
       // Crear el objeto de colores a partir de los datos recibidos
       const categoryColors: { [key: string]: string } = data.reduce((acc:any, category:any) => {
@@ -58,7 +58,7 @@ export class BarChartComponent implements OnChanges {
         return acc;
       }, {} as { [key: string]: string });
 
-      console.log(categoryColors);
+      //console.log(categoryColors);
 
       // Crear un array de colores para las categorías de series
       const colors = this.series.map((seriesItem: any) => {

@@ -30,7 +30,7 @@ export class DayPickerComponent implements OnInit {
   emitCurrentDate(): void {
     const today = moment().format('YYYY-MM-DD');
     this.daySelected.emit(today);
-    console.log('Fecha actual:', today);
+    //console.log('Fecha actual:', today);
   }
 
   // Método para emitir la fecha seleccionada
@@ -38,7 +38,7 @@ export class DayPickerComponent implements OnInit {
     if (date) {
       const formattedDate = moment(date).format('YYYY-MM-DD'); // Convertir a Moment y formatear
       this.daySelected.emit(formattedDate);
-      console.log('Fecha seleccionada:', formattedDate);
+      //console.log('Fecha seleccionada:', formattedDate);
     }
   }
 }

@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
+import { CategoriesService } from '../categories/categories.service';
+import { DataUserService } from '../dataUser/data-user.service';
+import { TransactionsService } from '../transactions/transactions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +15,19 @@ export class AuthService {
   private tokenKey = 'authToken';
   private refreshTokenKey = 'refreshToken';
 
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(
+    private httpClient: HttpClient, 
+    private router: Router,
+    private categoriesSrv: CategoriesService, 
+    private dataUserSrv: DataUserService,
+    private transactionSrv: TransactionsService
+  ) { }
 
   login(data:any): Observable<any>{
     return this.httpClient.post<any>(`${this.BASE_URL}/login`, data).pipe(
       tap(response => {
         if(response.token){
-          console.log(response.token);
+          //console.log(response.token);
           this.setToken(response.token);
           this.setRefreshToken(response.refreshToken)
           this.autoRefreshToken();
@@ -31,7 +40,7 @@ export class AuthService {
     return this.httpClient.post<any>(`${this.BASE_URL}/register`, data).pipe(
       tap(response => {
         if(response.token){
-          console.log(response.token);
+          //console.log(response.token);
           this.setToken(response.token);
           this.setRefreshToken(response.refreshToken)
           this.autoRefreshToken();
@@ -69,7 +78,7 @@ export class AuthService {
     return this.httpClient.post<any>(`${this.BASE_URL}/refresh`, { refreshToken: refreshToken }).pipe(
       tap(response => {
         if (response.token) {
-          console.log('Refresh token'+response.token);
+          //console.log('Refresh token'+response.token);
           this.setToken(response.token);
           this.setRefreshToken(response.refreshToken);
           this.autoRefreshToken();
@@ -108,6 +117,10 @@ export class AuthService {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.refreshTokenKey);
     localStorage.removeItem('Email')
+    localStorage.removeItem('userData')
+    this.categoriesSrv.clearData();
+    this.dataUserSrv.clearUserData();
+    this.transactionSrv.clearData();
     this.router.navigate(['/login']);
   }
 }

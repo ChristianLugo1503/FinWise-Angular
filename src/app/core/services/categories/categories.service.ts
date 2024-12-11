@@ -1,51 +1,65 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap, catchError, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { DataUserService } from '../dataUser/data-user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriesService {
   private BASE_URL = 'http://localhost:8080/api/v1/categories/user';
-  private userDataSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
+  private categoriesSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
+  private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); // Estado de carga
 
-  constructor(private httpClient: HttpClient) {
-    // Cargar los datos del usuario desde localStorage y emitir el valor inicial
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      this.userDataSubject.next(JSON.parse(userData));
-    }
-  }
+  constructor(
+    private httpClient: HttpClient,
+    private dataUserSrv: DataUserService
+  ) {}
 
-  // Cargar los datos del usuario desde la API y actualizar el BehaviorSubject
+  // Cargar las categorías por usuario
   getCategoriesByUserId(): Observable<any> {
-    const userData = this.userDataSubject.value; // Obtén los datos actuales del BehaviorSubject
-    if (userData) {
-      return this.httpClient.get<any>(`${this.BASE_URL}/${userData.id}`).pipe(
-        tap((data) => {
-          this.userDataSubject.next(data); // Actualiza el BehaviorSubject con la respuesta
-        })
-      );
-    } else {
-      // Manejo de caso en el que `userData` no esté disponible (ejemplo, redirigir al login)
-      throw new Error('User data not found');
-    }
+    this.isLoadingSubject.next(true); // Iniciamos el estado de carga
+
+    return this.dataUserSrv.getUserData().pipe(
+      switchMap((userData) => {
+        if (userData && userData.id) {
+          // Si los datos del usuario están disponibles, hacemos la petición para obtener las categorías
+          return this.httpClient.get<any>(`${this.BASE_URL}/${userData.id}`).pipe(
+            tap((data) => {
+              //console.log('CATEGORÍAS CARGADAS', data);
+              this.categoriesSubject.next(data); // Actualizamos el BehaviorSubject con los datos de categorías
+            }),
+            catchError((error) => {
+              console.error('Error al cargar categorías:', error);
+              this.categoriesSubject.next(null); // En caso de error, reseteamos el BehaviorSubject
+              return of(null); // Devuelve un observable vacío en caso de error
+            }),
+            tap(() => {
+              this.isLoadingSubject.next(false); // Terminamos la carga
+            })
+          );
+        } else {
+          // Si no se encuentran los datos del usuario, terminamos la carga y retornamos un array vacío
+          this.isLoadingSubject.next(false);
+          return of(null);
+        }
+      })
+    );
   }
 
-  // Obtener los datos actuales del usuario de forma reactiva
-  getUserData(): Observable<any> {
-    console.log('Categorias del usuario Cargada por medio de USerDAta')
-    return this.userDataSubject.asObservable();
+  // Obtener las categorías observables
+  getCategoriesData(): Observable<any | null> {
+    //console.log('Categorías del usuario cargadas por medio de UserData');
+    return this.categoriesSubject.asObservable();
   }
 
-  // Obtener los datos del usuario de forma instantánea (sin Observable)
-  getUserDataSnapshot(): any | null {
-    return this.userDataSubject.value;
+  // Obtener el estado de carga (si se están cargando las categorías)
+  isLoading(): Observable<boolean> {
+    return this.isLoadingSubject.asObservable();
   }
 
-  // Limpiar los datos del usuario (por ejemplo, al cerrar sesión) y eliminar de localStorage
-  clearUserData(): void {
-    this.userDataSubject.next(null);
+  clearData(): void {
+    this.categoriesSubject.next(null);
     localStorage.removeItem('userData');
   }
 }

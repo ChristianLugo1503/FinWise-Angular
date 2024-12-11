@@ -64,7 +64,7 @@ export default class RegisterComponent {
 
         this.dataUserService.loadUserData().subscribe({
           next: (response) => {
-            console.log('Datos del usuario cargados:', response);
+            //console.log('Datos del usuario cargados:', response);
           },
           error: (error) => {
             console.error('Error al cargar datos del usuario:', error);

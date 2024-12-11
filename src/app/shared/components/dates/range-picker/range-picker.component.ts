@@ -36,7 +36,7 @@ export class RangePickerComponent {
       };
 
       this.dateRangeSelected.emit(dateRange);
-      console.log(this.dateRangeSelected)
+      //console.log(this.dateRangeSelected)
     }
   }
   private formatDate(date: Date): string {
