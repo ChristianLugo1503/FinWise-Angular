@@ -81,10 +81,20 @@ export default class ChartsComponent implements OnInit {
 
   setActiveTab(tab: string): void { 
     this.activeTab = tab 
-    this.getTransactionsByUserId(); // Llamar a getTransactionsByUserId() para cargar datos iniciales
-    //this.getUserData(); // Cargar datos de usuario
-    this.getCategoriesByUserID(); // Cargar categorías de usuario
-    this.filterDay();
+    // this.getTransactionsByUserId(); // Llamar a getTransactionsByUserId() para cargar datos iniciales
+    // this.getUserData(); // Cargar datos de usuario
+    // this.getCategoriesByUserID(); // Cargar categorías de usuario
+    switch (this.activeFilter) {
+      case 'day':
+        this.filterDay();
+        break;
+      case 'year':
+        this.filterYear();
+        break;
+      case this.activeFilter:
+        this.filterWithRange(this.activeFilter);
+        break;
+    }
   }
 
   openCustomDialog(type: string) { this.modalSvc.openModal(type) }
