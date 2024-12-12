@@ -5,14 +5,16 @@ import { DataDonutService } from '../../../core/services/dataDonut/data-donut.se
 import { CategoriesService } from '../../../core/services/categories/categories.service';
 import { ModalSpecsCategoriesService } from '../../../core/services/modalSpecsCategories/modal-specs-categories.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CustomCurrencyPipe } from "../../../shared/pipes/currency/custom-currency.pipe";
 
 @Component({
     selector: 'app-expenses-by-category',
     imports: [
-        CommonModule,
-        FormsModule,
+    CommonModule,
+    FormsModule,
     ReactiveFormsModule,
-    ],
+    CustomCurrencyPipe
+],
     templateUrl: './expenses-by-category.component.html',
     styleUrl: './expenses-by-category.component.css'
 })
@@ -45,7 +47,7 @@ export default class ExpensesByCategoryComponent implements OnInit {
                 this.categoriesData = data.categories;
                 this.amountsData = data.amounts;
                 this.transactionsIDs = data.transactionsIDs;
-                console.log('DATOS COMPLETOS', this.categoriesData, this.amountsData, this,this.transactionsIDs)
+                //console.log('DATOS COMPLETOS', this.categoriesData, this.amountsData, this,this.transactionsIDs)
                 
                 // Obtener la lista completa de categorías desde el servicio
                 this.categoriesSrv.getCategoriesData().subscribe((allCategories: any[]) => {
@@ -88,5 +90,5 @@ export default class ExpensesByCategoryComponent implements OnInit {
         }, 0);
     }
 
-    openCustomModal(type: string, img:string) { this.modalSrv.openModal(type, img) }
+    openCustomModal(type: string, img:string, transactionsID: number) { this.modalSrv.openModal(type, img, transactionsID) }
 }

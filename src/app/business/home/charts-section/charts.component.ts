@@ -301,25 +301,26 @@ export default class ChartsComponent implements OnInit {
               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
             ];  
             // ******** FILTRO INICIAL POR CATEGORIA Y AÑO ******** 
-            const { categoriesData, amountsData, datesData, transactionID} = response.reduce((acc, transaction: any) => {
+            const { categoriesData, amountsData, datesData, transactionID } = response.reduce((acc, transaction: any) => {
               const normalizedDbDate = new Date(transaction.date);
               const year = normalizedDbDate.getFullYear(); // Año de la transacción
-
+            
               if (transaction.type !== this.activeTab) {
                 return acc; // Se filtra por tipo de transacción
               }
-  
+            
               // Filtrar por el año seleccionado
               if (year !== this.selectedYear) {
                 return acc;
               }
-  
+            
               acc.categoriesData.push(transaction.categoryID.name);
               acc.amountsData.push(transaction.amount);
-              acc.datesData.push(normalizedDbDate);
-              acc.datesData.push(transaction.id);
+              acc.datesData.push(normalizedDbDate); // Solo fechas
+              acc.transactionID.push(transaction.id); // IDs separados
               return acc;
-            }, { categoriesData: [], amountsData: [], datesData: [] , transactionID: []});
+            }, { categoriesData: [], amountsData: [], datesData: [], transactionID: [] });
+            
 
     
             // ******** AGRUPAR Y SUMAR MONTOS POR CATEGORÍAS EN TOTAL ******** 

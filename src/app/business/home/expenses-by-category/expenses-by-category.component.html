@@ -1,12 +1,12 @@
 <div class="flex flex-col items-end ">
     <p class="text-xs text-white font-bold font-dm">Balance General</p>
-    <h1  [ngClass]="{'text-[#f0190a]': balanceGen < 0, 'text-[#088908]': balanceGen >= 0}" class="text-3xl font-bold font-dm">${{this.balanceGen}}</h1>
+    <h1  [ngClass]="{'text-[#f0190a]': balanceGen < 0, 'text-[#088908]': balanceGen >= 0}" class="text-3xl font-bold font-dm">{{this.balanceGen | customCurrency}}</h1>
 </div>
 
 <h2 class="text-sm text-white font-semibold mb-4 ml-3">Gastos por categorías:</h2>
 <div class="h-[34rem] overflow-y-auto">
     
-        <div (click)="openCustomModal(category.name, category.image)" *ngFor="let category of categoriesWithImagesAndAmounts" class="flex w-full items-center justify-between bg-[#111A3D] p-3 rounded-lg mb-3 cursor-pointer hover:scale-105 transition duration-400 ease-in-out h-16 w-[21rem] ml-3 ">
+        <div (click)="openCustomModal(category.name, category.image, transactionsIDs)" *ngFor="let category of categoriesWithImagesAndAmounts" class="flex w-full items-center justify-between bg-[#111A3D] p-3 rounded-lg mb-3 cursor-pointer hover:scale-105 transition duration-400 ease-in-out h-16 w-[21rem] ml-3 ">
             <div class="flex items-center space-x-3 ">
                 <!-- Imagen de la categoría -->
                 <div class="">
@@ -16,7 +16,7 @@
                     <p class="text-sm text-white font-semibold">{{ category.name }}</p>
                 </div>
             </div>
-            <p class="text-sm text-white font-semibold">${{ category.amount }}</p>
+            <p class="text-sm text-white font-semibold">{{ category.amount | customCurrency }}</p>
         </div>
     
 </div>

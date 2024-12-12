@@ -8,11 +8,12 @@ import { SpecsCategoriesComponent } from '../../../shared/components/modales/spe
 export class ModalSpecsCategoriesService {
   constructor(private dialog: MatDialog) {}
 
-  openModal(titulo: string, imagen:string): void {
+  openModal(titulo: string, imagen:string, transactions: number): void {
     this.dialog.open(SpecsCategoriesComponent, {
       data: {
         title: titulo,
-        img: imagen
+        img: imagen,
+        transactionsID : transactions,
       }
     });
   }
