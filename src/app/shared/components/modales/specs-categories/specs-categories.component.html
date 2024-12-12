@@ -1,1 +1,21 @@
-<p>specs-categories works!</p>
+<div class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade-in-opacity">
+
+    <div class="border-2 border-white fixed bg-[#0A1232] top-20 rounded-lg w-3/5  animate-slide-in-top h-[33rem] overflow-auto" (click)="$event.stopPropagation()">
+      
+      <!-- TITULO Y SALIR -->
+      <div class="sticky top-0 bg-[#0A1232] z-10 items-center justify-center flex flex-row items-center justify-between py-2 px-4">
+        <div class="ml-1 h-full flex flex-row">
+            <img class="w-12" src="{{data.img}}" alt="">
+          <h2 class="text-2xl flex ml-2 items-center justify-center font-bold text-center text-white">{{ data.title }}</h2>
+        </div>
+        <button class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold" (click)="closeModal()">×</button>
+      </div>
+  
+      
+      
+  
+    </div>
+    
+  </div>
+    
+      

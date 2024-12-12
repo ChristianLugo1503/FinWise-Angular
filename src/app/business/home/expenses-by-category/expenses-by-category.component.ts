@@ -3,11 +3,15 @@ import { TransactionsService } from '../../../core/services/transactions/transac
 import { CommonModule } from '@angular/common';
 import { DataDonutService } from '../../../core/services/dataDonut/data-donut.service';
 import { CategoriesService } from '../../../core/services/categories/categories.service';
+import { ModalSpecsCategoriesService } from '../../../core/services/modalSpecsCategories/modal-specs-categories.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-expenses-by-category',
     imports: [
-        CommonModule
+        CommonModule,
+        FormsModule,
+    ReactiveFormsModule,
     ],
     templateUrl: './expenses-by-category.component.html',
     styleUrl: './expenses-by-category.component.css'
@@ -21,6 +25,7 @@ export default class ExpensesByCategoryComponent implements OnInit {
 
     constructor(
         private transactionsSrv: TransactionsService,
+        private modalSrv: ModalSpecsCategoriesService,
         private dataDonutSrv: DataDonutService,
         private categoriesSrv: CategoriesService
     ) {
@@ -82,4 +87,6 @@ export default class ExpensesByCategoryComponent implements OnInit {
             return balance;
         }, 0);
     }
+
+    openCustomModal(type: string, img:string) { this.modalSrv.openModal(type, img) }
 }
