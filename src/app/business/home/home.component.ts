@@ -15,6 +15,8 @@ import { DataUserService } from '../../core/services/dataUser/data-user.service'
     styleUrl: './home.component.css'
 })
 export default class HomeComponent {
+ 
+
   constructor(
     dataUserService : DataUserService
   ){
@@ -27,6 +29,8 @@ export default class HomeComponent {
     //     },
     //   });
   }
+
+  
 
   
 }

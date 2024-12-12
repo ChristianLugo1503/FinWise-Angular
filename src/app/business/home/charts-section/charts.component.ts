@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, resolveForwardRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, resolveForwardRef, ViewChild } from '@angular/core';
 import { DataUserService } from '../../../core/services/dataUser/data-user.service';
 import { ModalAddTransactionService } from '../../../core/services/modalAddTransaction/modal-add-transaction.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,8 @@ import { RangePickerComponent } from '../../../shared/components/dates/range-pic
 import { MonthPickerComponent } from '../../../shared/components/dates/month-picker/month-picker.component';
 import { YearPickerComponent } from '../../../shared/components/dates/year-picker/year-picker.component';
 import { DayPickerComponent } from '../../../shared/components/dates/day-picker/day-picker.component';
+import { BehaviorSubject } from 'rxjs';
+import { DataDonutService } from '../../../core/services/dataDonut/data-donut.service';
 
 @Component({
   selector: 'app-charts',
@@ -41,6 +43,7 @@ export default class ChartsComponent implements OnInit {
   public selectedRange: { start: string, end: string } | null = null; //variable para las fechas con rango
   public selectedYear! : number;
   public selectedDay! : string;
+
 // ************ DATA DONUT CHART ************
   public categories = ['vacio'];
   public amounts!: number[];
@@ -54,6 +57,7 @@ export default class ChartsComponent implements OnInit {
     private dataUserService: DataUserService,
     private categorieSrv: CategoriesService,
     private transactionsSrv: TransactionsService,
+    private dataDonutSrv: DataDonutService,
     public dialog: MatDialog
   ) {
     this.getUserData()
@@ -135,15 +139,16 @@ export default class ChartsComponent implements OnInit {
       this.transactionsSrv.getTransactionsData().subscribe({ // Suscribirse al Observable de transacciones
         next: (response) => {
           if (response) {
-            const { categoriesData, amountsData } = response.reduce((acc, transaction: any) => {
+            const { categoriesData, amountsData, transactionID } = response.reduce((acc, transaction: any) => {
               const normalizedDbDate = new Date(transaction.date).toISOString().split('T')[0]; // Se normaliza la fecha de la bd
               if (transaction.type !== this.activeTab) return acc; // Se filtra por categoría
               if(normalizedDbDate !== this.selectedDay) return acc;
 
               acc.categoriesData.push(transaction.categoryID.name);
               acc.amountsData.push(transaction.amount);
+              acc.transactionID.push(transaction.id)
               return acc;
-            }, { categoriesData: [], amountsData: [] });
+            }, { categoriesData: [], amountsData: [], transactionID: [] });
           
             // Agrupar y sumar montos por categoría
             const categorySums = categoriesData.reduce((acc:any, category:any, index:any) => {
@@ -157,6 +162,14 @@ export default class ChartsComponent implements OnInit {
             // Convertir las claves y valores del objeto en arrays separados
             this.categories = Object.keys(categorySums);
             this.amounts = Object.values(categorySums);
+
+            let datos = {
+              transactionsIDs: transactionID,
+              categories: this.categories,
+              amounts: this.amounts
+            }
+
+            this.dataDonutSrv.setData(datos);
 
             // Construir la serie de datos con categorías y montos
             this.series = this.categories.map((categoria: string, index: number) => ({
@@ -181,15 +194,16 @@ export default class ChartsComponent implements OnInit {
           if (response) {
 
           // ******** FILTRO INICIAL POR CATEGORIA, RANGO DE FECHAS Y MONTOS ******** 
-            const { categoriesData, amountsData, datesData } = response.reduce((acc, transaction: any) => {
+            const { categoriesData, amountsData, datesData,transactionID } = response.reduce((acc, transaction: any) => {
               const normalizedDbDate = new Date(transaction.date).toISOString().split('T')[0]; // Se normaliza la fecha de la bd
               if (transaction.type !== this.activeTab) return acc; // Se filtra por categoría
               if (normalizedDbDate < this.selectedRange!.start || normalizedDbDate > this.selectedRange!.end) return acc; //filtrar por el rango de fechas
               acc.categoriesData.push(transaction.categoryID.name);
               acc.amountsData.push(transaction.amount);
               acc.datesData.push(normalizedDbDate);
+              acc.transactionID.push(transaction.id)
               return acc;
-            }, { categoriesData: [], amountsData: [], datesData:[] });
+            }, { categoriesData: [], amountsData: [], datesData:[], transactionID:[] });
           
           // ********  AGRUPAR Y SUMAR MONTOS POR CATEGORIAS EN TOTAL ******** 
             const categorySums = categoriesData.reduce((acc:any, category:any, index:any) => {
@@ -203,6 +217,14 @@ export default class ChartsComponent implements OnInit {
           // ********  ENVIAR DATOS A DONUT CHART ******** 
             this.categories = Object.keys(categorySums);
             this.amounts = Object.values(categorySums);
+
+            let datos = {
+              transactionsIDs: transactionID,
+              categories: this.categories,
+              amounts: this.amounts
+            }
+
+            this.dataDonutSrv.setData(datos);
 
           // ******** AGRUPAR Y SUMAR MONTOS POR CATEGORIA Y FECHA (QUE SEAN DEL MISMO DIA) ******** 
             const categorySumsDate = categoriesData.reduce((acc: any, category: any, index: any) => {
@@ -279,7 +301,7 @@ export default class ChartsComponent implements OnInit {
               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
             ];  
             // ******** FILTRO INICIAL POR CATEGORIA Y AÑO ******** 
-            const { categoriesData, amountsData, datesData } = response.reduce((acc, transaction: any) => {
+            const { categoriesData, amountsData, datesData, transactionID} = response.reduce((acc, transaction: any) => {
               const normalizedDbDate = new Date(transaction.date);
               const year = normalizedDbDate.getFullYear(); // Año de la transacción
 
@@ -295,8 +317,10 @@ export default class ChartsComponent implements OnInit {
               acc.categoriesData.push(transaction.categoryID.name);
               acc.amountsData.push(transaction.amount);
               acc.datesData.push(normalizedDbDate);
+              acc.datesData.push(transaction.id);
               return acc;
-            }, { categoriesData: [], amountsData: [], datesData: [] });
+            }, { categoriesData: [], amountsData: [], datesData: [] , transactionID: []});
+
     
             // ******** AGRUPAR Y SUMAR MONTOS POR CATEGORÍAS EN TOTAL ******** 
             const categorySums = categoriesData.reduce((acc: any, category: any, index: any) => {
@@ -310,6 +334,14 @@ export default class ChartsComponent implements OnInit {
             // ******** ENVIAR DATOS A DONUT CHART ******** 
             this.categories = Object.keys(categorySums);
             this.amounts = Object.values(categorySums);
+
+            let datos = {
+              transactionsIDs: transactionID,
+              categories: this.categories,
+              amounts: this.amounts
+            }
+
+            this.dataDonutSrv.setData(datos);
   
             // ******** AGRUPAR Y SUMAR MONTOS POR CATEGORÍA Y MES ******** 
             const categorySumsMonth = categoriesData.reduce((acc: any, category: any, index: any) => {
