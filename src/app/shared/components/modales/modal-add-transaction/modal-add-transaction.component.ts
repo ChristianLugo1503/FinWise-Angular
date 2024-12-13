@@ -4,7 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ModalAlertService } from '../../../../core/services/alert/modal-alert.service';
+import { ModalAlertService } from '../../../../core/services/alert/modal-alert.service'; 
 import { CategoriesService } from '../../../../core/services/categories/categories.service';
 import { TransactionsService } from '../../../../core/services/transactions/transactions.service';
 

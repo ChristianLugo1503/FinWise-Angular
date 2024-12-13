@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CategoriesService } from '../../core/services/categories/categories.service';
 import { CommonModule } from '@angular/common';
-import { ModalAlertService } from '../../core/services/alert/modal-alert.service';
 import { AlertRESService } from '../../core/services/alertRES/alert-res.service';
+import { ModalAlertService } from '../../core/services/alert/modal-alert.service';
+import { ModalNewCategoryService } from '../../core/services/modalNewCategory/modal-new-category.service';
 
 @Component({
   selector: 'app-categories',
@@ -20,6 +21,7 @@ export default class CategoriesComponent {
     public categoriesSrv : CategoriesService,
     public alert: ModalAlertService,
     public alertRES : AlertRESService,
+    public categorySrv : ModalNewCategoryService,
   ){
     this.getCategories()  
   }
@@ -78,19 +80,28 @@ export default class CategoriesComponent {
         if (result) {
           //console.log('Transacción eliminada');
           this.delete(categoryId);
+          
         } 
       });
   }
 
   delete(id: number): void {
     this.categoriesSrv.deleteCategory(id).subscribe({
-      next: () =>{
+      next: () => {
         this.alert.openCustomDialog('Éxito', 'La categoría ha sido eliminada éxitosamente. :)', 'success');
+  
+        // Eliminar la categoría de la lista de gastos o ingresos localmente
+        this.gastos = this.gastos.filter((category: any) => category.id !== id);
+        this.ingresos = this.ingresos.filter((category: any) => category.id !== id);
       },
-      error:(error) =>{
-        this.alert.openCustomDialog('Error', 'La categoría no ha sido eliminada :(', 'error');
+      error: (error) => {
+        this.alert.openCustomDialog('Error', error, 'error');
       }
-    })
+    });
   }
-
+  
+  newCategory(){
+    this.categorySrv.openModal();
+    this.getCategories();
+  }
 }

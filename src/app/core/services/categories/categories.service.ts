@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, switchMap, catchError, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap, catchError, of, tap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DataUserService } from '../dataUser/data-user.service';
 
@@ -78,14 +78,41 @@ export class CategoriesService {
   // Método para eliminar una categoría
   deleteCategory(categoryId: number): Observable<any> {
     return this.httpClient.delete<any>(`${this.BASE_URL}/delete/${categoryId}`).pipe(
-      tap(() => {
-        // Actualizar el BehaviorSubject después de eliminar la categoría si es necesario
-        this.categoriesSubject.next(this.categoriesSubject.getValue()?.filter((category:any) => category.id !== categoryId));
+      tap((response) => {
+        if (response.success) {
+          this.categoriesSubject.next(this.categoriesSubject.getValue()?.filter((category: any) => category.id !== categoryId));
+        } 
       }),
       catchError((error) => {
-        console.error('Error al eliminar la categoría:', error);
-        return of(null); // Devuelve un observable vacío en caso de error
+        console.error(error.error.message);
+        //this.alert.openCustomDialog('Error', 'Ocurrió un problema al eliminar la categoría', 'error');
+        return throwError(() => new Error(error.error.message));
       })
     );
   }
+  
+  // Añadimos el nuevo método 'createCategory' al servicio
+  createCategory(name: string, type: string, userId: number, image: File, color: string): Observable<any> {
+    // Creamos un FormData para enviar los datos como multipart/form-data (necesario para archivos como imagen)
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('type', type);
+    formData.append('userId', userId.toString()); // Convertimos el ID a string
+    formData.append('image', image); // Añadimos el archivo de imagen
+    formData.append('color', color);
+
+    return this.httpClient.post<any>(`${this.BASE_URL}/create`, formData).pipe(
+      tap((data) => {
+        // Aquí puedes manejar la respuesta si es necesario
+        console.log('Categoría creada:', data);
+      }),
+      catchError((error) => {
+        console.error('Error al crear la categoría:', error);
+        return throwError(() => new Error(error.error.message || 'Error al crear la categoría'));
+      })
+    );
+  }
+
+
+
 }
