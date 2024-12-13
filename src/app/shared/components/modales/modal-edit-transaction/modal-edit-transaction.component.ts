@@ -56,6 +56,11 @@ export class ModalEditTransactionComponent {
     
   }
 
+  get filteredCategories() {
+    return this.categories.filter(cat => cat.type === this.data.transaction.type);
+  }
+  
+
   ngOnInit(): void {
     this.categorieSrv.getCategoriesData().subscribe(data => {
       this.categories = data.map((category: { id: number, name: any; image: any; type: any }) => {

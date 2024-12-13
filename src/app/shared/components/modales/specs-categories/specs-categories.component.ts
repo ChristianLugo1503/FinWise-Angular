@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TransactionsService } from '../../../../core/services/transactions/transactions.service';
 import { CommonModule } from '@angular/common';
 import { CustomCurrencyPipe } from '../../../pipes/currency/custom-currency.pipe';
@@ -26,6 +26,7 @@ export class SpecsCategoriesComponent implements OnInit{
     public transactionsSrv : TransactionsService,
     public alertRES : AlertRESService,
     public alert: ModalAlertService,
+    public dialog: MatDialog,
     public modalEditTransaction: ModalEditTransactionService,
   ){}
 
@@ -64,7 +65,7 @@ export class SpecsCategoriesComponent implements OnInit{
     console.log('id Transaccion:', transID)
     this.transactionsSrv.deleteTransaction(transID).subscribe({
       next: () =>{
-        this.alert.openCustomDialog('Éxito', 'La transacción ha sido eliminada éxitosamente. :)', 'sucess');
+        this.alert.openCustomDialog('Éxito', 'La transacción ha sido eliminada éxitosamente. :)', 'success');
       },
       error:(error) =>{
         this.alert.openCustomDialog('Error', 'La transacción no ha sido eliminada :(', 'error');

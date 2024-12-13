@@ -50,6 +50,10 @@ export class ModalAddTransactionComponent implements OnInit{
     });
   }
 
+  get filteredCategories() {
+    return this.categories.filter(cat => cat.type === this.data.title);
+  }
+
   base64ToBlob(base64: string, mimeType: string): Blob {
     const byteCharacters = atob(base64);
     const byteArray = new Uint8Array(byteCharacters.length);
