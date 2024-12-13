@@ -7,6 +7,7 @@ import { AlertRESComponent } from '../alert-res/alert-res.component';
 import { AlertRESService } from '../../../../core/services/alertRES/alert-res.service';
 import { AlertComponent } from '../alert/alert.component';
 import { ModalAlertService } from '../../../../core/services/alert/modal-alert.service';
+import { ModalEditTransactionService } from '../../../../core/services/modalEditTransaction/modal-edit-transaction.service';
 
 @Component({
   selector: 'app-specs-categories',
@@ -25,6 +26,7 @@ export class SpecsCategoriesComponent implements OnInit{
     public transactionsSrv : TransactionsService,
     public alertRES : AlertRESService,
     public alert: ModalAlertService,
+    public modalEditTransaction: ModalEditTransactionService,
   ){}
 
   ngOnInit(): void {
@@ -68,5 +70,9 @@ export class SpecsCategoriesComponent implements OnInit{
         this.alert.openCustomDialog('Error', 'La transacción no ha sido eliminada :(', 'error');
       }
     })
+  }
+
+  editTrans(transaction: any){
+    this.modalEditTransaction.openModal(transaction)
   }
 }

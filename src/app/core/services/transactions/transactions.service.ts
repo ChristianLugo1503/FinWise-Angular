@@ -54,6 +54,20 @@ export class TransactionsService {
     );
   }
 
+  // Actualizar una transacción existente
+  updateTransaction(id: number, updatedData: any): Observable<any> {
+    return this.httpClient.put<any>(`${this.BASE_URL}/update/${id}`, updatedData).pipe(
+      tap(() => {
+        // Refresca las transacciones después de la actualización
+        this.getTransactionsByUserId().subscribe();
+      }),
+      catchError((error) => {
+        console.error('Error al actualizar la transacción:', error);
+        return of(null); // Devuelve null en caso de error
+      })
+    );
+  }
+
   deleteTransaction(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.BASE_URL}/delete/${id}`).pipe(
       tap(() => {
