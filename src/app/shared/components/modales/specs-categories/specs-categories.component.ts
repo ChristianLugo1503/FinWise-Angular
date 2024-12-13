@@ -3,6 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TransactionsService } from '../../../../core/services/transactions/transactions.service';
 import { CommonModule } from '@angular/common';
 import { CustomCurrencyPipe } from '../../../pipes/currency/custom-currency.pipe';
+import { AlertRESComponent } from '../alert-res/alert-res.component';
+import { AlertRESService } from '../../../../core/services/alertRES/alert-res.service';
+import { AlertComponent } from '../alert/alert.component';
+import { ModalAlertService } from '../../../../core/services/alert/modal-alert.service';
 
 @Component({
   selector: 'app-specs-categories',
@@ -19,6 +23,8 @@ export class SpecsCategoriesComponent implements OnInit{
     public dialogRef: MatDialogRef<SpecsCategoriesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { title: string, img: string, transactionsID: any },
     public transactionsSrv : TransactionsService,
+    public alertRES : AlertRESService,
+    public alert: ModalAlertService,
   ){}
 
   ngOnInit(): void {
@@ -42,4 +48,25 @@ export class SpecsCategoriesComponent implements OnInit{
     this.dialogRef.close();
   }
 
+  deleteBtn(id: number): void {
+    this.alertRES.openCustomDialog('Advertencia', '¿Está seguro que desea eliminar la transacción?')
+      .subscribe((result: boolean) => {
+        if (result) {
+          //console.log('Transacción eliminada');
+          this.deleteTrans(id);
+        } 
+      });
+  }
+
+  deleteTrans(transID: number){
+    console.log('id Transaccion:', transID)
+    this.transactionsSrv.deleteTransaction(transID).subscribe({
+      next: () =>{
+        this.alert.openCustomDialog('Éxito', 'La transacción ha sido eliminada éxitosamente. :)', 'sucess');
+      },
+      error:(error) =>{
+        this.alert.openCustomDialog('Error', 'La transacción no ha sido eliminada :(', 'error');
+      }
+    })
+  }
 }

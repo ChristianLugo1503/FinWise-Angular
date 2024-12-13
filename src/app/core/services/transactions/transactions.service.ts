@@ -54,6 +54,18 @@ export class TransactionsService {
     );
   }
 
+  deleteTransaction(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.BASE_URL}/delete/${id}`).pipe(
+      tap(() => {
+        this.getTransactionsByUserId().subscribe();
+      }),
+      catchError((error) => {
+        console.error('Error al eliminar la transacción:', error);
+        return of(); 
+      })
+    );
+  }
+
   clearData(): void {
     this.transactionsSubject.next(null);
   }

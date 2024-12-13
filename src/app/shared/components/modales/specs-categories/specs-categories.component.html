@@ -13,9 +13,10 @@
     </div>
 
     <!-- LISTA DE TRANSACCIONES -->
+    <h2 class="text-white pl-7">Lista de transacciones que pertenecen a esta categoría:</h2>
     <div class="px-7">
       <div *ngFor="let transaction of transactions" 
-           class="flex w-full items-center justify-between bg-[#111A3D] p-3 rounded-lg mb-3 h-14">
+           class="flex w-full items-center justify-between bg-[#111A3D] p-3 hover:scale-105 transition duration-400 ease-in-out rounded-lg mb-3 h-14">
         <div class="flex flex-row items-center">
           <img class="w-10 mr-2" src="{{data.img}}" alt="">
           <div class="flex flex-col items-start"> 
@@ -50,7 +51,7 @@
           </button>
 
           <!-- DELETE -->
-          <button title="Eliminar transacción">
+          <button (click)="deleteBtn(transaction.id)" title="Eliminar transacción">
             <svg 
             class="stroke-current text-white hover:text-red-600 cursor-pointer hover:scale-125 transition duration-400 ease-in-out" 
             width="20" height="20" 
