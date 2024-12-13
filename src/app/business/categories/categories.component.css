@@ -1,0 +1,12 @@
+.radio-input {
+    display: none; /* Oculta el input de tipo radio */
+  }
+
+  .category-image.selected {
+    border: 2px solid #ffffff; 
+    box-shadow: 0 0 10px rgba(255, 255, 255, 1);  
+  }  
+
+  .errorCategory{
+    border-color: #C92628;
+  }

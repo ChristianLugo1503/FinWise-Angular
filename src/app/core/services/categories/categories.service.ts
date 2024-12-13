@@ -7,7 +7,7 @@ import { DataUserService } from '../dataUser/data-user.service';
   providedIn: 'root'
 })
 export class CategoriesService {
-  private BASE_URL = 'http://localhost:8080/api/v1/categories/user';
+  private BASE_URL = 'http://localhost:8080/api/v1/categories';
   private categoriesSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); // Estado de carga
 
@@ -24,9 +24,8 @@ export class CategoriesService {
       switchMap((userData) => {
         if (userData && userData.id) {
           // Si los datos del usuario están disponibles, hacemos la petición para obtener las categorías
-          return this.httpClient.get<any>(`${this.BASE_URL}/${userData.id}`).pipe(
+          return this.httpClient.get<any>(`${this.BASE_URL}/user/${userData.id}`).pipe(
             tap((data) => {
-              //console.log('CATEGORÍAS CARGADAS', data);
               this.categoriesSubject.next(data); // Actualizamos el BehaviorSubject con los datos de categorías
             }),
             catchError((error) => {
@@ -49,7 +48,6 @@ export class CategoriesService {
 
   // Obtener las categorías observables
   getCategoriesData(): Observable<any | null> {
-    //console.log('Categorías del usuario cargadas por medio de UserData');
     return this.categoriesSubject.asObservable();
   }
 
@@ -61,5 +59,33 @@ export class CategoriesService {
   clearData(): void {
     this.categoriesSubject.next(null);
     localStorage.removeItem('userData');
+  }
+
+  // Método para editar una categoría
+  editCategory(categoryId: number, updatedCategory: any): Observable<any> {
+    return this.httpClient.put<any>(`${this.BASE_URL}/update/${categoryId}`, updatedCategory).pipe(
+      tap((updatedCategory) => {
+        // Aquí puedes actualizar el BehaviorSubject si es necesario
+        this.categoriesSubject.next(updatedCategory);
+      }),
+      catchError((error) => {
+        console.error('Error al editar la categoría:', error);
+        return of(null); // Devuelve un observable vacío en caso de error
+      })
+    );
+  }
+
+  // Método para eliminar una categoría
+  deleteCategory(categoryId: number): Observable<any> {
+    return this.httpClient.delete<any>(`${this.BASE_URL}/delete/${categoryId}`).pipe(
+      tap(() => {
+        // Actualizar el BehaviorSubject después de eliminar la categoría si es necesario
+        this.categoriesSubject.next(this.categoriesSubject.getValue()?.filter((category:any) => category.id !== categoryId));
+      }),
+      catchError((error) => {
+        console.error('Error al eliminar la categoría:', error);
+        return of(null); // Devuelve un observable vacío en caso de error
+      })
+    );
   }
 }

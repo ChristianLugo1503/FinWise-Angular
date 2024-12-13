@@ -13,6 +13,11 @@ export const routes: Routes = [
                 canActivate: [authGuard]
             },
             {
+                path: 'categories',
+                loadComponent: () => import('./business/categories/categories.component'),
+                canActivate: [authGuard]
+            },
+            {
                 path:'',
                 redirectTo: 'home',
                 pathMatch: 'full'

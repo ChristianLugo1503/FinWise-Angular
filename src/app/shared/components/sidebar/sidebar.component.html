@@ -8,7 +8,7 @@
       <ul class="flex flex-col py-4 space-y-1 p-4">
         
         <!-- INICIO -->
-        <li (click)="selected('inicio')">
+        <li (click)="selected('inicio', '/home')">
           <a [ngClass]="{'selectedBack' : selectedFilter === 'inicio'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
@@ -32,7 +32,7 @@
         </li>
 
         <!-- PAGOS RECURRENTES -->
-        <li (click)="selected('pagos')">
+        <li (click)="selected('pagos','')">
           <a [ngClass]="{'selectedBack' : selectedFilter === 'pagos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg 
@@ -52,7 +52,7 @@
         </li>
 
         <!-- GRUPOS DE PAGO -->
-        <li (click)="selected('grupos')">
+        <li (click)="selected('grupos','')">
           <a [ngClass]="{'selectedBack' : selectedFilter === 'grupos'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
@@ -72,7 +72,7 @@
         </li>
 
         <!-- AHORROS -->
-        <li (click)="selected('ahorros')">
+        <li (click)="selected('ahorros','')">
           <a [ngClass]="{'selectedBack' : selectedFilter === 'ahorros'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
@@ -94,7 +94,7 @@
         </li>
 
         <!-- Categorias -->
-        <li (click)="selected('Categorias')">
+        <li (click)="selected('Categorias','/categories')">
           <a [ngClass]="{'selectedBack' : selectedFilter === 'Categorias'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg
@@ -117,7 +117,7 @@
         </li>
 
         <!-- Notificaciones -->
-        <li (click)="selected('Notificaciones')">
+        <li (click)="selected('Notificaciones','')">
           <a [ngClass]="{'selectedBack' : selectedFilter === 'Notificaciones'}" class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg  transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105">
             <span class="inline-flex justify-center items-center">
               <svg 

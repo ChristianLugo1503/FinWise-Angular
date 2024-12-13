@@ -1,0 +1,142 @@
+<div class="h-full w-full flex flex-col">
+    <!-- Contenedor principal -->
+    <div class="h-[90%] w-full flex gap-4 px-5">
+  
+      <!-- Columna de Gastos -->
+      <div class="w-1/2 h-full bg-[#111A3D] rounded-lg flex flex-col">
+        <div class="pt-5 px-5">
+          <h2 class="text-white font-bold text-lg">Gastos</h2>
+        </div>
+        <div class="p-5 h-full overflow-auto">
+          <div class="flex flex-wrap gap-4 justify-start">
+            <div class="flex flex-col items-center w-20 relative group" *ngFor="let category of gastos">
+              <!-- Contenedor de la imagen y los botones -->
+              <div class="relative w-full">
+                <!-- Imagen de la categoría -->
+                <label class="cursor-pointer flex flex-col items-center break-all w-full text-sm transition-transform ease-in-out duration-300 group-hover:scale-125">
+                  <input
+                    type="radio"
+                    name="categoryID"
+                    [value]="category.id"
+                    formControlName="categoryID"
+                    class="hidden"
+                  />
+                  <img
+                    [src]="category.image"
+                    [alt]="category.id"
+                    [class.selected]="false"
+                    class="category-image w-12 h-12 mt-2 rounded-full border-2 border-transparent transition-transform ease-in-out duration-300"
+                  />
+                  {{ category.name }}
+                </label>
+  
+                <!-- Botón de Editar -->
+                <button (click)="editTrans(category)" title="Editar categoría" 
+                        class="absolute top-0 right-0 mt-2 mr-2 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#111A3D] rounded-r-lg">
+                  <svg 
+                    class="stroke-current text-white hover:text-[#FF8000] cursor-pointer hover:scale-125 transition duration-400 ease-in-out" 
+                    width="20" height="20" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.1497 7.93997L8.27971 19.81C7.21971 20.88 4.04971 21.3699 3.27971 20.6599C2.50971 19.9499 3.06969 16.78 4.12969 15.71L15.9997 3.84C16.5478 3.31801 17.2783 3.03097 18.0351 3.04019C18.7919 3.04942 19.5151 3.35418 20.0503 3.88938C20.5855 4.42457 20.8903 5.14781 20.8995 5.90463C20.9088 6.66146 20.6217 7.39189 20.0997 7.93997H20.1497Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 21H12"  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              
+                <!-- Botón de Eliminar -->
+                <button (click)="deleteBtn(category.id)" title="Eliminar categoría"
+                        class="absolute top-0 left-0 mt-2 ml-2 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#111A3D] rounded-l-lg">
+                  <svg 
+                    class="stroke-current text-white hover:text-red-600 cursor-pointer hover:scale-125 transition duration-400 ease-in-out" 
+                    width="20" height="20" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 11V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 11V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 7H20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna de Ingresos -->
+      <div class="w-1/2 h-full bg-[#111A3D] rounded-lg flex flex-col">
+        <div class="pt-5 px-5">
+          <h2 class="text-white font-bold text-lg">Ingresos</h2>
+        </div>
+        <div class="p-5 h-full overflow-auto">
+          <div class="flex flex-wrap gap-4 justify-start">
+            <div class="flex flex-col items-center w-20 relative group" *ngFor="let category of ingresos">
+              <!-- Contenedor de la imagen y los botones -->
+              <div class="relative w-full">
+                <!-- Imagen de la categoría -->
+                <label class="cursor-pointer flex flex-col items-center break-all w-full text-sm transition-transform ease-in-out duration-300 group-hover:scale-125">
+                  <input
+                    type="radio"
+                    name="categoryID"
+                    [value]="category.id"
+                    formControlName="categoryID"
+                    class="hidden"
+                  />
+                  <img
+                    [src]="category.image"
+                    [alt]="category.id"
+                    [class.selected]="false"
+                    class="category-image w-12 h-12 mt-2 rounded-full border-2 border-transparent transition-transform ease-in-out duration-300"
+                  />
+                  {{ category.name }}
+                </label>
+  
+                <!-- Botón de Editar -->
+                <button (click)="editTrans(category)" title="Editar categoría" 
+                        class="absolute top-0 right-0 mt-2 mr-2 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#111A3D] rounded-r-lg">
+                  <svg 
+                    class="stroke-current text-white hover:text-[#FF8000] cursor-pointer hover:scale-125 transition duration-400 ease-in-out" 
+                    width="20" height="20" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.1497 7.93997L8.27971 19.81C7.21971 20.88 4.04971 21.3699 3.27971 20.6599C2.50971 19.9499 3.06969 16.78 4.12969 15.71L15.9997 3.84C16.5478 3.31801 17.2783 3.03097 18.0351 3.04019C18.7919 3.04942 19.5151 3.35418 20.0503 3.88938C20.5855 4.42457 20.8903 5.14781 20.8995 5.90463C20.9088 6.66146 20.6217 7.39189 20.0997 7.93997H20.1497Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 21H12"  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              
+                <!-- Botón de Eliminar -->
+                <button (click)="deleteBtn(category.id)" title="Eliminar categoría"
+                        class="absolute top-0 left-0 mt-2 ml-2 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#111A3D] rounded-l-lg">
+                  <svg 
+                    class="stroke-current text-white hover:text-red-600 cursor-pointer hover:scale-125 transition duration-400 ease-in-out" 
+                    width="20" height="20" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 11V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 11V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 7H20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Botón inferior -->
+    </div>
+    <div class="p-5 flex items-center justify-center">
+      <button
+        class="bg-white w-32 h-10 rounded-lg text-[#0A1232] text-sm font-semibold hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
+        Nueva Categoría
+      </button>
+    </div>
+  </div>
+  
