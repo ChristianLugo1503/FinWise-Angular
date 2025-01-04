@@ -1,0 +1,157 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade animate-duration-[600ms]"
+>
+  <div
+    class="border-2 border-white fixed bg-[#0A1232] top-16 rounded-lg max-w-sm w-96 min-w-80 h-[33rem] overflow-auto animate-fade-down animate-duration-[400ms] animate-ease-in-out animate-normal animate-fill-backwards"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- TITULO Y SALIR -->
+    <div
+      class="sticky top-0 bg-[#0A1232] z-10 flex flex-row items-center justify-between py-2 px-4"
+    >
+      <div class="ml-1 h-full">
+        <h2 class="text-2xl font-bold text-center text-white">
+          Nueva categoría
+        </h2>
+      </div>
+      <button
+        class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="p-4">
+      <!-- Formulario con formGroup -->
+      <form [formGroup]="categoryForm" (ngSubmit)="sendForm()">
+        <!-- Campo de nombre -->
+        <div class="input-group relative mb-5">
+          <div class="w-full">
+            <input
+              [ngClass]="{ error: hasRequiredError('description') }"
+              formControlName="description"
+              type="text"
+              name="text"
+              autocomplete="off"
+              class="input"
+            />
+            <label class="user-label font-semibold text-lg">Comentario</label>
+          </div>
+          <div
+            *ngIf="hasRequiredError('description')"
+            class="absolute top-3 end-0 text-sm text-red-600"
+            role="alert"
+          >
+            <svg
+              class="flex-shrink-0 inline w-4 h-4 me-3 cursor-pointer"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <title>Campo obligatorio</title>
+              <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Selección de tipo: Gastos o Ingresos -->
+        <div class="mb-4">
+          <label class="block text-white font-semibold">Tipo</label>
+          <div class="flex items-center space-x-4 mt-2">
+            <div>
+              <input
+                type="radio"
+                id="gastos"
+                formControlName="type"
+                value="Gasto"
+                class="text-blue-500 focus:ring-2 focus:ring-blue-400"
+              />
+              <label for="gastos" class="text-white">Gastos</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="ingresos"
+                formControlName="type"
+                value="Ingreso"
+                class="text-blue-500 focus:ring-2 focus:ring-blue-400"
+              />
+              <label for="ingresos" class="text-white">Ingresos</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Añadir imagen -->
+        <b class="block text-white font-semibold">Agregar imagen:</b>
+        <div class="w-full flex flex-col items-center justify-center mb-4">
+          <div
+            id="image-preview"
+            class="flex h-28 w-28 bg-[#111a3d] border-dashed border-2 border-gray-400 rounded-full items-center justify-center text-center cursor-pointer"
+          >
+            <img src="" alt="" />
+            <input
+              id="upload"
+              type="file"
+              formControlName="image"
+              class="hidden"
+              accept="image/*"
+              (change)="onImageChange($event)"
+            />
+            <label
+              for="upload"
+              class="cursor-pointer bg-black bg-opacity-50 rounded-sm p-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-8 h-8 text-white mx-auto"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                />
+              </svg>
+              <span id="filename" class="text-gray-500 bg-gray-200 z-50"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Seleccionar Color -->
+        <div class="mb-4">
+          <label class="block text-white font-semibold"
+            >Selecciona un color:</label
+          >
+          <input
+            type="color"
+            formControlName="color"
+            class="w-full mt-2 cursor-pointer"
+          />
+        </div>
+
+        <!-- Botón de aceptar -->
+        <div class="flex justify-center">
+          <button
+            [disabled]="this.categoryForm.invalid"
+            [title]="
+              this.categoryForm.invalid
+                ? 'Completa todos los campos'
+                : 'Aceptar'
+            "
+            type="submit"
+            class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed"
+          >
+            Aceptar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

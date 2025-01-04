@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
-import { DataUserService } from '../../../core/services/dataUser/data-user.service';
-import { TransactionsService } from '../../../core/services/transactions/transactions.service';
+import { DataUserService } from '../../../core/services/user/data-user.service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { NgClass, NgStyle } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
+import { TransactionsService } from '../../../core/services/transactions/api/transactions.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -38,7 +38,7 @@ export class SidebarComponent {
   selected(selected:string, ruta:string){
     this.selectedFilter = selected;
     this.router.navigate([ruta]);
-    console.log(this.selectedFilter, ruta)
+    //console.log(this.selectedFilter, ruta)
   }
 
   redirigir(ruta: string) {

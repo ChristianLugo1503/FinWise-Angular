@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
-import { CategoriesService } from '../categories/categories.service';
-import { DataUserService } from '../dataUser/data-user.service';
-import { TransactionsService } from '../transactions/transactions.service';
+import { DataUserService } from '../user/data-user.service';
+import { CategoriesService } from '../categories/api/categories.service';
+import { TransactionsService } from '../transactions/api/transactions.service';
 
 @Injectable({
   providedIn: 'root'

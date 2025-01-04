@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import ChartsComponent from './charts-section/charts.component';
 import ExpensesByCategoryComponent from './expenses-by-category/expenses-by-category.component';
-import { DataUserService } from '../../core/services/dataUser/data-user.service';
+import { DataUserService } from '../../core/services/user/data-user.service';
 
 @Component({
     selector: 'app-home',

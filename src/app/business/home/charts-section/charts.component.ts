@@ -1,9 +1,6 @@
 import { Component, EventEmitter, inject, OnInit, Output, resolveForwardRef, ViewChild } from '@angular/core';
-import { DataUserService } from '../../../core/services/dataUser/data-user.service';
-import { ModalAddTransactionService } from '../../../core/services/modalAddTransaction/modal-add-transaction.service';
+import { DataUserService } from '../../../core/services/user/data-user.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CategoriesService } from '../../../core/services/categories/categories.service';
-import { TransactionsService } from '../../../core/services/transactions/transactions.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DonutChartComponent } from '../../../shared/components/charts/donut-chart/donut-chart.component';
@@ -14,7 +11,10 @@ import { MonthPickerComponent } from '../../../shared/components/dates/month-pic
 import { YearPickerComponent } from '../../../shared/components/dates/year-picker/year-picker.component';
 import { DayPickerComponent } from '../../../shared/components/dates/day-picker/day-picker.component';
 import { BehaviorSubject } from 'rxjs';
-import { DataDonutService } from '../../../core/services/dataDonut/data-donut.service';
+import { DataDonutService } from '../../../core/services/visualizations/data-donut.service';
+import { CategoriesService } from '../../../core/services/categories/api/categories.service';
+import { TransactionsService } from '../../../core/services/transactions/api/transactions.service';
+import { ModalAddTransactionService } from '../../../core/services/transactions/modals/modal-add-transaction.service';
 
 @Component({
   selector: 'app-charts',

@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TransactionsService } from '../../../core/services/transactions/transactions.service';
 import { CommonModule } from '@angular/common';
-import { DataDonutService } from '../../../core/services/dataDonut/data-donut.service';
-import { CategoriesService } from '../../../core/services/categories/categories.service';
-import { ModalSpecsCategoriesService } from '../../../core/services/modalSpecsCategories/modal-specs-categories.service';
+import { DataDonutService } from '../../../core/services/visualizations/data-donut.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomCurrencyPipe } from "../../../shared/pipes/currency/custom-currency.pipe";
+import { TransactionsService } from '../../../core/services/transactions/api/transactions.service';
+import { CategoriesService } from '../../../core/services/categories/api/categories.service';
+import { ModalSpecsCategoriesService } from '../../../core/services/categories/modals/modal-specs-categories.service';
 
 @Component({
     selector: 'app-expenses-by-category',
@@ -64,7 +64,7 @@ export default class ExpensesByCategoryComponent implements OnInit {
                     // Ordenar por montos de mayor a menor
                     this.categoriesWithImagesAndAmounts.sort((a, b) => b.amount - a.amount);
                     
-                    console.log('Objeto combinado y ordenado:', this.categoriesWithImagesAndAmounts);
+                    //console.log('Objeto combinado y ordenado:', this.categoriesWithImagesAndAmounts);
                 });
             }
         });

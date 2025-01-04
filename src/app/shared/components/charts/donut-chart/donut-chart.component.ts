@@ -9,7 +9,7 @@ import {
   ApexNonAxisChartSeries,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-import { CategoriesService } from '../../../../core/services/categories/categories.service';
+import { CategoriesService } from '../../../../core/services/categories/api/categories.service';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;

@@ -1,150 +1,222 @@
 <div class="h-full w-full">
-    <div class="flex flex-col sm:flex-row justify-end mr-2">
-
-        <div class="flex items-center w-full">
-            <h1 class="ml-4 font-dm font-bold text-3xl text-white">Hola {{name ?? 'user'}} 👋🏼</h1>
-        </div>
-
-        <div class="tabs flex flex-row justify-end">
-            <div 
-                (click)="setActiveTab('Gasto')" 
-                [ngClass]="{'bg-[#111A3D] text-white font-bold': activeTab === 'Gasto', 'bg-[#0E1635]': activeTab !== 'Gastos'}"
-            
-                class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out">
-                <p>Gastos</p>
-            </div>
-            
-            <div 
-                (click)="setActiveTab('Ingreso')" 
-                [ngClass]="{'bg-[#111A3D] text-white font-bold': activeTab === 'Ingreso', 'bg-[#0E1635]': activeTab !== 'Ingresos'}" 
-                class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out mr-2">
-                <p>Ingresos</p>
-            </div>
-        </div>
+  <div class="flex flex-col sm:flex-row justify-end mr-2">
+    <div class="flex items-center w-full">
+      <h1 class="ml-4 font-dm font-bold text-3xl text-white">
+        Hola {{ name ?? "user" }}
+      </h1>
+      <h1
+        class="text-3xl pl-2 animate-wiggle animate-thrice animate-duration-700 animate-ease-in animate-normal"
+      >
+        👋🏼
+      </h1>
     </div>
 
-    <div class="h-5/6 bg-[#111A3D] rounded-lg flex flex-col p-5 sm:pt-1 mr-2">
-        
-        <div class="flex-shrink-0">
-            <div class="flex flex-col items-center justify-center">
-                
-                <h1 class="mb-2">Ver por:</h1>
-                <form class="flex w-full flex-row content-center justify-center">
-                    <!-- Día -->
-                    <input (click)="filterDay()"  class="peer/day hidden" type="radio" id="day" name="filters" value="day" checked>
-                    <label 
-                        class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center text-base rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/day:bg-white peer-checked/day:text-[#0A1232]  peer-checked/day:font-bold hover:scale-105 mr-4" 
-                        for="day"
-                    >Día</label>
-                    <!-- Semana -->
-                    <input (click)="filterWithRange('week')" class="peer/week hidden" type="radio" id="week" name="filters" value="week">
-                    <label 
-                        class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/week:bg-white peer-checked/week:text-[#0A1232] hover:scale-105 peer-checked/week:font-bold mr-4" 
-                        for="week"
-                    >Semana</label>
-                    <!-- Mes -->
-                    <input (click)="filterWithRange('month')" class="peer/month hidden" type="radio" id="month" name="filters" value="month">
-                    <label 
-                        class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/month:bg-white peer-checked/month:text-[#0A1232] hover:scale-105 peer-checked/month:font-bold mr-4" 
-                        for="month"
-                    >Mes</label>
-                    <!-- Año -->
-                    <input (click)="filterYear()" class="peer/year hidden" type="radio" id="year" name="filters" value="year">
-                    <label 
-                        class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/year:bg-white peer-checked/year:text-[#0A1232] hover:scale-105 peer-checked/year:font-bold mr-4" 
-                        for="year"
-                    >Año</label>
-                    <!-- range -->
-                    <input (click)="filterWithRange('range')" class="peer/range hidden" type="radio" id="range" name="filters" value="range">
-                    <label 
-                        class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/range:bg-white peer-checked/range:text-[#0A1232] hover:scale-105 peer-checked/range:font-bold" 
-                        for="range"
-                    >Rango</label>
-                </form>
-            </div>
+    <div class="tabs flex flex-row justify-end">
+      <div
+        (click)="setActiveTab('Gasto')"
+        [ngClass]="{
+          'bg-[#111A3D] text-white font-bold': activeTab === 'Gasto',
+          'bg-[#0E1635]': activeTab !== 'Gastos'
+        }"
+        class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out"
+      >
+        <p>Gastos</p>
+      </div>
 
-            <div *ngIf="activeFilter === 'day'" class="w-full flex items-center justify-center">
-                <app-day-picker
-                    (daySelected)="onDaySelected($event)"
-                    (change)="filterDay()"
-                />
-            </div>
-
-            <div *ngIf="activeFilter === 'week'" class="w-full flex items-center justify-center">
-                <app-week-picker
-                (dateRangeSelected)="onDateRangeSelected($event)"
-                (change)="filterWithRange('week')"
-                />
-            </div>
-
-            <div *ngIf="activeFilter === 'month'" class="w-full flex items-center justify-center">
-                <app-month-picker
-                (dateRangeSelected)="onDateRangeSelected($event)" 
-                (change)="filterWithRange('month')"
-                />
-            </div>
-
-            <div *ngIf="activeFilter === 'year'" class="w-full flex items-center justify-center">
-
-                <app-year-picker
-                (yearSelected)="onYearSelected($event)"  
-                (change)="filterYear()"
-                />
-
-            </div>
-
-            <div *ngIf="activeFilter === 'range'" class="w-full flex items-center justify-center ">
-                <app-range-picker
-                (dateRangeSelected)="onDateRangeSelected($event)"
-                (change)="filterWithRange('range')"
-                />
-            </div>
-
-        </div>
-    
-        
-        <div *ngIf="activeTab === 'Gasto'" class="flex-1 h-full">
-            <div class="flex flex-col lg:flex-row items-center w-full">
-                <div id="chart" class="w-full lg:w-1/2">
-                    <app-donut-chart 
-                        *ngIf="transactions"
-                        [amounts]="amounts"
-                        [categories]="categories"
-                    />
-                </div>
-                <div id="chart2" class="w-full lg:w-1/2">
-                    <app-bar-chart
-                        *ngIf="transactions"
-                        [series]="series"
-                        [dates]="dates"
-                    />
-                </div>
-            </div>
-        </div>
-
-        <div *ngIf="activeTab === 'Ingreso'" class="flex-1 h-full ">
-            <div class="flex flex-col lg:flex-row items-center w-full">
-                <div id="chart" class="w-full lg:w-1/2">
-                    <app-donut-chart 
-                        *ngIf="transactions"
-                        [amounts]="amounts"
-                        [categories]="categories"
-                    />
-                </div>
-                <div id="chart2" class="w-full lg:w-1/2">
-                    <app-bar-chart
-                        *ngIf="transactions"
-                        [series]="series"
-                        [dates]="dates"
-                    />
-                </div>
-            </div>
-        </div>
-    
-        <div class="flex-shrink-0 flex justify-end">
-            <button (click)="openCustomDialog(activeTab)" class="bg-white w-32 h-7 rounded-lg text-[#0A1232] text-xs font-semibold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center">+ Agregar {{activeTab}}</button>
-        </div>
-
+      <div
+        (click)="setActiveTab('Ingreso')"
+        [ngClass]="{
+          'bg-[#111A3D] text-white font-bold': activeTab === 'Ingreso',
+          'bg-[#0E1635]': activeTab !== 'Ingresos'
+        }"
+        class="flex items-center justify-center h-12 w-24 cursor-pointer rounded-t-lg active:bg-[#172147] hover:scale-105 transition duration-400 ease-in-out mr-2"
+      >
+        <p>Ingresos</p>
+      </div>
     </div>
-    
+  </div>
+
+  <div class="h-5/6 bg-[#111A3D] rounded-lg flex flex-col p-5 sm:pt-1 mr-2">
+    <div class="flex-shrink-0">
+      <div class="flex flex-col items-center justify-center">
+        <h1 class="mb-2">Ver por:</h1>
+        <form class="flex w-full flex-row content-center justify-center">
+          <!-- Día -->
+          <input
+            (click)="filterDay()"
+            class="peer/day hidden"
+            type="radio"
+            id="day"
+            name="filters"
+            value="day"
+            checked
+          />
+          <label
+            class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center text-base rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/day:bg-white peer-checked/day:text-[#0A1232] peer-checked/day:font-bold hover:scale-105 mr-4"
+            for="day"
+            >Día</label
+          >
+          <!-- Semana -->
+          <input
+            (click)="filterWithRange('week')"
+            class="peer/week hidden"
+            type="radio"
+            id="week"
+            name="filters"
+            value="week"
+          />
+          <label
+            class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/week:bg-white peer-checked/week:text-[#0A1232] hover:scale-105 peer-checked/week:font-bold mr-4"
+            for="week"
+            >Semana</label
+          >
+          <!-- Mes -->
+          <input
+            (click)="filterWithRange('month')"
+            class="peer/month hidden"
+            type="radio"
+            id="month"
+            name="filters"
+            value="month"
+          />
+          <label
+            class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/month:bg-white peer-checked/month:text-[#0A1232] hover:scale-105 peer-checked/month:font-bold mr-4"
+            for="month"
+            >Mes</label
+          >
+          <!-- Año -->
+          <input
+            (click)="filterYear()"
+            class="peer/year hidden"
+            type="radio"
+            id="year"
+            name="filters"
+            value="year"
+          />
+          <label
+            class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/year:bg-white peer-checked/year:text-[#0A1232] hover:scale-105 peer-checked/year:font-bold mr-4"
+            for="year"
+            >Año</label
+          >
+          <!-- range -->
+          <input
+            (click)="filterWithRange('range')"
+            class="peer/range hidden"
+            type="radio"
+            id="range"
+            name="filters"
+            value="range"
+          />
+          <label
+            class="cursor-pointer flex items-center justify-center w-20 h-9 text-white text-center rounded-lg border border-white bg-transparent transition duration-500 ease-in-out peer-checked/range:bg-white peer-checked/range:text-[#0A1232] hover:scale-105 peer-checked/range:font-bold"
+            for="range"
+            >Rango</label
+          >
+        </form>
+      </div>
+
+      <div
+        *ngIf="activeFilter === 'day'"
+        class="w-full flex items-center justify-center"
+      >
+        <app-day-picker
+          (daySelected)="onDaySelected($event)"
+          (change)="filterDay()"
+        />
+      </div>
+
+      <div
+        *ngIf="activeFilter === 'week'"
+        class="w-full flex items-center justify-center"
+      >
+        <app-week-picker
+          (dateRangeSelected)="onDateRangeSelected($event)"
+          (change)="filterWithRange('week')"
+        />
+      </div>
+
+      <div
+        *ngIf="activeFilter === 'month'"
+        class="w-full flex items-center justify-center"
+      >
+        <app-month-picker
+          (dateRangeSelected)="onDateRangeSelected($event)"
+          (change)="filterWithRange('month')"
+        />
+      </div>
+
+      <div
+        *ngIf="activeFilter === 'year'"
+        class="w-full flex items-center justify-center"
+      >
+        <app-year-picker
+          (yearSelected)="onYearSelected($event)"
+          (change)="filterYear()"
+        />
+      </div>
+
+      <div
+        *ngIf="activeFilter === 'range'"
+        class="w-full flex items-center justify-center"
+      >
+        <app-range-picker
+          (dateRangeSelected)="onDateRangeSelected($event)"
+          (change)="filterWithRange('range')"
+        />
+      </div>
+    </div>
+
+    <div
+      *ngIf="activeTab === 'Gasto'"
+      class="flex-1 h-full animate-fade-right animate-duration-[500ms]"
+    >
+      <div class="flex flex-col lg:flex-row items-center w-full">
+        <div id="chart" class="w-full lg:w-1/2">
+          <app-donut-chart
+            *ngIf="transactions"
+            [amounts]="amounts"
+            [categories]="categories"
+          />
+        </div>
+        <div id="chart2" class="w-full lg:w-1/2">
+          <app-bar-chart
+            *ngIf="transactions"
+            [series]="series"
+            [dates]="dates"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="activeTab === 'Ingreso'"
+      class="flex-1 h-full animate-fade-left animate-duration-[500ms]"
+    >
+      <div class="flex flex-col lg:flex-row items-center w-full">
+        <div id="chart" class="w-full lg:w-1/2">
+          <app-donut-chart
+            *ngIf="transactions"
+            [amounts]="amounts"
+            [categories]="categories"
+          />
+        </div>
+        <div id="chart2" class="w-full lg:w-1/2">
+          <app-bar-chart
+            *ngIf="transactions"
+            [series]="series"
+            [dates]="dates"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-shrink-0 flex justify-end">
+      <button
+        (click)="openCustomDialog(activeTab)"
+        class="bg-white w-32 h-7 rounded-lg text-[#0A1232] text-xs font-semibold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center"
+      >
+        + Agregar {{ activeTab }}
+      </button>
+    </div>
+  </div>
 </div>
