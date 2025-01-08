@@ -1,28 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { DataUserService } from '../../../core/services/user/data-user.service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { NgClass, NgStyle } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { TransactionsService } from '../../../core/services/transactions/api/transactions.service';
 
 @Component({
-    selector: 'app-sidebar',
-    standalone: true,
-    imports: [FormsModule, NgClass], // Sin dependencias externas
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.css'] // Corregido: styleUrls
+  selector: 'app-sidebar',
+  standalone: true,
+  imports: [FormsModule, NgClass], // Sin dependencias externas
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css'], // Corregido: styleUrls
 })
 export class SidebarComponent {
-  selectedFilter: string = 'inicio';
+  selectedFilter: string = '';
   user: any;
 
   constructor(
     private authService: AuthService,
     private dataUserService: DataUserService,
     private transactionsSrv: TransactionsService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
+    this.selectedFilter = this.router.url.replace(/\//g, '');
+
     dataUserService.loadUserData().subscribe({
       next: (response) => {
         //console.log('Datos del usuario cargados:', response);
@@ -34,11 +42,10 @@ export class SidebarComponent {
     });
     //console.log(this.selectedFilter)
   }
-  
-  selected(selected:string, ruta:string){
+
+  selected(selected: string, ruta: string) {
     this.selectedFilter = selected;
     this.router.navigate([ruta]);
-    //console.log(this.selectedFilter, ruta)
   }
 
   redirigir(ruta: string) {
