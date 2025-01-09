@@ -48,11 +48,14 @@ export default class CategoriesComponent implements OnInit {
           this.ingresos = data
             .filter((data: any) => data.type === 'Ingreso')
             .map((data: any) => {
-              const blob = this.base64ToBlob(data.image, 'image/jpeg');
+              if (data.image && !data.image.startsWith('blob:')) {
+                const blob = this.base64ToBlob(data.image, 'image/jpeg');
+                data.image = URL.createObjectURL(blob) || null;
+              }
               return {
                 id: data.id,
                 name: data.name,
-                image: URL.createObjectURL(blob),
+                image: data.image,
                 imageBlob: data.image,
                 color: data.color,
                 type: data.type,

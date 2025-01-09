@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { signal } from '@angular/core';
@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalAlertService } from '../../../../../core/services/alerts/modal-alert.service';
 import { CategoriesService } from '../../../../../core/services/categories/api/categories.service';
 import { TransactionsService } from '../../../../../core/services/transactions/api/transactions.service';
+import { InputCategoryComponent } from '../../../input-category/input-category.component';
 
 @Component({
   selector: 'app-modal-edit-transaction',
@@ -17,33 +18,16 @@ import { TransactionsService } from '../../../../../core/services/transactions/a
     MatInputModule,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputCategoryComponent,
   ],
   templateUrl: './modal-edit-transaction.component.html',
-  styleUrl: './modal-edit-transaction.component.css'
+  styleUrl: './modal-edit-transaction.component.css',
 })
 export class ModalEditTransactionComponent {
   public currentDate!: string;
-  categories: { id: number, name: string, image: Blob , type: string}[] = [];
-
-  // Cambiar a WritableSignal para manipular el formulario
-  form = signal<FormGroup>(new FormGroup({
-    amount: new FormControl('', [
-      Validators.required,
-      Validators.pattern('^[0-9]+(\.[0-9]{1,2})?$')
-    ]),
-    categoryID: new FormControl('', [
-      Validators.required
-    ]),
-    date: new FormControl(this.getCurrentDate(), [
-      Validators.required
-    ]),
-    description: new FormControl('', [
-      Validators.required
-    ]),
-    userId: new FormControl(''),
-    type: new FormControl('')
-  }));
+  categories: { id: number; name: string; image: Blob; type: string }[] = [];
+  public defaultCategory!: number;
 
   constructor(
     public dialogRef: MatDialogRef<ModalEditTransactionComponent>,
@@ -51,42 +35,45 @@ export class ModalEditTransactionComponent {
     private transactionSrv: TransactionsService,
     private modalAlertSrv: ModalAlertService,
     @Inject(MAT_DIALOG_DATA) public data: { transaction: any }
-  ) { 
+  ) {
     this.getCurrentDate();
-    
   }
 
-  get filteredCategories() {
-    return this.categories.filter(cat => cat.type === this.data.transaction.type);
+  // Cambiar a WritableSignal para manipular el formulario
+  form = signal<FormGroup>(
+    new FormGroup({
+      amount: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]+(.[0-9]{1,2})?$'),
+      ]),
+      categoryID: new FormControl('', [Validators.required]),
+      date: new FormControl(this.getCurrentDate(), [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      userId: new FormControl(''),
+      type: new FormControl(''),
+    })
+  );
+
+  getCategoryID(categoryID: any): void {
+    this.form().patchValue({ categoryID: categoryID });
+    console.log('Categoria seleccionada:', categoryID);
   }
-  
 
   ngOnInit(): void {
-    this.categorieSrv.getCategoriesData().subscribe(data => {
-      this.categories = data.map((category: { id: number, name: any; image: any; type: any }) => {
-        const blob = this.base64ToBlob(category.image, 'image/jpeg');
-        return {
-          id: category.id,
-          name: category.name,
-          image: URL.createObjectURL(blob),
-          type: category.type,
-        }
-      });
-    });
-
     // Asignar valores directamente al formulario en el constructor
     if (this.data && this.data.transaction) {
-      console.log(this.data)
+      this.defaultCategory = this.data.transaction.categoryID.id;
+      //console.log(this.data);
       this.form().patchValue({
         amount: this.data.transaction.amount,
         categoryID: this.data.transaction.categoryID.id,
         date: this.nomalizarFecha(this.data.transaction.date),
-        description: this.data.transaction.description
+        description: this.data.transaction.description,
       });
     }
   }
 
-  nomalizarFecha(date:any){
+  nomalizarFecha(date: any) {
     return new Date(date).toISOString().split('T')[0];
   }
 
@@ -99,10 +86,10 @@ export class ModalEditTransactionComponent {
     return new Blob([byteArray], { type: mimeType });
   }
 
-  getCurrentDate() : string {
+  getCurrentDate(): string {
     const today = new Date();
     today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Ajuste para la zona horaria
-    return this.currentDate = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
+    return (this.currentDate = today.toISOString().split('T')[0]); // Formato 'YYYY-MM-DD'
   }
 
   closeModal(): void {
@@ -112,23 +99,32 @@ export class ModalEditTransactionComponent {
   // Enviar formulario a la API
   sendForm() {
     this.form().patchValue({ userId: this.getUserId() }); // Asignar el userId al formulario
-    this.form().patchValue({type: this.data.transaction.type})
-    console.log(this.form().value)
-    this.transactionSrv.updateTransaction(this.data.transaction.id,this.form().value).subscribe({
-      next: (response) => {
-        this.closeModal();
-        this.modalAlertSrv.openCustomDialog('Éxito','Transacción modificada con éxito','success');
-        this.transactionSrv.getTransactionsByUserId().subscribe({
-          error: (error) => {
-            console.error('Error al cargar las transacciones iniciales:', error);
-          }
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        this.modalAlertSrv.openCustomDialog('Error',err,'error');
-      }
-    });
+    this.form().patchValue({ type: this.data.transaction.type });
+    console.log(this.form().value);
+    this.transactionSrv
+      .updateTransaction(this.data.transaction.id, this.form().value)
+      .subscribe({
+        next: (response) => {
+          this.closeModal();
+          this.modalAlertSrv.openCustomDialog(
+            'Éxito',
+            'Transacción modificada con éxito',
+            'success'
+          );
+          this.transactionSrv.getTransactionsByUserId().subscribe({
+            error: (error) => {
+              console.error(
+                'Error al cargar las transacciones iniciales:',
+                error
+              );
+            },
+          });
+        },
+        error: (err) => {
+          console.error(err);
+          this.modalAlertSrv.openCustomDialog('Error', err, 'error');
+        },
+      });
   }
 
   // Obtener Id de LocalStorage
@@ -140,7 +136,7 @@ export class ModalEditTransactionComponent {
   // Validaciones formulario
   checkMount() {
     const control = this.form().get('amount');
-    if(control?.hasError('required') && control.touched) {
+    if (control?.hasError('required') && control.touched) {
       return 'Monto requerido';
     } else if (control?.hasError('pattern')) {
       return 'Solo se admiten números enteros y dos decimales después del punto.';

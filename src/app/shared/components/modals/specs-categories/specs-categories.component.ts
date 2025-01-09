@@ -1,47 +1,55 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { AlertRESService } from '../../../../core/services/alerts/alert-res.service';
 import { ModalAlertService } from '../../../../core/services/alerts/modal-alert.service';
 import { TransactionsService } from '../../../../core/services/transactions/api/transactions.service';
 import { ModalEditTransactionService } from '../../../../core/services/transactions/modals/modal-edit-transaction.service';
 
-
 @Component({
   selector: 'app-specs-categories',
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   templateUrl: './specs-categories.component.html',
-  styleUrl: './specs-categories.component.css'
+  styleUrl: './specs-categories.component.css',
 })
-export class SpecsCategoriesComponent implements OnInit{
+export class SpecsCategoriesComponent implements OnInit {
   public transactions: any[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<SpecsCategoriesComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { title: string, img: string, transactionsID: any },
-    public transactionsSrv : TransactionsService,
-    public alertRES : AlertRESService,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { title: string; img: string; transactionsID: any },
+    public transactionsSrv: TransactionsService,
+    public alertRES: AlertRESService,
     public alert: ModalAlertService,
     public dialog: MatDialog,
-    public modalEditTransaction: ModalEditTransactionService,
-  ){}
+    public modalEditTransaction: ModalEditTransactionService
+  ) {}
 
   ngOnInit(): void {
-    this.transactionsSrv.getTransactionsData().subscribe((allTransactions:any) =>{
-      if(allTransactions !== null){
-        this.transactions = allTransactions.filter((transaction:any) => {
-          if (!this.data.transactionsID.includes(transaction.id)){return false}
-          if(transaction.categoryID.name !== this.data.title){return false}
-          return true;
-        })
-        //console.log('Transaction', this.transactions)
-      };
-    })
+    this.transactionsSrv
+      .getTransactionsData()
+      .subscribe((allTransactions: any) => {
+        if (allTransactions !== null) {
+          this.transactions = allTransactions.filter((transaction: any) => {
+            if (!this.data.transactionsID.includes(transaction.id)) {
+              return false;
+            }
+            if (transaction.categoryID.name !== this.data.title) {
+              return false;
+            }
+            return true;
+          });
+          //console.log('Transaction', this.transactions)
+        }
+      });
   }
 
-  nomalizarFecha(date:any){
+  nomalizarFecha(date: any) {
     return new Date(date).toISOString().split('T')[0];
   }
 
@@ -50,28 +58,40 @@ export class SpecsCategoriesComponent implements OnInit{
   }
 
   deleteBtn(id: number): void {
-    this.alertRES.openCustomDialog('Advertencia', '¿Está seguro que desea eliminar la transacción?')
+    this.alertRES
+      .openCustomDialog(
+        'Advertencia',
+        '¿Está seguro que desea eliminar la transacción?'
+      )
       .subscribe((result: boolean) => {
         if (result) {
           //console.log('Transacción eliminada');
           this.deleteTrans(id);
-        } 
+        }
       });
   }
 
-  deleteTrans(transID: number){
-    //console.log('id Transaccion:', transID)
+  deleteTrans(transID: number) {
+    console.log('id Transaccion:', transID);
     this.transactionsSrv.deleteTransaction(transID).subscribe({
-      next: () =>{
-        this.alert.openCustomDialog('Éxito', 'La transacción ha sido eliminada éxitosamente. :)', 'success');
+      next: () => {
+        this.alert.openCustomDialog(
+          'Éxito',
+          'La transacción ha sido eliminada éxitosamente. :)',
+          'success'
+        );
       },
-      error:(error) =>{
-        this.alert.openCustomDialog('Error', 'La transacción no ha sido eliminada :(', 'error');
-      }
-    })
+      error: (error) => {
+        this.alert.openCustomDialog(
+          'Error',
+          'La transacción no ha sido eliminada :(',
+          'error'
+        );
+      },
+    });
   }
 
-  editTrans(transaction: any){
-    this.modalEditTransaction.openModal(transaction)
+  editTrans(transaction: any) {
+    this.modalEditTransaction.openModal(transaction);
   }
 }

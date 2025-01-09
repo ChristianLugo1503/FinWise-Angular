@@ -20,6 +20,7 @@ import { TransactionsService } from '../../../../../core/services/transactions/a
 import { ModalAddTransactionComponent } from '../../transactions/modal-add-transaction/modal-add-transaction.component';
 import { TimePickerComponent } from '../../../time/time-picker/time-picker.component';
 import { RecurringPaymentsService } from '../../../../../core/services/recurringPayments/api/recurring-payments.service';
+import { InputCategoryComponent } from '../../../input-category/input-category.component';
 
 @Component({
   selector: 'app-modal-add-payment',
@@ -31,6 +32,7 @@ import { RecurringPaymentsService } from '../../../../../core/services/recurring
     FormsModule,
     ReactiveFormsModule,
     TimePickerComponent,
+    InputCategoryComponent,
   ],
   templateUrl: './modal-add-payment.component.html',
   styleUrl: './modal-add-payment.component.css',
@@ -46,49 +48,21 @@ export class ModalAddPaymentComponent {
     public dialogRef: MatDialogRef<ModalAddTransactionComponent>,
     private categorieSrv: CategoriesService,
     private paymentsSrv: RecurringPaymentsService,
-    @Inject(MAT_DIALOG_DATA) public data: { type: String }
+    @Inject(MAT_DIALOG_DATA) public data: { type: string }
   ) {
     this.getCurrentDate();
-    this.categorieSrv.getCategoriesByUserId().subscribe();
-    this.loadCategories();
-    //console.log('Data:', this.data.type);
-  }
-
-  loadCategories(): void {
-    this.categorieSrv.getCategoriesData().subscribe((data) => {
-      if (data !== null) {
-        this.categories = data
-          .filter((category: { type: any }) => category.type === this.data.type)
-          .map((category: any) => {
-            if (category.image && !category.image.startsWith('blob:')) {
-              const blob = this.base64ToBlob(category.image, 'image/jpeg');
-              category.image = URL.createObjectURL(blob) || null;
-            }
-            return category;
-          });
-      }
-    });
-  }
-
-  base64ToBlob(base64: string, mimeType: string): Blob {
-    //console.log('base64:', base64);
-    const byteCharacters = atob(base64);
-    const byteArray = new Uint8Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-    return new Blob([byteArray], { type: mimeType });
   }
 
   onTimeSelected(data: any): void {
     this.time = data;
     this.form().patchValue({ reminderTime: this.time });
     console.log(data);
-    console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
+    //console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
   }
 
-  selectCategory(categoryName: number): void {
-    //console.log('Categoría seleccionada:', categoryName);
+  getCategoryID(categoryID: any): void {
+    this.form().patchValue({ categoryID: categoryID });
+    console.log('Categoria seleccionada:', categoryID);
   }
 
   getCurrentDate(): string {
@@ -139,16 +113,6 @@ export class ModalAddPaymentComponent {
           'Pago recurrente añadido con éxito',
           'success'
         );
-        //console.log(response);
-        // Llamar a getTransactionsByUserId() para cargar datos iniciales
-        // this.transactionSrv.getTransactionsByUserId().subscribe({
-        //   error: (error) => {
-        //     console.error(
-        //       'Error al cargar las transacciones iniciales:',
-        //       error
-        //     );
-        //   },
-        // });
       },
       error: (err) => {
         console.error(err);
