@@ -62,9 +62,27 @@ export class RecurringPaymentsService {
     );
   }
 
-  editRecurringPayment() {}
+  editRecurringPaymentStatus(id: number, status: boolean) {
+    console.log(id, status);
+    return this.httpClient
+      .put<any>(`${this.BASE_URL}/status/${id}`, status)
+      .pipe(
+        tap((response) => {
+          console.log('Respuesta exitosa:', response);
+          // Refresca las transacciones después de editar una
+          this.getPaymentsByUserId().subscribe();
+        })
+      );
+  }
 
-  deleteRecurringPayment() {}
+  deleteRecurringPayment(id: any) {
+    return this.httpClient.delete<any>(`${this.BASE_URL}/delete/${id}`).pipe(
+      tap(() => {
+        // Refresca las transacciones después de eliminar una
+        this.getPaymentsByUserId().subscribe();
+      })
+    );
+  }
 
   clearData(): void {
     this.paymentsSubject.next(null);

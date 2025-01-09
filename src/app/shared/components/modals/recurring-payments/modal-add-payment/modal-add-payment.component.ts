@@ -21,6 +21,7 @@ import { ModalAddTransactionComponent } from '../../transactions/modal-add-trans
 import { TimePickerComponent } from '../../../time/time-picker/time-picker.component';
 import { RecurringPaymentsService } from '../../../../../core/services/recurringPayments/api/recurring-payments.service';
 import { InputCategoryComponent } from '../../../input-category/input-category.component';
+import { DataUserService } from '../../../../../core/services/user/data-user.service';
 
 @Component({
   selector: 'app-modal-add-payment',
@@ -39,6 +40,7 @@ import { InputCategoryComponent } from '../../../input-category/input-category.c
 })
 export class ModalAddPaymentComponent {
   time: string = '';
+  userID: any;
   public currentDate!: string;
   private modalAlertSrv = inject(ModalAlertService);
   categories: any;
@@ -48,9 +50,12 @@ export class ModalAddPaymentComponent {
     public dialogRef: MatDialogRef<ModalAddTransactionComponent>,
     private categorieSrv: CategoriesService,
     private paymentsSrv: RecurringPaymentsService,
+    private userSrv: DataUserService,
     @Inject(MAT_DIALOG_DATA) public data: { type: string }
   ) {
     this.getCurrentDate();
+    this.userSrv.loadUserData().subscribe();
+    this.userID = this.getUserId();
   }
 
   onTimeSelected(data: any): void {
@@ -95,14 +100,13 @@ export class ModalAddPaymentComponent {
       status: new FormControl(true),
       createdAt: new FormControl(this.getCurrentDate()),
       updatedAt: new FormControl(null),
-      user: new FormControl(''),
+      user: new FormControl(0),
       type: new FormControl(''),
     })
   );
 
   //ENVIAR FORMULARIO A LA API
   sendForm() {
-    this.form().patchValue({ user: this.getUserId() }); //asignar el user id al formulario
     this.form().patchValue({ type: this.data.type });
     console.log(this.form().value);
     this.paymentsSrv.createRecurrentPayment(this.form().value).subscribe({
@@ -121,11 +125,12 @@ export class ModalAddPaymentComponent {
     });
   }
 
-  //Optener Id de LocalStorage
   getUserId(): any {
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    const userId = userData.id;
-    return userId;
+    this.userSrv.getUserData().subscribe((data) => {
+      if (data !== null) {
+        this.form().patchValue({ user: data.id });
+      }
+    });
   }
 
   //VALIDACIONES FORMULARIO

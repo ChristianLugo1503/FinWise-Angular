@@ -42,7 +42,12 @@ export default class ExpensesByCategoryComponent implements OnInit {
         this.categoriesData = data.categories;
         this.amountsData = data.amounts;
         this.transactionsIDs = data.transactionsIDs;
-        //console.log('DATOS COMPLETOS', this.categoriesData, this.amountsData, this,this.transactionsIDs)
+        console.log(
+          'DATOS COMPLETOS',
+          this.categoriesData,
+          this.amountsData,
+          this.transactionsIDs
+        );
 
         // Obtener la lista completa de categorías desde el servicio
         this.categoriesSrv
@@ -53,14 +58,20 @@ export default class ExpensesByCategoryComponent implements OnInit {
                 const matchedCategory = allCategories.find(
                   (cat) => cat.name === categoryName
                 );
-                const blob = this.base64ToBlob(
-                  matchedCategory.image,
-                  'image/jpeg'
-                );
+                if (
+                  matchedCategory.image &&
+                  !matchedCategory.image.startsWith('blob:')
+                ) {
+                  const blob = this.base64ToBlob(
+                    matchedCategory.image,
+                    'image/jpeg'
+                  );
+                  matchedCategory.image = URL.createObjectURL(blob) || null;
+                }
                 return {
                   name: categoryName,
                   amount: this.amountsData[index] || 0,
-                  image: matchedCategory ? URL.createObjectURL(blob) : null,
+                  image: matchedCategory.image,
                 };
               }
             );

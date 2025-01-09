@@ -4,6 +4,8 @@ import { RecurringPaymentsService } from '../../core/services/recurringPayments/
 import { CustomCurrencyPipe } from '../../shared/pipes/currency/custom-currency.pipe';
 import { AlertRESService } from '../../core/services/alerts/alert-res.service';
 import { ModalAddPaymentService } from '../../core/services/recurringPayments/modals/modal-add-payment.service';
+import { AlertComponent } from '../../shared/components/modals/alert/alert.component';
+import { ModalAlertService } from '../../core/services/alerts/modal-alert.service';
 
 @Component({
   selector: 'app-recurring-payments',
@@ -18,6 +20,7 @@ export default class RecurringPaymentsComponent {
   constructor(
     private recurrentPaymentsSrv: RecurringPaymentsService,
     private alertRES: AlertRESService,
+    private alert: ModalAlertService,
     private addPaymentModal: ModalAddPaymentService
   ) {
     this.recurrentPaymentsSrv.getPaymentsByUserId().subscribe({
@@ -42,6 +45,7 @@ export default class RecurringPaymentsComponent {
                 'image/jpeg'
               );
               data.image = URL.createObjectURL(blob) || null;
+
               return data;
             });
           console.log(this.payments);
@@ -83,30 +87,52 @@ export default class RecurringPaymentsComponent {
       )
       .subscribe((result: boolean) => {
         if (result) {
-          //console.log('Transacción eliminada');
-          //this.deleteTrans(id);
+          this.recurrentPaymentsSrv.deleteRecurringPayment(id).subscribe({
+            next: () => {
+              this.alert.openCustomDialog(
+                'Éxito',
+                'Pago recurrente eliminado correctamente',
+                'success'
+              );
+            },
+            error: (error) => {
+              console.error('Error al eliminar el pago recurrente:', error);
+              this.alert.openCustomDialog(
+                'Error',
+                'Error al eliminar el pago recurrente',
+                'error'
+              );
+            },
+          });
         }
       });
   }
 
-  deleteTrans(transID: number) {
-    //console.log('id Transaccion:', transID)
-    // this.transactionsSrv.deleteTransaction(transID).subscribe({
-    //   next: () => {
-    //     this.alert.openCustomDialog(
-    //       'Éxito',
-    //       'La transacción ha sido eliminada éxitosamente. :)',
-    //       'success'
-    //     );
-    //   },
-    //   error: (error) => {
-    //     this.alert.openCustomDialog(
-    //       'Error',
-    //       'La transacción no ha sido eliminada :(',
-    //       'error'
-    //     );
-    //   },
-    // });
+  changeStatus(id: number, actualStatus: boolean): void {
+    console.log('Cambiar estado', id, !actualStatus);
+    this.recurrentPaymentsSrv
+      .editRecurringPaymentStatus(id, !actualStatus)
+      .subscribe({
+        next: () => {
+          console.log('Estado actualizado correctamente:');
+          this.alert.openCustomDialog(
+            'Éxito',
+            'Estado del pago recurrente actualizado correctamente',
+            'success'
+          );
+        },
+        error: (error) => {
+          console.error(
+            'Error al actualizar el estado del pago recurrente:',
+            error
+          );
+          this.alert.openCustomDialog(
+            'Error',
+            'Error al actualizar el estado del pago recurrente',
+            'error'
+          );
+        },
+      });
   }
 
   editTrans(transaction: any) {

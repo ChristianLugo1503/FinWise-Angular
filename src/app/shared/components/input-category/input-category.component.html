@@ -18,14 +18,14 @@
           type="radio"
           name="categoryID"
           [value]="category.id"
-          [checked]="category.id.toString() === categoryid"
+          [checked]="category.id === categoryid"
           class="radio-input"
-          (change)="selectCategory(category.id.toString())"
+          (change)="selectCategory(category.id)"
         />
         <img
           [src]="category.image"
           [alt]="category.id"
-          [class.selected]="categoryid === category.id.toString()"
+          [class.selected]="categoryid === category.id"
           class="category-image w-12 h-12 rounded-full mt-2 border-[1px] border-[transparent]"
         />
         <p class="text-xs">{{ category.name }}</p>

@@ -16,27 +16,26 @@ import { CategoriesService } from '../../../core/services/categories/api/categor
   templateUrl: './input-category.component.html',
   styleUrl: './input-category.component.css',
 })
-export class InputCategoryComponent implements OnInit, OnChanges {
+export class InputCategoryComponent implements OnChanges {
   @Input() type!: string; // Recibe el tipo de categoría
   @Input() defaultCategory!: number; // Recibe la categoría por defecto
-  @Output() categoryID = new EventEmitter<string>(); // Envía el ID de la categoría seleccionada
+  @Output() categoryID = new EventEmitter<number>(); // Envía el ID de la categoría seleccionada
 
-  public categoryid!: string; // ID de la categoría seleccionada
+  public categoryid!: number; // ID de la categoría seleccionada
   public categories: any = []; // Lista de categorías disponibles
 
-  constructor(private categorieSrv: CategoriesService) {}
-
-  ngOnInit(): void {
+  constructor(private categorieSrv: CategoriesService) {
+    this.categorieSrv.getCategoriesByUserId().subscribe();
     this.loadCategories();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['defaultCategory'] && this.defaultCategory) {
-      this.selectCategory(this.defaultCategory.toString());
+      this.selectCategory(this.defaultCategory);
     }
   }
 
-  selectCategory(categoryID: string): void {
+  selectCategory(categoryID: number): void {
     this.categoryid = categoryID;
     this.categoryID.emit(categoryID);
     console.log('Categoría seleccionada:', categoryID);
