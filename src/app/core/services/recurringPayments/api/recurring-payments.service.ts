@@ -62,6 +62,15 @@ export class RecurringPaymentsService {
     );
   }
 
+  editRecurrentPayment(id: number, data: any) {
+    return this.httpClient.put<any>(`${this.BASE_URL}/update/${id}`, data).pipe(
+      tap(() => {
+        // Refresca las transacciones después de crear una nueva
+        this.getPaymentsByUserId().subscribe();
+      })
+    );
+  }
+
   editRecurringPaymentStatus(id: number, status: boolean) {
     console.log(id, status);
     return this.httpClient

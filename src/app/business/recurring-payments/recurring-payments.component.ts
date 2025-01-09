@@ -6,6 +6,7 @@ import { AlertRESService } from '../../core/services/alerts/alert-res.service';
 import { ModalAddPaymentService } from '../../core/services/recurringPayments/modals/modal-add-payment.service';
 import { AlertComponent } from '../../shared/components/modals/alert/alert.component';
 import { ModalAlertService } from '../../core/services/alerts/modal-alert.service';
+import { ModalEditPaymentService } from '../../core/services/recurringPayments/modals/modal-edit-payment.service';
 
 @Component({
   selector: 'app-recurring-payments',
@@ -21,7 +22,8 @@ export default class RecurringPaymentsComponent {
     private recurrentPaymentsSrv: RecurringPaymentsService,
     private alertRES: AlertRESService,
     private alert: ModalAlertService,
-    private addPaymentModal: ModalAddPaymentService
+    private addPaymentModal: ModalAddPaymentService,
+    private editPaymentModal: ModalEditPaymentService
   ) {
     this.recurrentPaymentsSrv.getPaymentsByUserId().subscribe({
       next: (data) => console.log(data),
@@ -135,7 +137,7 @@ export default class RecurringPaymentsComponent {
       });
   }
 
-  editTrans(transaction: any) {
-    // this.modalEditTransaction.openModal(transaction);
+  editRecurringPayment(payment: any) {
+    this.editPaymentModal.openModal(payment);
   }
 }

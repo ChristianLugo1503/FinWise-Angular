@@ -11,6 +11,8 @@
     ngxMaterialTimepickerToggleIcon
     readonly
     (click)="toggleIcon.open()"
+    [(ngModel)]="defaultTime"
+    [value]="defaultTime"
   />
   <ngx-material-timepicker-toggle
     [for]="toggleIcon"
