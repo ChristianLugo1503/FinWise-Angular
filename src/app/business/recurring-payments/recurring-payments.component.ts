@@ -4,19 +4,20 @@ import { RecurringPaymentsService } from '../../core/services/recurringPayments/
 import { CustomCurrencyPipe } from '../../shared/pipes/currency/custom-currency.pipe';
 import { AlertRESService } from '../../core/services/alerts/alert-res.service';
 import { ModalAddPaymentService } from '../../core/services/recurringPayments/modals/modal-add-payment.service';
-import { AlertComponent } from '../../shared/components/modals/alert/alert.component';
 import { ModalAlertService } from '../../core/services/alerts/modal-alert.service';
 import { ModalEditPaymentService } from '../../core/services/recurringPayments/modals/modal-edit-payment.service';
+import { FormControl, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-recurring-payments',
-  imports: [CommonModule, CustomCurrencyPipe],
+  imports: [CommonModule, CustomCurrencyPipe, FormsModule],
   templateUrl: './recurring-payments.component.html',
   styleUrl: './recurring-payments.component.css',
 })
 export default class RecurringPaymentsComponent {
   activeTab: string = 'Gasto';
   payments: any[] = [];
+  searchText: string = '';
 
   constructor(
     private recurrentPaymentsSrv: RecurringPaymentsService,
@@ -32,6 +33,15 @@ export default class RecurringPaymentsComponent {
       },
     });
     this.getPaymentsByType();
+  }
+
+  get filteredPayments(): any[] {
+    const lowerSearchText = this.searchText.toLowerCase();
+    return this.payments.filter(
+      (payment) =>
+        payment.name.toLowerCase().includes(lowerSearchText) ||
+        payment.comment.toLowerCase().includes(lowerSearchText)
+    );
   }
 
   getPaymentsByType(): void {
