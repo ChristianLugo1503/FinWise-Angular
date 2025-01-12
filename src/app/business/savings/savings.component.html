@@ -33,7 +33,9 @@
       <div class="h-full overflow-y-auto mt-2 px-4 pt-2">
         <div
           *ngFor="let saving of filteredSavings"
-          class="flex bg-[#111A3D] w-full items-center justify-between p-3 transition duration-400 ease-in-outS rounded-lg mb-3 h-14 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] hover:shadow-[0px_0px_15px_1px_rgba(255,_255,_255,_0.1)] hover:scale-[1.01]"
+          (click)="openSaving(saving)"
+          class="flex bg-[#111A3D] w-full items-center justify-between p-3 transition duration-400 ease-in-outS rounded-lg mb-3 h-14 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] hover:shadow-[0px_0px_15px_1px_rgba(255,_255,_255,_0.1)] hover:scale-[1.01] cursor-pointer"
+          title="Ver ahorro"
         >
           <div class="flex flex-row items-center">
             <img class="w-10 mr-2" src="savings.png" alt="" />
@@ -81,7 +83,10 @@
 
           <div class="flex items-center space-x-3">
             <!-- EDIT -->
-            <button (click)="editSaving(saving)" title="Editar transacción">
+            <button
+              (click)="editSaving(saving); $event.stopPropagation()"
+              title="Editar transacción"
+            >
               <svg
                 class="stroke-current text-white hover:text-[#FF8000] cursor-pointer hover:scale-125 transition duration-400 ease-in-out"
                 width="20"
@@ -106,7 +111,10 @@
             </button>
 
             <!-- DELETE -->
-            <button (click)="deleteBtn(saving.id)" title="Eliminar transacción">
+            <button
+              (click)="deleteBtn(saving.id); $event.stopPropagation()"
+              title="Eliminar transacción"
+            >
               <svg
                 class="stroke-current text-white hover:text-red-600 cursor-pointer hover:scale-125 transition duration-400 ease-in-out"
                 width="20"
@@ -148,7 +156,10 @@
               </svg>
             </button>
 
-            <div class="h-full flex items-center justify-center">
+            <div
+              class="h-full flex items-center justify-center"
+              (click)="$event.stopPropagation()"
+            >
               <label class="inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"

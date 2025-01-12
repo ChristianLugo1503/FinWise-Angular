@@ -1,0 +1,87 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade animate-duration-[600ms]"
+>
+  <div
+    class="border-2 border-white fixed bg-[#0A1232] top-18 rounded-lg max-w-sm w-96 min-w-80 h-[36rem] overflow-auto animate-fade-down animate-duration-[400ms] animate-ease-in-out animate-normal animate-fill-backwards"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- TÍTULO Y BOTÓN PARA CERRAR -->
+    <div
+      class="sticky top-0 bg-[#0A1232] z-10 flex flex-row items-center justify-between py-2 px-4"
+    >
+      <h2 class="text-2xl font-bold text-white">{{ saving?.name }}</h2>
+      <button
+        class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- INFORMACIÓN DETALLADA -->
+    <div class="p-4 text-white space-y-4">
+      <!-- Cantidad objetivo -->
+      <div class="flex justify-between items-center">
+        <p class="font-semibold text-lg">Cantidad Objetivo:</p>
+        <p>{{ this.saving?.goalAmount | customCurrency }}</p>
+      </div>
+
+      <!-- Cantidad ahorrada -->
+      <div class="flex justify-between items-center">
+        <p class="font-semibold text-lg">Cantidad Ahorrada:</p>
+        <p>{{ this.saving?.savedAmount | customCurrency }}</p>
+      </div>
+
+      <!-- Frecuencia -->
+      <div class="flex justify-between items-center">
+        <p class="font-semibold text-lg">Frecuencia:</p>
+        <p>{{ saving?.frequency }}</p>
+      </div>
+
+      <!-- Meta periódica -->
+      <div class="flex justify-between items-center">
+        <p class="font-semibold text-lg">Abono periódico:</p>
+        <p>{{ saving?.periodicTarget | customCurrency }}</p>
+      </div>
+
+      <!-- Comentarios -->
+      <div>
+        <p class="font-semibold text-lg mb-2">Comentario:</p>
+        <p class="text-sm text-slate-400">{{ saving?.comment }}</p>
+      </div>
+
+      <!-- Hora de la meta -->
+      <div class="flex justify-between items-center">
+        <p class="font-semibold text-lg">Hora de notificación:</p>
+        <p>{{ saving?.goalTime }}</p>
+      </div>
+
+      <!-- Estado -->
+      <div class="flex justify-between items-center">
+        <p class="font-semibold text-lg">Estado:</p>
+        <p
+          [class.text-green-500]="saving?.status"
+          [class.text-red-500]="!saving?.status"
+        >
+          {{ saving?.status ? "Activo" : "Inactivo" }}
+        </p>
+      </div>
+
+      <!-- Fecha de creación -->
+      <div>
+        <p class="font-semibold text-lg mb-2">Fecha de Creación:</p>
+        <p class="text-sm text-slate-400">
+          {{ saving?.createdAt | date : "medium" }}
+        </p>
+      </div>
+    </div>
+    <div class="mt-7 w-full flex items-center justify-center">
+      <button
+        (click)="openAbonar(saving)"
+        class="bg-white w-5/6 py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed"
+      >
+        + Abonar
+      </button>
+    </div>
+  </div>
+</div>

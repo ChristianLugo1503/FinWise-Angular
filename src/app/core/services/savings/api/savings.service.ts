@@ -71,8 +71,20 @@ export class SavingsService {
     );
   }
 
+  abonar(id: number, amount: number) {
+    return this.httpClient
+      .put<any>(`${this.BASE_URL}/saved/${id}`, amount)
+      .pipe(
+        tap((response) => {
+          //console.log('Respuesta exitosa:', response);
+          // Refresca las transacciones después de editar una
+          this.getSavingsByUserId().subscribe();
+        })
+      );
+  }
+
   editSavingStatus(id: number, status: boolean) {
-    console.log(id, status);
+    //console.log(id, status);
     return this.httpClient
       .put<any>(`${this.BASE_URL}/status/${id}`, status)
       .pipe(

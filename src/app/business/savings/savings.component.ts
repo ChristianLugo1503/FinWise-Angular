@@ -7,6 +7,8 @@ import { CustomCurrencyPipe } from '../../shared/pipes/currency/custom-currency.
 import { SavingsService } from '../../core/services/savings/api/savings.service';
 import { ModalAddSavingService } from '../../core/services/savings/modals/modal-add-saving.service';
 import { ModalEditSavingService } from '../../core/services/savings/modals/modal-edit-saving.service';
+import { ModalOpenSavingComponent } from '../../shared/components/modals/savings/modal-open-saving/modal-open-saving.component';
+import { ModalOpenSavingService } from '../../core/services/savings/modals/modal-open-saving.service';
 
 @Component({
   selector: 'app-savings',
@@ -23,7 +25,8 @@ export default class SavingsComponent {
     private alertRES: AlertRESService,
     private alert: ModalAlertService,
     private addSavingsModal: ModalAddSavingService,
-    private editSavingModal: ModalEditSavingService
+    private editSavingModal: ModalEditSavingService,
+    private openSavingModal: ModalOpenSavingService
   ) {
     this.savingSrv.getSavingsByUserId().subscribe({
       next: (data) => console.log(data),
@@ -126,6 +129,10 @@ export default class SavingsComponent {
         );
       },
     });
+  }
+
+  openSaving(saving: any) {
+    this.openSavingModal.openModal(saving);
   }
 
   editSaving(saving: any) {
