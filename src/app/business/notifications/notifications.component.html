@@ -3,6 +3,7 @@
     <div class="flex items-center w-full mr-2">
       <div class="relative w-full">
         <input
+          [(ngModel)]="searchText"
           class="w-full bg-[#111A3D] placeholder:text-slate-400 text-white text-sm rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 shadow-sm focus:shadow"
           placeholder="Buscar..."
         />
@@ -26,10 +27,99 @@
       </div>
     </div>
 
-    <div class="h-[92%] bg-[#111A3D] rounded-lg flex flex-col p-5 sm:pt-1 mt-2">
-      <div
-        class="flex-1 h-full animate-fade-right animate-duration-[500ms]"
-      ></div>
+    <div class="h-[92%] bg-[#111A3D] rounded-lg flex flex-col mt-2">
+      <h1 class="text-white font-bold px-4 pt-2">Lista de notificaciones:</h1>
+
+      <div class="h-full overflow-y-auto mt-2 px-4 pt-2">
+        <div
+          *ngFor="let notification of filteredNotifications"
+          (click)="viewNotification(notification)"
+          class="flex bg-[#111A3D] w-full items-center justify-between p-3 transition duration-400 ease-in-outS rounded-lg mb-3 h-14 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] hover:shadow-[0px_0px_15px_1px_rgba(255,_255,_255,_0.1)] hover:scale-[1.01] cursor-pointer"
+        >
+          <!-- Contenido de la notificación -->
+          <div class="flex flex-row items-center w-1/4">
+            <img
+              class="w-10 mr-2"
+              src="{{ getImageType(notification.type) }}"
+              alt=""
+            />
+            <div class="flex flex-col items-start">
+              <p class="text-sm text-white font-bold">
+                {{ getNameType(notification.type) }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col space-x-3 w-2/4">
+            <p
+              class="text-sm text-white font-normal"
+              [innerHTML]="
+                removeLineBreaks(notification.message) | truncate : 13
+              "
+            ></p>
+          </div>
+
+          <div class="flex flex-col items-center space-x-3 w-1/4">
+            <p class="text-sm text-white font-bold">Fecha:</p>
+            <p class="text-sm text-white font-normal">
+              {{ nomalizarFecha(notification.creationDate) }}
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-3 w-1/8">
+            <div class="flex flex-col items-center space-x-3">
+              <p class="text-sm text-white font-normal">
+                {{ notification.readStatus ? "○" : "●" }}
+              </p>
+            </div>
+            <!-- DELETE -->
+            <button
+              (click)="deleteBtn(notification.id); $event.stopPropagation()"
+              title="Eliminar transacción"
+            >
+              <svg
+                class="stroke-current text-white hover:text-red-600 cursor-pointer hover:scale-125 transition duration-400 ease-in-out"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 11V17"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M14 11V17"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M4 7H20"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,0 +1,110 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade animate-duration-[600ms]"
+>
+  <div
+    class="border-2 border-white fixed bg-[#0A1232] top-18 rounded-lg w-96 min-w-[34rem] h-[35rem] overflow-auto animate-fade-down animate-duration-[400ms] animate-ease-in-out animate-normal animate-fill-backwards"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- TITULO Y SALIR -->
+    <div
+      class="sticky top-0 bg-[#0A1232] z-10 flex flex-row items-center justify-between py-2 px-4"
+    >
+      <div class="ml-1 h-full">
+        <h2 class="text-2xl font-bold text-center text-white">Notificación</h2>
+      </div>
+      <button
+        class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- CONTENIDO DEL MENSAJE -->
+    <div class="mt-2 space-y-4 text-white px-5">
+      <!-- Detalles del usuario -->
+      <!-- <div>
+        <h3 class="text-lg font-semibold">Enviado a:</h3>
+        <p class="text-sm">
+          <span class="font-bold">Nombre:</span> {{ notification.user.name }}
+          {{ notification.user.lastname }}
+        </p>
+        <p class="text-sm">
+          <span class="font-bold">Correo:</span> {{ notification.user.email }}
+        </p>
+      </div> -->
+
+      <!-- tipo -->
+      <div class="flex flex-row items-center">
+        <img
+          class="w-10 mr-2"
+          src="{{ getImageType(notification.type) }}"
+          alt="{{ notification.type }}"
+        />
+        <p class="font-bold">
+          {{ getNameType(notification.type) }}
+        </p>
+      </div>
+
+      <!-- Detalles del mensaje -->
+      <div class="">
+        <h3 class="text-lg font-semibold">Mensaje:</h3>
+        <p
+          class="text-base leading-6 text-justify break-words max-h-[15rem] overflow-y-auto pr-2"
+          [innerHTML]="notification.message"
+        ></p>
+      </div>
+      <hr />
+      <!-- Fecha de creación -->
+      <div>
+        <h3 class="text-lg mt-4 font-semibold">Fecha de creación:</h3>
+        <p class="text-sm">
+          {{ nomalizarFecha(notification.creationDate) }}
+        </p>
+      </div>
+
+      <!-- Estado de lectura -->
+      <div>
+        <h3 class="text-lg font-semibold">Estado:</h3>
+        <p class="text-sm">
+          {{ notification.readStatus ? "Leído" : "No leído" }}
+        </p>
+      </div>
+
+      <!-- Requiere respuesta -->
+      <div *ngIf="notification.requiresResponse">
+        <h3 class="text-lg font-semibold">Requiere Respuesta:</h3>
+        <p class="text-sm">
+          {{
+            notification.responseStatus === null
+              ? "Pendiente"
+              : notification.responseStatus
+              ? "Aceptado"
+              : "Rechazado"
+          }}
+        </p>
+      </div>
+
+      <!-- SECCIÓN DE ACEPTAR O CANCELAR -->
+      <div *ngIf="notification.requiresResponse" class="mt-4 space-y-2">
+        <h3 class="text-lg font-semibold text-white">
+          ¿Cómo deseas responder?
+        </h3>
+        <div class="flex justify-around">
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+            (click)="acceptNotification(notification.id)"
+          >
+            Aceptar
+          </button>
+          <button
+            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+            (click)="rejectNotification(notification.id)"
+          >
+            Rechazar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
