@@ -52,14 +52,14 @@ export class NotificationsService {
     return this.NotificationSubject.asObservable();
   }
 
-  // createSaving(data: any) {
-  //   return this.httpClient.post<any>(`${this.BASE_URL}/create`, data).pipe(
-  //     tap(() => {
-  //       // Refresca los ahorros después de crear una nueva
-  //       this.getSavingsByUserId().subscribe();
-  //     })
-  //   );
-  // }
+  createNotification(data: any) {
+    return this.httpClient.post<any>(`${this.BASE_URL}/create`, data).pipe(
+      tap(() => {
+        // Refresca los ahorros después de crear una nueva
+        this.getNotificationsByUserId().subscribe();
+      })
+    );
+  }
 
   // editSavings(id: number, data: any) {
   //   return this.httpClient.put<any>(`${this.BASE_URL}/update/${id}`, data).pipe(

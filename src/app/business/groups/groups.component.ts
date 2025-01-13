@@ -9,6 +9,7 @@ import { ModalEditGroupService } from '../../core/services/groups/modals/modal-e
 import { ModalOpenGroupService } from '../../core/services/groups/modals/modal-open-group.service';
 import { GroupsMembersService } from '../../core/services/groups/api/groups-members.service';
 import { map } from 'rxjs';
+import { ModalNewGroupService } from '../../core/services/groups/modals/modal-new-group.service';
 
 @Component({
   selector: 'app-groups',
@@ -25,7 +26,7 @@ export default class GroupsComponent {
     private groupsSrv: GroupsService,
     private alertRES: AlertRESService,
     private alert: ModalAlertService,
-    // private addGroupModal: ModalAddGroupService,
+    private newGroupModal: ModalNewGroupService,
     private editGroupModal: ModalEditGroupService,
     private openGroupModal: ModalOpenGroupService,
     private groupsMembersSrv: GroupsMembersService
@@ -107,7 +108,7 @@ export default class GroupsComponent {
   }
 
   addGroup(): void {
-    // this.addGroupModal.openModal();
+    this.newGroupModal.openModal();
   }
 
   deleteGroup(id: number): void {

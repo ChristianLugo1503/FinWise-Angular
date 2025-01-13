@@ -45,13 +45,6 @@
           </div>
 
           <div class="flex flex-col items-center space-x-3">
-            <p class="text-sm text-white font-bold">Fecha límite:</p>
-            <p class="text-sm text-white font-normal">
-              {{ group.deadline | date }}
-            </p>
-          </div>
-
-          <div class="flex flex-col items-center space-x-3">
             <p class="text-sm text-white font-bold">Descripción:</p>
             <p class="text-sm text-white font-normal">
               {{ group.description }}
@@ -209,9 +202,9 @@
       <div class="flex-shrink-0 flex justify-end">
         <button
           (click)="addGroup()"
-          class="bg-white w-32 h-7 rounded-lg text-[#0A1232] text-xs font-semibold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center"
+          class="m-5 bg-white w-32 h-7 rounded-lg text-[#0A1232] text-xs font-semibold hover:scale-105 transition duration-400 ease-in-out flex items-center justify-center"
         >
-          + Agregar
+          + Crear Grupo
         </button>
       </div>
     </div>

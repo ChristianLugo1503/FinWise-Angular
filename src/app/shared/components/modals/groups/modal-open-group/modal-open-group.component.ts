@@ -19,6 +19,7 @@ import { GroupsMembersService } from '../../../../../core/services/groups/api/gr
 import { ModalAddMemberGroupService } from '../../../../../core/services/groups/modals/modal-add-member-group.service';
 import { AlertRESService } from '../../../../../core/services/alerts/alert-res.service';
 import { ModalAlertService } from '../../../../../core/services/alerts/modal-alert.service';
+import { ModalNewContributionGroupService } from '../../../../../core/services/groups/modals/modal-new-contribution-group.service';
 
 @Component({
   selector: 'app-modal-open-group',
@@ -46,7 +47,7 @@ export class ModalOpenGroupComponent {
   constructor(
     public dialogRef: MatDialogRef<ModalAddSavingComponent>,
     private groupsSrv: GroupsService,
-    private abonoSrv: ModalAbonoSavingService,
+    private newContributionModal: ModalNewContributionGroupService,
     private userSrv: DataUserService,
     private membersGroup: GroupsMembersService,
     private addMemberModal: ModalAddMemberGroupService,
@@ -101,9 +102,11 @@ export class ModalOpenGroupComponent {
     });
   }
 
-  openAbonar(saving: any) {
-    this.abonoSrv.openModal(saving);
+  openContribuir(group: any) {
+    this.newContributionModal.openModal(group);
   }
+
+  openContributions(group: any) {}
 
   addMember(group: number) {
     this.addMemberModal.openModal(group);

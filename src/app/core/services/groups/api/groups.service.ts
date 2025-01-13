@@ -119,6 +119,18 @@ export class GroupsService {
       );
   }
 
+  abonar(id: number, amount: number) {
+    return this.httpClient
+      .put<any>(`${this.BASE_URL_MY_GROUPS}/saved/${id}`, amount)
+      .pipe(
+        tap((response) => {
+          //console.log('Respuesta exitosa:', response);
+          // Refresca las transacciones después de editar una
+          this.getMYGroupsByUserId().subscribe();
+        })
+      );
+  }
+
   clearData(): void {
     this.MYGroupsSubject.next(null);
     localStorage.removeItem('userData');
