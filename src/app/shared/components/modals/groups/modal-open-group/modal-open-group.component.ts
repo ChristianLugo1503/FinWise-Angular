@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -20,6 +20,9 @@ import { ModalAddMemberGroupService } from '../../../../../core/services/groups/
 import { AlertRESService } from '../../../../../core/services/alerts/alert-res.service';
 import { ModalAlertService } from '../../../../../core/services/alerts/modal-alert.service';
 import { ModalNewContributionGroupService } from '../../../../../core/services/groups/modals/modal-new-contribution-group.service';
+import { ModalViewContributionsService } from '../../../../../core/services/groups/modals/modal-view-contributions.service';
+import { ModalViewUserContributionsService } from '../../../../../core/services/groups/modals/modal-view-user-contributions.service';
+import { GroupsContributionsService } from '../../../../../core/services/groups/api/groups-contributions.service';
 
 @Component({
   selector: 'app-modal-open-group',
@@ -43,6 +46,7 @@ export class ModalOpenGroupComponent {
   userId!: number;
   miembros: any;
   isMenuOpen: boolean = false;
+  contribucionesGroup: any;
 
   constructor(
     public dialogRef: MatDialogRef<ModalAddSavingComponent>,
@@ -53,16 +57,17 @@ export class ModalOpenGroupComponent {
     private addMemberModal: ModalAddMemberGroupService,
     private alertRES: AlertRESService,
     private alert: ModalAlertService,
+    private viewContributionsModal: ModalViewContributionsService,
+    private modalviewUserContribution: ModalViewUserContributionsService,
+    private contributionSrv: GroupsContributionsService,
+    private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public groupId: any
   ) {
     this.userSrv.loadUserData().subscribe({
       next: (data) => (this.userId = data.id),
       error: (err) => console.error(err),
     });
-    this.groupsSrv.getGroupById(this.groupId.id).subscribe({
-      // next: (data) => console.log('data obtenida', data, 'data2', groupId.id),
-      error: (error) => console.error(error),
-    });
+    this.getGroupById();
     this.membersGroup.getListMembersByGroupId(this.groupId.id).subscribe({
       // next: (data) => console.log('Miembros que pertenecen al grupo', data),
       error: (error) => console.error(error),
@@ -74,11 +79,24 @@ export class ModalOpenGroupComponent {
     console.log('group id', this.groupId);
   }
 
+  getGroupById() {
+    this.groupsSrv.getGroupById(this.groupId.id).subscribe({
+      // next: (data) => console.log('data obtenida', data, 'data2', groupId.id),
+      error: (error) => console.error(error),
+    });
+  }
+
   calculatePercent(total: number, cantidad: number): number {
-    return (cantidad * 100) / total;
+    return Math.round(((cantidad * 100) / total) * 100) / 100;
   }
 
   ngOnInit(): void {
+    this.getGroupdataPercent();
+    this.getMembers();
+    this.getContributionsByGroupId();
+  }
+
+  getGroupdataPercent() {
     this.groupsSrv.getGroupData().subscribe({
       next: (data) => {
         this.group = data;
@@ -87,7 +105,29 @@ export class ModalOpenGroupComponent {
       },
       error: (error) => console.error(error),
     });
-    this.getMembers();
+  }
+
+  getContributionsByGroupId(): void {
+    this.contributionSrv.getContributionsByGroupId(this.groupId.id).subscribe({
+      next: (data) => {
+        if (data) {
+          this.contribucionesGroup = data;
+        }
+      },
+      error: (error) =>
+        console.error('Error al cargar las contribuciones:', error),
+    });
+  }
+
+  getTotalContribuido(memberId: number): number {
+    const memberContributions = this.contribucionesGroup.filter(
+      (contribution: any) => contribution.user.id === memberId
+    );
+    const total = memberContributions.reduce(
+      (sum: number, contribution: any) => sum + contribution.amount,
+      0
+    );
+    return total;
   }
 
   getMembers() {
@@ -104,12 +144,25 @@ export class ModalOpenGroupComponent {
 
   openContribuir(group: any) {
     this.newContributionModal.openModal(group);
+
+    this.getGroupById(); // Recarga los datos del grupo
+    this.getGroupdataPercent(); // Recalcula el porcentaje
+    this.getContributionsByGroupId(); // Recarga las contribuciones
+    this.cdr.detectChanges(); // Forzar la detección de cambios
   }
 
-  openContributions(group: any) {}
+  onHistory(group: any, memberId: number) {
+    this.modalviewUserContribution.openModal(group, memberId);
+  }
+
+  openContributions(group: any) {
+    this.viewContributionsModal.openModal(group);
+  }
 
   addMember(group: number) {
     this.addMemberModal.openModal(group);
+    this.getMembers();
+    this.cdr.detectChanges(); // Forzar la detección de cambios
   }
 
   closeModal(): void {
@@ -137,7 +190,9 @@ export class ModalOpenGroupComponent {
                     member.userId.id === memberId
                 );
                 this.deleteGroupMember(filtered[0].id);
-                // console.log('filtrado', filtered[0].id);
+                // Después de eliminar el miembro, forzamos la detección de cambios
+                this.getMembers();
+                this.cdr.detectChanges(); // Forzar la detección de cambios
               }
             },
             error: (err) => console.error(err),
@@ -155,6 +210,8 @@ export class ModalOpenGroupComponent {
           'Integrante eliminado correctamente',
           'success'
         );
+        this.getMembers();
+        this.cdr.detectChanges(); // Forzar la detección de cambios
       },
       error: (error) => {
         console.error('Error al eliminar al integrante', error);
@@ -165,10 +222,5 @@ export class ModalOpenGroupComponent {
         );
       },
     });
-  }
-
-  onDelete() {
-    console.log('Eliminar seleccionado');
-    this.isMenuOpen = false;
   }
 }

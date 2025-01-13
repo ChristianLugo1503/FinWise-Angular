@@ -43,6 +43,7 @@ export class ModalNewContributionGroupComponent {
   public currentDate!: string;
   private modalAlertSrv = inject(ModalAlertService);
   miembros: any;
+  user: any;
 
   constructor(
     public dialogRef: MatDialogRef<ModalAbonoSavingComponent>,
@@ -94,6 +95,8 @@ export class ModalNewContributionGroupComponent {
 
   // ENVIAR FORMULARIO A LA API
   sendForm() {
+    this.getUserId();
+    console.log('userrrrrrrrrrrrrrrrrrrr', this.user);
     const updatedSaving =
       this.form().get('amount')?.value + this.group.savedAmount;
     this.contributionsSrv.createContribution(this.form().value).subscribe({
@@ -110,9 +113,9 @@ export class ModalNewContributionGroupComponent {
           '¡Contribución recibida en el grupo de pago! 💸🎉<br>' +
           '<br>' +
           'Se informa que <b>' +
-          this.group.createdBy.name +
+          this.user.name +
           ' ' +
-          this.group.createdBy.lastname +
+          this.user.lastname +
           '</b> ha realizado una contribución de <b>$' +
           this.form().get('amount')?.value +
           ' MXN</b> al grupo <b>' +
@@ -155,9 +158,9 @@ export class ModalNewContributionGroupComponent {
               '¡Contribución recibida en el grupo de pago! 💸🎉<br>' +
               '<br>' +
               'Se informa que <b>' +
-              miembro.name +
+              this.user.name +
               ' ' +
-              miembro.lastname +
+              this.user.lastname +
               '</b> ha realizado una contribución de <b>$' +
               this.form().get('amount')?.value +
               ' MXN</b> al grupo <b>' +
@@ -210,6 +213,7 @@ export class ModalNewContributionGroupComponent {
     this.userSrv.getUserData().subscribe((data) => {
       if (data !== null) {
         this.form().patchValue({ user: data.id });
+        this.user = data;
       }
     });
   }

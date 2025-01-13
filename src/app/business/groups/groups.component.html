@@ -98,7 +98,7 @@
             </button>
 
             <!-- DELETE -->
-            <button
+            <!-- <button
               (click)="deleteGroup(group.id); $event.stopPropagation()"
               title="Eliminar Grupo"
             >
@@ -141,7 +141,7 @@
                   stroke-linejoin="round"
                 />
               </svg>
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -164,13 +164,6 @@
                 {{ group.name }}
               </p>
             </div>
-          </div>
-
-          <div class="flex flex-col items-center space-x-3">
-            <p class="text-sm text-white font-bold">Fecha límite:</p>
-            <p class="text-sm text-white font-normal">
-              {{ group.deadline | date }}
-            </p>
           </div>
 
           <div class="flex flex-col items-center space-x-3">

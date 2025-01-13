@@ -75,7 +75,9 @@
 
           <div class="flex flex-col items-center space-x-3">
             <p class="text-xs text-white font-bold">Total aportado:</p>
-            <p class="text-xs text-white font-normal">0 | customCurrency</p>
+            <p class="text-xs text-white font-normal">
+              {{ getTotalContribuido(group?.createdBy.id) | customCurrency }}
+            </p>
           </div>
         </div>
 
@@ -97,7 +99,9 @@
 
           <div class="flex flex-col items-center space-x-3">
             <p class="text-xs text-white font-bold">Total aportado:</p>
-            <p class="text-xs text-white font-normal">$12 | customCurrency</p>
+            <p class="text-xs text-white font-normal">
+              {{ getTotalContribuido(members?.id) | customCurrency }}
+            </p>
           </div>
 
           <div class="relative inline-block text-left" title="Opciones">
@@ -135,8 +139,7 @@
                   Expulsar del grupo
                 </a>
                 <a
-                  href="#"
-                  (click)="onDelete()"
+                  (click)="onHistory(group, members.id)"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 >
                   Historial de pagos

@@ -15,43 +15,34 @@ import { DataUserService } from '../../user/data-user.service';
 })
 export class GroupsContributionsService {
   private BASE_URL_CONTRIBUTIONS = 'http://localhost:8080/api/v1/contributions';
-  private MYGroupsSubject: BehaviorSubject<any | null> = new BehaviorSubject<
-    any | null
-  >(null);
+  private contributionsSubject: BehaviorSubject<any | null> =
+    new BehaviorSubject<any | null>(null);
 
   constructor(
     private httpClient: HttpClient,
     private dataUserSrv: DataUserService
   ) {}
 
-  // Cargar mis grupos
-  // getMYGroupsByUserId(): Observable<any> {
-  //   return this.dataUserSrv.getUserData().pipe(
-  //     switchMap((userData) => {
-  //       if (userData && userData.id) {
-  //         return this.httpClient
-  //           .get<any>(`${this.BASE_URL_MY_GROUPS}/user/${userData.id}`)
-  //           .pipe(
-  //             tap((data) => {
-  //               this.MYGroupsSubject.next(data); // Actualizamos el BehaviorSubject con los datos
-  //             }),
-  //             catchError((error) => {
-  //               console.error('Error al cargar los grupos:', error);
-  //               this.MYGroupsSubject.next(null); // En caso de error, reseteamos el BehaviorSubject
-  //               return of(null);
-  //             })
-  //           );
-  //       } else {
-  //         return of(null);
-  //       }
-  //     })
-  //   );
-  // }
+  // Cargar contribuciones por id del grupo
+  getContributionsByGroupId(groupid: number): Observable<any> {
+    return this.httpClient
+      .get<any>(`${this.BASE_URL_CONTRIBUTIONS}/group/${groupid}`)
+      .pipe(
+        tap((data) => {
+          this.contributionsSubject.next(data); // Actualizamos el BehaviorSubject con los datos
+        }),
+        catchError((error) => {
+          console.error('Error al cargar los grupos:', error);
+          this.contributionsSubject.next(null); // En caso de error, reseteamos el BehaviorSubject
+          return of(null);
+        })
+      );
+  }
 
-  // Obtener los grupos observables
-  // getMYGroupsData(): Observable<any | null> {
-  //   return this.MYGroupsSubject.asObservable();
-  // }
+  //Obtener los grupos observables
+  getContributionsSubject(): Observable<any | null> {
+    return this.contributionsSubject.asObservable();
+  }
 
   createContribution(data: any) {
     return this.httpClient
@@ -65,7 +56,7 @@ export class GroupsContributionsService {
   }
 
   clearData(): void {
-    this.MYGroupsSubject.next(null);
+    this.contributionsSubject.next(null);
     localStorage.removeItem('userData');
   }
 }

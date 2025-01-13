@@ -1,0 +1,60 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade animate-duration-[600ms]"
+>
+  <div
+    class="border-2 border-white fixed bg-[#0A1232] top-18 rounded-lg w-[60rem] min-w-80 h-[40rem] overflow-auto animate-fade-down animate-duration-[400ms] animate-ease-in-out animate-normal animate-fill-backwards"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- TITULO Y SALIR -->
+    <div
+      class="sticky top-0 bg-[#0A1232] z-10 flex flex-row items-center justify-between py-2 px-4"
+    >
+      <div class="ml-1 h-full">
+        <h2 class="text-2xl font-bold text-center text-white">
+          Contribuciones
+        </h2>
+      </div>
+      <button
+        class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+    <div
+      class="h-full overflow-y-auto px-3 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] rounded"
+    >
+      <div class="overflow-x-auto">
+        <table
+          class="w-full text-sm text-left text-white border-separate border-spacing-y-2"
+        >
+          <thead class="text-xs text-white uppercase bg-[#111A3D]">
+            <tr>
+              <th scope="col" class="px-6 py-3">Fecha</th>
+              <th scope="col" class="px-6 py-3">Usuario</th>
+              <th scope="col" class="px-6 py-3">Monto</th>
+              <th scope="col" class="px-6 py-3">Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let contribucion of contribuciones"
+              class="bg-[#111A3D] hover:bg-[#1A244E] transition duration-200 ease-in-out"
+            >
+              <td class="px-6 py-4">
+                {{ contribucion?.createdAt | date : "yyyy-MM-dd" }}
+              </td>
+              <td class="px-6 py-4">
+                {{ contribucion?.user?.email }}
+              </td>
+              <td class="px-6 py-4">
+                $ {{ contribucion?.amount | number : "1.2-2" }}
+              </td>
+              <td class="px-6 py-4">{{ contribucion?.note }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

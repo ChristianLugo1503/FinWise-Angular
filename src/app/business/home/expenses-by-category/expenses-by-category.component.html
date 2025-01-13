@@ -1,22 +1,39 @@
-<div class="flex flex-col items-end ">
-    <p class="text-xs text-white font-bold font-dm">Balance General</p>
-    <h1  [ngClass]="{'text-[#f0190a]': balanceGen < 0, 'text-[#088908]': balanceGen >= 0}" class="text-3xl font-bold font-dm">{{this.balanceGen | customCurrency}}</h1>
+<div class="flex flex-col items-end px-4">
+  <p class="text-xs text-white font-bold font-dm">Balance General</p>
+  <h1
+    [ngClass]="{
+      'text-[#f0190a]': balanceGen < 0,
+      'text-[#088908]': balanceGen >= 0
+    }"
+    class="text-3xl font-bold font-dm"
+  >
+    {{ this.balanceGen | customCurrency }}
+  </h1>
 </div>
 
-<h2 class="text-sm text-white font-semibold mb-4 ml-3">Gastos por categorías:</h2>
-<div class="h-[34rem] overflow-y-auto">
-    
-        <div (click)="openCustomModal(category.name, category.image, transactionsIDs)" *ngFor="let category of categoriesWithImagesAndAmounts" class="flex w-full items-center justify-between bg-[#111A3D] p-3 rounded-lg mb-3 cursor-pointer hover:scale-105 transition duration-400 ease-in-out h-16 w-[21rem] ml-3 ">
-            <div class="flex items-center space-x-3 ">
-                <!-- Imagen de la categoría -->
-                <div class="">
-                    <img [src]="category.image"  class="category-image w-12 h-12 rounded-full mt-2 border-[1px] border-[transparent]" />
-                </div>
-                <div>
-                    <p class="text-sm text-white font-semibold">{{ category.name }}</p>
-                </div>
-            </div>
-            <p class="text-sm text-white font-semibold">{{ category.amount | customCurrency }}</p>
-        </div>
-    
+<h2 class="text-sm text-white font-semibold mb-4 ml-3 px-4">
+  Gastos por categorías:
+</h2>
+<div class="h-6/6 overflow-y-auto px-4">
+  <div
+    (click)="openCustomModal(category.name, category.image, transactionsIDs)"
+    *ngFor="let category of categoriesWithImagesAndAmounts"
+    class="flex w-full items-center justify-between bg-[#111A3D] p-3 rounded-lg mb-3 cursor-pointer hover:scale-105 transition duration-400 ease-in-out h-16"
+  >
+    <div class="flex items-center space-x-3">
+      <!-- Imagen de la categoría -->
+      <div class="">
+        <img
+          [src]="category.image"
+          class="category-image w-12 h-12 rounded-full mt-2 border-[1px] border-[transparent]"
+        />
+      </div>
+      <div>
+        <p class="text-sm text-white font-semibold">{{ category.name }}</p>
+      </div>
+    </div>
+    <p class="text-sm text-white font-semibold">
+      {{ category.amount | customCurrency }}
+    </p>
+  </div>
 </div>

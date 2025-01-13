@@ -15,15 +15,10 @@ import { DataUserService } from '../../user/data-user.service';
 })
 export class GroupsMembersService {
   private BASE_URL_MEMBERS = 'http://localhost:8080/api/v1/membersGroup';
-  private membersSubject: BehaviorSubject<any | null> = new BehaviorSubject<
-    any | null
-  >(null);
-  private listMembers: BehaviorSubject<any | null> = new BehaviorSubject<
-    any | null
-  >(null);
-  private allGroupMembers: BehaviorSubject<any | null> = new BehaviorSubject<
-    any | null
-  >(null);
+
+  private membersSubject = new BehaviorSubject<any | null>(null);
+  private listMembers = new BehaviorSubject<any | null>(null);
+  private allGroupMembers = new BehaviorSubject<any | null>(null);
 
   constructor(
     private httpClient: HttpClient,
@@ -39,7 +34,7 @@ export class GroupsMembersService {
             .get<any>(`${this.BASE_URL_MEMBERS}/user/${userData.id}`)
             .pipe(
               tap((data) => {
-                this.membersSubject.next(data); // Actualizamos el BehaviorSubject con los datos
+                this.membersSubject.next(data); // Actualizamos el BehaviorSubject para propagar los datos
               }),
               catchError((error) => {
                 console.error('Error al cargar los grupos:', error);
@@ -55,32 +50,24 @@ export class GroupsMembersService {
   }
 
   getListMembersByGroupId(groupId: number) {
-    return this.dataUserSrv.getUserData().pipe(
-      switchMap((userData) => {
-        if (userData && userData.id) {
-          return this.httpClient
-            .get<any>(`${this.BASE_URL_MEMBERS}/group/${groupId}`)
-            .pipe(
-              tap((data) => {
-                this.listMembers.next(data); // Actualizamos el BehaviorSubject con los datos
-              }),
-              catchError((error) => {
-                console.error('Error al cargar los grupos:', error);
-                this.listMembers.next(null); // En caso de error, reseteamos el BehaviorSubject
-                return of(null);
-              })
-            );
-        } else {
+    return this.httpClient
+      .get<any>(`${this.BASE_URL_MEMBERS}/group/${groupId}`)
+      .pipe(
+        tap((data) => {
+          this.listMembers.next(data); // Actualizamos el BehaviorSubject para propagar los datos
+        }),
+        catchError((error) => {
+          console.error('Error al cargar los grupos:', error);
+          this.listMembers.next(null); // En caso de error, reseteamos el BehaviorSubject
           return of(null);
-        }
-      })
-    );
+        })
+      );
   }
 
   getAllGroupMembers(): Observable<any> {
     return this.httpClient.get<any>(`${this.BASE_URL_MEMBERS}`).pipe(
       tap((data) => {
-        this.allGroupMembers.next(data); // Actualizamos el BehaviorSubject con los datos
+        this.allGroupMembers.next(data); // Actualizamos el BehaviorSubject para propagar los datos
       }),
       catchError((error) => {
         console.error('Error al cargar los grupos:', error);
@@ -113,7 +100,8 @@ export class GroupsMembersService {
       .post<any>(`${this.BASE_URL_MEMBERS}/create`, body)
       .pipe(
         tap(() => {
-          this.getMembersByGroupId().subscribe();
+          this.getMembersByGroupId().subscribe(); // Actualizamos el BehaviorSubject para propagar los datos
+          this.getListMembersByGroupId(groupId).subscribe(); // Actualizamos el BehaviorSubject para propagar los datos
         })
       );
   }
@@ -131,8 +119,8 @@ export class GroupsMembersService {
       )
       .pipe(
         tap(() => {
-          // Refresca los miembros después de editar uno
-          this.getMembersByGroupId().subscribe();
+          this.getMembersByGroupId().subscribe(); // Actualizamos el BehaviorSubject para propagar los datos
+          this.getListMembersByGroupId(groupId).subscribe(); // Actualizamos el BehaviorSubject para propagar los datos
         })
       );
   }
@@ -143,14 +131,16 @@ export class GroupsMembersService {
       .delete<any>(`${this.BASE_URL_MEMBERS}/delete/${groupId}`)
       .pipe(
         tap(() => {
-          // Refresca los miembros después de eliminar uno
-          this.getMembersByGroupId().subscribe();
+          this.getMembersByGroupId().subscribe(); // Actualizamos el BehaviorSubject para propagar los datos
+          this.getListMembersByGroupId(groupId).subscribe(); // Actualizamos el BehaviorSubject para propagar los datos
         })
       );
   }
 
   // Limpiar datos de los miembros
   clearMembersData(): void {
-    this.membersSubject.next(null);
+    this.membersSubject.next(null); // Reseteamos el BehaviorSubject
+    this.listMembers.next(null); // Reseteamos el BehaviorSubject
+    this.allGroupMembers.next(null); // Reseteamos el BehaviorSubject
   }
 }
