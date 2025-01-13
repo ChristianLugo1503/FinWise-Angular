@@ -1,0 +1,181 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade animate-duration-[600ms]"
+>
+  <div
+    class="border-2 border-white fixed bg-[#0A1232] top-18 rounded-lg w-[25rem] min-w-80 h-[36rem] overflow-auto animate-fade-down animate-duration-[400ms] animate-ease-in-out animate-normal animate-fill-backwards"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- TÍTULO Y BOTÓN PARA CERRAR -->
+    <div
+      class="sticky top-0 bg-[#0A1232] z-10 flex flex-row items-center justify-between py-2 px-4"
+    >
+      <h2 class="text-2xl font-bold text-white">Detalles del grupo</h2>
+      <button
+        class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- INFORMACIÓN DETALLADA -->
+    <div class="p-4 text-white space-y-4">
+      <!-- Cantidad objetivo -->
+      <div class="flex items-center">
+        <p class="text-lg"><b>Nombre:</b> {{ group?.name }}</p>
+      </div>
+      <!-- Fecha límite -->
+      <div class="flex justify-between items-center">
+        <p class="">
+          Meta establecida para el
+          <b>{{ group?.deadline }}</b>
+        </p>
+      </div>
+
+      <div class="flex flex-col">
+        <app-semi-circle-chart
+          class=""
+          [mensajeHijo]="this.percent"
+          [color]="this.color"
+        />
+        <div class="flex flex-row justify-center space-x-[8rem] mt-6">
+          <p class="font-bold">{{ group?.goalAmount | customCurrency }}</p>
+          <p class="font-bold">{{ group?.savedAmount | customCurrency }}</p>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div>
+        <p class="font-semibold text-lg mb-2">Descripción:</p>
+        <p class="text-sm text-slate-400">{{ group?.description }}</p>
+      </div>
+
+      <!-- Fecha de creación -->
+      <div>
+        <p class="font-semibold text-lg mb-2">Fecha de Creación:</p>
+        <p class="text-sm text-slate-400">
+          {{ group?.createdAt | date : "medium" }}
+        </p>
+      </div>
+
+      <!-- Integrantes -->
+      <h1 class="text-white font-bold mb-3 pt-2">Integrantes:</h1>
+      <div
+        class="h-[20rem] overflow-y-auto px-3 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] rounded"
+      >
+        <div
+          class="flex bg-[#111A3D] w-full items-center justify-between p-3 transition duration-400 ease-in-outS rounded-lg mb-3 h-14 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] hover:shadow-[0px_0px_15px_1px_rgba(255,_255,_255,_0.1)] hover:scale-[1.01] cursor-pointer"
+          title="Ver Grupo"
+        >
+          <div class="flex flex-row items-center">
+            <img class="w-10 mr-2" src="groups.png" alt="" />
+            <div class="flex flex-col items-start">
+              <p class="text-xs text-white font-bold">
+                {{ group?.createdBy.name }}
+                {{ group?.createdBy.lastname }} (Admin)
+              </p>
+              <p class="text-xs text-white font-normal">
+                {{ group?.createdBy.email }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center space-x-3">
+            <p class="text-xs text-white font-bold">Total aportado:</p>
+            <p class="text-xs text-white font-normal">0 | customCurrency</p>
+          </div>
+        </div>
+
+        <div
+          *ngFor="let members of miembros"
+          class="flex bg-[#111A3D] w-full items-center justify-between p-3 transition duration-400 ease-in-out rounded-lg mb-3 h-14 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] hover:shadow-[0px_0px_15px_1px_rgba(255,_255,_255,_0.1)] hover:scale-[1.01] cursor-pointer"
+        >
+          <div class="flex flex-row items-center">
+            <img class="w-10 mr-2" src="groups.png" alt="" />
+            <div class="flex flex-col items-start">
+              <p class="text-xs text-white font-bold">
+                {{ members?.name }} {{ members?.lastname }}
+              </p>
+              <p class="text-xs text-white font-normal">
+                {{ members?.email }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center space-x-3">
+            <p class="text-xs text-white font-bold">Total aportado:</p>
+            <p class="text-xs text-white font-normal">$12 | customCurrency</p>
+          </div>
+
+          <div class="relative inline-block text-left" title="Opciones">
+            <button
+              class="inline-flex items-center justify-center hover:hover:scale-125 transition duration-400 ease-in-out"
+              (click)="toggleMenu()"
+            >
+              <svg
+                class="w-5 h-5 text-white text-2xl"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6v.01M12 12v.01M12 18v.01"
+                />
+              </svg>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div
+              *ngIf="isMenuOpen"
+              class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
+              <div class="py-1">
+                <a
+                  *ngIf="this.userId == group?.createdBy.id"
+                  (click)="expulsarIntegrante(members?.id)"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                >
+                  Expulsar del grupo
+                </a>
+                <a
+                  href="#"
+                  (click)="onDelete()"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                >
+                  Historial de pagos
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botónes -->
+    <div class="w-full flex items-center justify-between p-3 space-x-3">
+      <button
+        (click)="openAbonar(group)"
+        class="text-xs bg-white w-2/6 py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed"
+      >
+        Ver contribuciones
+      </button>
+      <button
+        *ngIf="this.userId == group?.createdBy.id"
+        (click)="addMember(group)"
+        class="text-xs bg-white w-2/6 py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed"
+      >
+        Agregar integrante
+      </button>
+      <button
+        (click)="openAbonar(group)"
+        class="text-xs bg-white w-2/6 py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed"
+      >
+        Contribuir
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,36 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { DataUserService } from '../../../core/services/user/data-user.service';
-import { FormsModule, NgModel } from '@angular/forms';
-import { NgClass, NgStyle } from '@angular/common';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterOutlet,
-} from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule, NgClass } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionsService } from '../../../core/services/transactions/api/transactions.service';
+import { NotificationsService } from '../../../core/services/notifications/api/notifications.service';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [FormsModule, NgClass], // Sin dependencias externas
+  imports: [FormsModule, NgClass, CommonModule], // Sin dependencias externas
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'], // Corregido: styleUrls
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   selectedFilter: string = '';
   user: any;
+  notification!: boolean;
 
   constructor(
     private authService: AuthService,
     private dataUserService: DataUserService,
-    private transactionsSrv: TransactionsService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private notificationsSrv: NotificationsService,
+    private router: Router
   ) {
-    this.selectedFilter = this.router.url.replace(/\//g, '');
+    this.notificationsSrv.getNotificationsByUserId().subscribe({
+      error: (err) => console.error(err),
+    });
 
+    this.selectedFilter = this.router.url.replace(/\//g, '');
+    this.checkNotifications();
     dataUserService.loadUserData().subscribe({
       next: (response) => {
         //console.log('Datos del usuario cargados:', response);
@@ -41,6 +41,27 @@ export class SidebarComponent {
       },
     });
     //console.log(this.selectedFilter)
+  }
+
+  ngOnInit(): void {
+    setInterval(() => {
+      this.checkNotifications();
+    }, 30000);
+  }
+
+  checkNotifications() {
+    this.notificationsSrv.getNotificationsByUserId().subscribe({
+      error: (err) => console.error(err),
+    });
+    this.notificationsSrv.getNotificationsData().subscribe({
+      next: (data) => {
+        this.notification = data.some(
+          (notification: any) => !notification.readStatus
+        );
+        console.log('¿Hay notificaciones sin leer?', this.notification);
+        console.log(data);
+      },
+    });
   }
 
   selected(selected: string, ruta: string) {

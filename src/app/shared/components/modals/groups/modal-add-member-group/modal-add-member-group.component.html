@@ -1,0 +1,71 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade animate-duration-[600ms]"
+>
+  <div
+    class="border-2 border-white fixed bg-[#0A1232] top-18 rounded-lg max-w-sm w-96 min-w-80 h-[15rem] overflow-auto animate-fade-down animate-duration-[400ms] animate-ease-in-out animate-normal animate-fill-backwards"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- TITULO Y SALIR -->
+    <div
+      class="sticky top-0 bg-[#0A1232] z-10 flex flex-row items-center justify-between py-2 px-4"
+    >
+      <div class="ml-1 h-full">
+        <h2 class="text-2xl font-bold text-center text-white">
+          Agregar Integrante
+        </h2>
+      </div>
+      <button
+        class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- FORMULARIO -->
+    <form [formGroup]="form()" action="#" class="mt-2 overflow-auto pt-2 p-4">
+      <!-- EMAIL -->
+      <div class="input-group relative mb-9">
+        <div class="w-full">
+          <input
+            [ngClass]="{ error: checkEmail() !== '' }"
+            formControlName="email"
+            type="text"
+            name="text"
+            autocomplete="off"
+            class="input"
+          />
+          <label class="user-label">Correo electrónico</label>
+        </div>
+        <div
+          *ngIf="checkEmail()"
+          class="absolute top-5 end-0 text-sm text-red-600"
+          role="alert"
+        >
+          <svg
+            class="flex-shrink-0 inline w-4 h-4 me-3 cursor-pointer"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <title>{{ checkEmail() }}</title>
+            <path
+              d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-7">
+        <button
+          (click)="sendForm()"
+          [disabled]="form().invalid || form().get('savedAmount')?.value === 0"
+          class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x enabled:hover:scale-105 disabled:opacity-75 disabled:cursor-not-allowed"
+        >
+          Aceptar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

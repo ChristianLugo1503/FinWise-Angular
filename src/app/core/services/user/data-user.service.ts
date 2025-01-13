@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap, catchError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataUserService {
   private BASE_URL = 'http://localhost:8080/api/v1/user';
-  private userDataSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
-  private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private userDataSubject: BehaviorSubject<any | null> = new BehaviorSubject<
+    any | null
+  >(null);
+  private isLoadingSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   constructor(private httpClient: HttpClient) {
     // Intentamos cargar los datos del usuario desde localStorage solo si no están cargados en el BehaviorSubject
@@ -47,6 +50,17 @@ export class DataUserService {
         this.saveUserDataToLocalStorage(data); // Guardamos los datos en localStorage
         this.isLoadingSubject.next(false); // Indicamos que la carga ha terminado
       }),
+      catchError((error) => {
+        console.error('Error al cargar datos del usuario:', error);
+        this.isLoadingSubject.next(false); // En caso de error, indicamos que ha terminado
+        throw error; // Rethrow error para que lo maneje quien llama al servicio
+      })
+    );
+  }
+
+  getUserByEmail(email: string) {
+    return this.httpClient.get<any>(`${this.BASE_URL}/${email}`).pipe(
+      tap((data) => {}),
       catchError((error) => {
         console.error('Error al cargar datos del usuario:', error);
         this.isLoadingSubject.next(false); // En caso de error, indicamos que ha terminado

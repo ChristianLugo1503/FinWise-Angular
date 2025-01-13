@@ -87,13 +87,13 @@ export class ModalEditSavingComponent implements OnInit {
 
   ngOnInit(): void {
     this.form().patchValue({ name: this.saving.name });
-
+    this.form().patchValue({ savedAmount: this.saving.savedAmount });
     this.form().patchValue({ goalAmount: this.saving.goalAmount });
     this.form().patchValue({ periodicTarget: this.saving.periodicTarget });
     this.form().patchValue({ goalTime: this.saving.goalTime });
     this.form().patchValue({ comment: this.saving.comment });
     this.form().patchValue({ frequency: this.saving.frequency });
-    console.log('asdadsas', this.saving);
+    // console.log('asdadsas', this.saving);
   }
 
   //FORMULARIO
