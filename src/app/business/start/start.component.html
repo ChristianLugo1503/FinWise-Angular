@@ -1,0 +1,64 @@
+<div class="relative h-full">
+  <div
+    class="fondo relative bg-cover bg-center bg-no-repeat pb-[5rem] p-[2rem] h-3/6"
+    style="background-image: url('fondo.jpg')"
+  >
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+
+    <div class="flex justify-end z-10 relative space-x-3">
+      <button
+        class="cta-button text-white hover:text-[#0a1232] hover:scale-105 hover:bg-white transition-all duration-300 transform p-4 rounded-xl"
+        (click)="goToLogin()"
+      >
+        Iniciar sesión
+      </button>
+      <button
+        class="cta-button text-white hover:text-[#0a1232] hover:scale-105 hover:bg-white transition-all duration-300 transform p-4 rounded-xl"
+        (click)="goToRegister()"
+      >
+        Registrarse
+      </button>
+    </div>
+
+    <div
+      class="container mx-auto text-center relative z-10 md:pt-[1rem] pt-[5rem]"
+    >
+      <h1 class="text-5xl font-bold mb-4 text-white">
+        Bienvenido a <span class="text-white">FinWise</span>
+      </h1>
+      <p class="text-xl mb-6 text-white">
+        Tu sabio compañero en la gestión de tus finanzas personales
+      </p>
+      <p class="max-w-2xl mx-auto text-white text-lg">
+        FinWise te ayuda a llevar un control total de tus finanzas personales,
+        gestionando tus gastos, ingresos, pagos recurrentes, grupos de pago,
+        ahorros y categorías de forma fácil y eficiente. ¡Toma el control de tu
+        dinero hoy!
+      </p>
+    </div>
+  </div>
+
+  <div class="features py-16 bg-[#0A1232] text-white text-center h-3/6">
+    <h2 class="text-3xl font-semibold mb-12">¿Por qué elegir FinWise?</h2>
+    <div class="feature-cards flex justify-center gap-10">
+      <div
+        class="feature-card p-8 bg-[#111A3D] rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+      >
+        <h3 class="text-2xl text-white font-bold mb-4">Gestión de Finanzas</h3>
+        <p>Lleva un control detallado de tus gastos e ingresos.</p>
+      </div>
+      <div
+        class="feature-card p-8 bg-[#111A3D] rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+      >
+        <h3 class="text-2xl text-white font-bold mb-4">Pagos Recurrentes</h3>
+        <p>Crea y gestiona pagos recurrentes fácilmente.</p>
+      </div>
+      <div
+        class="feature-card p-8 bg-[#111A3D] rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+      >
+        <h3 class="text-2xl text-white font-bold mb-4">Ahorros y Metas</h3>
+        <p>Establece metas de ahorro y sigue tu progreso.</p>
+      </div>
+    </div>
+  </div>
+</div>

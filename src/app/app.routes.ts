@@ -1,8 +1,16 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { AuthenticatedGuard } from './core/guards/authenticated.guard';
-
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'start', // Redirige a la ruta 'start' por defecto
+    pathMatch: 'full',
+  },
+  {
+    path: 'start',
+    loadComponent: () => import('./business/start/start.component'),
+  },
   {
     path: '',
     loadComponent: () => import('./shared/components/layout/layout.component'),
@@ -39,11 +47,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./business/notifications/notifications.component'),
         canActivate: [authGuard],
-      },
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full',
       },
     ],
   },
