@@ -68,6 +68,8 @@ export class ModalEditCategoryComponent {
       }
     }
 
+    console.log('yaaaaaaaaaaaaaaaaaaa', this.data.category.image);
+
     this.userSrv.getUserData().subscribe({
       next: (data) => {
         if (data) this.userData = data;
@@ -91,7 +93,6 @@ export class ModalEditCategoryComponent {
       const type = this.categoryForm.value.type;
       const color = this.categoryForm.value.color;
       let image = this.image;
-      2;
 
       // Llamamos a la función para editar la categoría
       this.categoriesSrv

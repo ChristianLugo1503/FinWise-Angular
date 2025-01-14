@@ -29,8 +29,8 @@ export default class CategoriesComponent implements OnInit {
   ngOnInit() {
     this.categoriesSrv.getCategoriesData().subscribe({
       next: (data) => {
+        console.log('daraa', data.image);
         if (data !== null) {
-          //console.log(data);
           this.gastos = data
             .filter((data: any) => data.type === 'Gasto')
             .map((data: any) => {

@@ -249,8 +249,8 @@
       <div class="flex justify-center items-center space-x-2">
         <div>
           <img
-            class="w-10 rounded-full"
-            src="https://w7.pngwing.com/pngs/536/90/png-transparent-black-logo-computer-icons-user-profile-login-avatar-description-heroes-monochrome-black.png"
+            class="w-10 h-10 rounded-full object-cover"
+            [src]="user?.image ? user.image : 'userDefault.png'"
             alt="avatar"
           />
         </div>
@@ -266,7 +266,7 @@
 
       <div class="flex flex-row">
         <a
-          href=""
+          (click)="openSettings()"
           class="group hover:bg-white rounded hover:cursor-pointer transition duration-500 ease-in-out mr-3"
         >
           <svg

@@ -1,0 +1,222 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/10 animate-fade animate-duration-[600ms]"
+>
+  <div
+    class="fixed top-18 bg-[#0A1232] border-2 border-white rounded-lg w-[37rem] min-w-80 h-[42rem] overflow-auto animate-fade-down animate-duration-[400ms] animate-ease-in-out animate-normal animate-fill-backwards"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Título y botón de cerrar -->
+    <div
+      class="sticky top-0 bg-[#0A1232] z-10 flex flex-row items-center justify-between py-2 px-6"
+    >
+      <h2 class="text-2xl font-bold text-center text-white">
+        Configuraciones de Usuario
+      </h2>
+      <button
+        class="transition transform ease-in-out duration-500 text-white text-3xl hover:text-red-600 hover:scale-110 font-bold"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="px-6">
+      <form [formGroup]="userForm" action="#" class="mt-5">
+        <!-- Previsualización de imagen -->
+        <div
+          class="w-full flex flex-col items-center justify-center mb-4 relative"
+        >
+          <div
+            id="image-preview"
+            class="flex h-28 w-28 bg-[#111a3d] border-dashed border-2 border-gray-400 rounded-full items-center justify-center text-center cursor-pointer"
+            [style.backgroundImage]="'url(' + this.userData.image + ')'"
+            style="background-size: cover; background-position: center"
+          >
+            <input
+              id="upload"
+              type="file"
+              formControlName="image"
+              class="hidden"
+              accept="image/*"
+              (change)="onImageChange($event)"
+            />
+            <label id="upload" for="upload" class="cursor-pointer">
+              <!-- SVG positioned absolutely -->
+              <svg
+                class="absolute top-[-4rem] left-[2rem] stroke-current text-white hover:text-[#FF8000] cursor-pointer hover:scale-125 transition duration-400 ease-in-out m-1"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20.1497 7.93997L8.27971 19.81C7.21971 20.88 4.04971 21.3699 3.27971 20.6599C2.50971 19.9499 3.06969 16.78 4.12969 15.71L15.9997 3.84C16.5478 3.31801 17.2783 3.03097 18.0351 3.04019C18.7919 3.04942 19.5151 3.35418 20.0503 3.88938C20.5855 4.42457 20.8903 5.14781 20.8995 5.90463C20.9088 6.66146 20.6217 7.39189 20.0997 7.93997H20.1497Z"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M21 21H12"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </label>
+          </div>
+        </div>
+
+        <!-- Campos del formulario -->
+        <div class="flex flex-row gap-4">
+          <!-- Nombre -->
+          <div class="input-group relative mb-5 w-1/2">
+            <input
+              [ngClass]="{ error: hasRequiredError('name') }"
+              formControlName="name"
+              type="text"
+              autocomplete="off"
+              class="input"
+            />
+            <label class="user-label">Nombre</label>
+            <div
+              *ngIf="hasRequiredError('name')"
+              class="absolute top-5 end-0 text-sm text-red-600"
+              role="alert"
+            >
+              <svg
+                class="inline w-4 h-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <title>Nombre requerido!</title>
+                <path
+                  d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Apellido -->
+          <div class="input-group relative mb-5 w-1/2">
+            <input
+              [ngClass]="{ error: hasRequiredError('lastname') }"
+              formControlName="lastname"
+              type="text"
+              autocomplete="off"
+              class="input"
+            />
+            <label class="user-label">Apellido</label>
+            <div
+              *ngIf="hasRequiredError('lastname')"
+              class="absolute top-5 end-0 text-sm text-red-600"
+              role="alert"
+            >
+              <svg
+                class="inline w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <title>Apellido requerido!</title>
+                <path
+                  d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <strong class="font-bold text-[#f0c032]">⚠️ Advertencia! </strong>
+        <span class="font-bold text-sm"
+          >Su sesión será cerrada tras cambiar su correo o contraseña.</span
+        >
+
+        <!-- Correo -->
+        <div class="input-group relative mb-5 mt-3">
+          <input
+            [ngClass]="{ error: checkEmail() !== '' }"
+            formControlName="email"
+            type="text"
+            autocomplete="off"
+            class="input"
+          />
+          <label class="user-label">Correo electrónico</label>
+          <div
+            *ngIf="checkEmail()"
+            class="absolute top-5 end-0 text-sm text-red-600"
+            role="alert"
+          >
+            <svg class="inline w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <title>{{ checkEmail() }}</title>
+              <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="text-white mb-5 font-bold">Cambiar contraseña:</h3>
+        <!-- Contraseñas -->
+        <div class="input-group relative mb-5">
+          <input
+            [ngClass]="{ error: checkPassword() !== '' }"
+            formControlName="password"
+            type="text"
+            autocomplete="off"
+            class="input"
+          />
+          <label class="user-label">Contraseña actual</label>
+          <div
+            *ngIf="checkPassword()"
+            class="absolute top-5 end-0 text-sm text-red-600"
+            role="alert"
+          >
+            <svg class="inline w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <title>{{ checkPassword() }}</title>
+              <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="input-group relative mb-9">
+          <input
+            [ngClass]="{ error: checkPassword() !== '' }"
+            formControlName="newPassword"
+            type="text"
+            autocomplete="off"
+            class="input"
+          />
+          <label class="user-label">Nueva contraseña</label>
+          <div
+            *ngIf="checkPassword()"
+            class="absolute top-5 end-0 text-sm text-red-600"
+            role="alert"
+          >
+            <svg class="inline w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <title>{{ checkPassword() }}</title>
+              <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Botón Aceptar -->
+        <div class="mt-7">
+          <button
+            (click)="sendForm()"
+            [disabled]="this.userForm.invalid"
+            class="bg-white w-full py-3 rounded text-[#0A1232] shadow-xl hover:shadow-inner focus:outline-none transition duration-300 ease-in-out font-semibold transform hover:-translate-x hover:enabled:scale-105 disabled:opacity-75 disabled:cursor-not-allowed"
+          >
+            Aceptar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

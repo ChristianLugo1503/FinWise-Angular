@@ -61,7 +61,15 @@
           title="Ver Grupo"
         >
           <div class="flex flex-row items-center">
-            <img class="w-10 mr-2" src="groups.png" alt="" />
+            <img
+              class="w-10 h-10 object-cover rounded-full mr-2"
+              [src]="
+                group?.createdBy.image
+                  ? group.createdBy.image
+                  : 'userDefault.png'
+              "
+              alt=""
+            />
             <div class="flex flex-col items-start">
               <p class="text-xs text-white font-bold">
                 {{ group?.createdBy.name }}
@@ -86,7 +94,11 @@
           class="flex bg-[#111A3D] w-full items-center justify-between p-3 transition duration-400 ease-in-out rounded-lg mb-3 h-14 shadow-[0px_0px_15px_-5px_rgba(255,_255,_255,_0.1)] hover:shadow-[0px_0px_15px_1px_rgba(255,_255,_255,_0.1)] hover:scale-[1.01] cursor-pointer"
         >
           <div class="flex flex-row items-center">
-            <img class="w-10 mr-2" src="groups.png" alt="" />
+            <img
+              class="w-10 h-10 object-cover rounded-full mr-2"
+              [src]="members?.image ? members.image : 'userDefault.png'"
+              alt=""
+            />
             <div class="flex flex-col items-start">
               <p class="text-xs text-white font-bold">
                 {{ members?.name }} {{ members?.lastname }}

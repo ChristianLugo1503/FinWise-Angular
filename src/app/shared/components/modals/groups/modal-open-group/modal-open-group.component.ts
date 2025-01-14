@@ -99,12 +99,25 @@ export class ModalOpenGroupComponent {
   getGroupdataPercent() {
     this.groupsSrv.getGroupData().subscribe({
       next: (data) => {
+        if (data.createdBy.image && !data.createdBy.image.startsWith('blob:')) {
+          const blob = this.base64ToBlob(data.createdBy.image, 'image/jpeg');
+          data.createdBy.image = URL.createObjectURL(blob);
+        }
         this.group = data;
+        console.log('informacion del grupo', data);
         this.percent = this.calculatePercent(data.goalAmount, data.savedAmount);
-        //console.log('GRUPPOOOO', this.group);
       },
       error: (error) => console.error(error),
     });
+  }
+
+  base64ToBlob(base64: string, mimeType: string): Blob {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    return new Blob([byteArray], { type: mimeType });
   }
 
   getContributionsByGroupId(): void {
@@ -134,8 +147,18 @@ export class ModalOpenGroupComponent {
     this.membersGroup.getMembersListData().subscribe({
       next: (data) => {
         if (data !== null) {
+          // Recorremos cada miembro de la lista
+          data.forEach((member: any) => {
+            // Verificar si el miembro tiene una imagen en base64
+            if (member.image && !member.image.startsWith('blob:')) {
+              const blob = this.base64ToBlob(member.image, 'image/jpeg');
+              member.image = URL.createObjectURL(blob);
+            }
+          });
+
+          // Asignar los miembros procesados a la variable
           this.miembros = data;
-          console.log('miembros desde get members', data);
+          console.log('Miembros procesados con imágenes:', data);
         }
       },
       error: (error) => console.error(error),
