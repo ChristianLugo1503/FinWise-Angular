@@ -51,7 +51,7 @@ export class ModalEditPaymentComponent implements OnInit {
     private userSrv: DataUserService,
     @Inject(MAT_DIALOG_DATA) public payment: any
   ) {
-    console.log('Pago:', this.payment);
+    //console.log('Pago:', this.payment);
     this.getCurrentDate();
     this.userSrv.loadUserData().subscribe();
     this.getUserId();
@@ -70,13 +70,13 @@ export class ModalEditPaymentComponent implements OnInit {
   onTimeSelected(data: any): void {
     this.time = data;
     this.form().patchValue({ reminderTime: this.time });
-    console.log(data);
-    //console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
+    //console.log(data);
+    ////console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
   }
 
   getCategoryID(categoryID: any): void {
     this.form().patchValue({ categoryID: categoryID });
-    console.log('Categoria seleccionada:', categoryID);
+    //console.log('Categoria seleccionada:', categoryID);
   }
 
   getCurrentDate(): string {
@@ -117,7 +117,7 @@ export class ModalEditPaymentComponent implements OnInit {
   //ENVIAR FORMULARIO A LA API
   sendForm() {
     this.form().patchValue({ type: this.payment.type });
-    console.log(this.form().value);
+    //console.log(this.form().value);
     this.paymentsSrv
       .editRecurrentPayment(this.payment.id, this.form().value)
       .subscribe({

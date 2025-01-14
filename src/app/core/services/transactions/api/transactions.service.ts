@@ -1,38 +1,45 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, switchMap, catchError, of, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  switchMap,
+  catchError,
+  of,
+  tap,
+} from 'rxjs';
 import { DataUserService } from '../../user/data-user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TransactionsService {
   private BASE_URL = 'http://localhost:8080/api/v1/transactions';
-  private transactionsSubject: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
+  private transactionsSubject: BehaviorSubject<any[] | null> =
+    new BehaviorSubject<any[] | null>(null);
 
   constructor(
     private httpClient: HttpClient,
     private dataUserSrv: DataUserService
   ) {}
 
-  // Obtener las transacciones por usuario, solo si los datos del usuario están disponibles
   getTransactionsByUserId(): Observable<any[]> {
     return this.dataUserSrv.getUserData().pipe(
       switchMap((userData) => {
         if (userData && userData.id) {
-          // Si los datos del usuario están listos, obtenemos las transacciones
-          return this.httpClient.get<any[]>(`${this.BASE_URL}/user/${userData.id}`).pipe(
-            tap((data) => {
-              //console.log('Transacciones Cargadas', data);
-              this.transactionsSubject.next(data); // Actualizamos el BehaviorSubject con los datos de transacciones
-            }),
-            catchError((error) => {
-              console.error('Error al cargar transacciones:', error);
-              return of([]); // Devuelve un array vacío en caso de error
-            })
-          );
+          return this.httpClient
+            .get<any[]>(`${this.BASE_URL}/user/${userData.id}`)
+            .pipe(
+              tap((data) => {
+                ////console.log('Transacciones Cargadas', data);
+                this.transactionsSubject.next(data);
+              }),
+              catchError((error) => {
+                console.error('Error al cargar transacciones:', error);
+                return of([]);
+              })
+            );
         } else {
-          // Si no se encuentran los datos del usuario, devolvemos un array vacío
           return of([]);
         }
       })
@@ -56,16 +63,18 @@ export class TransactionsService {
 
   // Actualizar una transacción existente
   updateTransaction(id: number, updatedData: any): Observable<any> {
-    return this.httpClient.put<any>(`${this.BASE_URL}/update/${id}`, updatedData).pipe(
-      tap(() => {
-        // Refresca las transacciones después de la actualización
-        this.getTransactionsByUserId().subscribe();
-      }),
-      catchError((error) => {
-        console.error('Error al actualizar la transacción:', error);
-        return of(null); // Devuelve null en caso de error
-      })
-    );
+    return this.httpClient
+      .put<any>(`${this.BASE_URL}/update/${id}`, updatedData)
+      .pipe(
+        tap(() => {
+          // Refresca las transacciones después de la actualización
+          this.getTransactionsByUserId().subscribe();
+        }),
+        catchError((error) => {
+          console.error('Error al actualizar la transacción:', error);
+          return of(null); // Devuelve null en caso de error
+        })
+      );
   }
 
   deleteTransaction(id: number): Observable<void> {
@@ -75,7 +84,7 @@ export class TransactionsService {
       }),
       catchError((error) => {
         console.error('Error al eliminar la transacción:', error);
-        return of(); 
+        return of();
       })
     );
   }

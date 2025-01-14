@@ -63,13 +63,13 @@ export class ModalAddSavingComponent {
   onTimeSelected(data: any): void {
     this.time = data;
     this.form().patchValue({ goalTime: this.time });
-    console.log(data);
-    //console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
+    //console.log(data);
+    ////console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
   }
 
   getCategoryID(categoryID: any): void {
     this.form().patchValue({ categoryID: categoryID });
-    console.log('Categoria seleccionada:', categoryID);
+    //console.log('Categoria seleccionada:', categoryID);
   }
 
   getCurrentDate(): string {
@@ -114,7 +114,7 @@ export class ModalAddSavingComponent {
 
   //ENVIAR FORMULARIO A LA API
   sendForm() {
-    console.log(this.form().value);
+    //console.log(this.form().value);
     this.savingSrv.createSaving(this.form().value).subscribe({
       next: (response) => {
         this.closeModal();

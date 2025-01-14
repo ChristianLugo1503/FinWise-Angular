@@ -35,13 +35,13 @@ export class SidebarComponent implements OnInit {
     this.checkNotifications();
     dataUserService.loadUserData().subscribe({
       next: (response) => {
-        console.log('Datos del usuario cargados:', response);
+        //console.log('Datos del usuario cargados:', response);
       },
       error: (error) => {
         console.error('Error al cargar datos del usuario:', error);
       },
     });
-    //console.log(this.selectedFilter)
+    ////console.log(this.selectedFilter)
   }
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class SidebarComponent implements OnInit {
           data.image = URL.createObjectURL(blob);
         }
         this.user = data; // Solo un usuario
-        console.log('User data with image converted:', this.user);
+        //console.log('User data with image converted:', this.user);
       },
       error: (error) => console.error('Error fetching user data:', error),
     });
@@ -83,8 +83,8 @@ export class SidebarComponent implements OnInit {
         this.notification = data.some(
           (notification: any) => !notification.readStatus
         );
-        // console.log('¿Hay notificaciones sin leer?', this.notification);
-        // console.log(data);
+        // //console.log('¿Hay notificaciones sin leer?', this.notification);
+        // //console.log(data);
       },
     });
   }

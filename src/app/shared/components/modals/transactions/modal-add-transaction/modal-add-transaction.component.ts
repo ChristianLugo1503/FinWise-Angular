@@ -18,6 +18,7 @@ import { ModalAlertService } from '../../../../../core/services/alerts/modal-ale
 import { CategoriesService } from '../../../../../core/services/categories/api/categories.service';
 import { TransactionsService } from '../../../../../core/services/transactions/api/transactions.service';
 import { InputCategoryComponent } from '../../../input-category/input-category.component';
+import { DataUserService } from '../../../../../core/services/user/data-user.service';
 
 @Component({
   selector: 'app-modal-add-transaction',
@@ -43,14 +44,16 @@ export class ModalAddTransactionComponent {
     public dialogRef: MatDialogRef<ModalAddTransactionComponent>,
     private categorieSrv: CategoriesService,
     private transactionSrv: TransactionsService,
+    private userSrv: DataUserService,
     @Inject(MAT_DIALOG_DATA) public data: { title: string }
   ) {
     this.getCurrentDate();
+    this.getUserId();
   }
 
   getCategoryID(categoryID: any): void {
     this.form().patchValue({ categoryID: categoryID });
-    console.log('Categoria seleccionada:', categoryID);
+    //console.log('Categoria seleccionada:', categoryID);
   }
 
   get filteredCategories() {
@@ -84,7 +87,6 @@ export class ModalAddTransactionComponent {
 
   //ENVIAR FORMULARIO A LA API
   sendForm() {
-    this.form().patchValue({ userId: this.getUserId() }); //asignar el user id al formulario
     this.form().patchValue({ type: this.data.title });
     this.transactionSrv.createTransaction(this.form().value).subscribe({
       next: (response) => {
@@ -94,7 +96,7 @@ export class ModalAddTransactionComponent {
           'Transacción añadida con éxito',
           'success'
         );
-        //console.log(response);
+        ////console.log(response);
         // Llamar a getTransactionsByUserId() para cargar datos iniciales
         this.transactionSrv.getTransactionsByUserId().subscribe({
           error: (error) => {
@@ -112,11 +114,12 @@ export class ModalAddTransactionComponent {
     });
   }
 
-  //Optener Id de LocalStorage
   getUserId(): any {
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    const userId = userData.id;
-    return userId;
+    this.userSrv.getUserData().subscribe((data) => {
+      if (data !== null) {
+        this.form().patchValue({ userId: data.id });
+      }
+    });
   }
 
   //VALIDACIONES FORMULARIO

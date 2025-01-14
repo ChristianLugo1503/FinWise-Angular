@@ -53,7 +53,7 @@ export class ModalUserSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.userData) {
-      console.log('user data', this.userData);
+      //console.log('user data', this.userData);
       this.userForm.patchValue({
         name: this.userData.name,
         lastname: this.userData.lastname,
@@ -79,7 +79,7 @@ export class ModalUserSettingsComponent implements OnInit {
           data.image = URL.createObjectURL(blob);
         }
         this.userData = data; // Solo un usuario
-        console.log('User data with image converted:', this.userData);
+        //console.log('User data with image converted:', this.userData);
       },
       error: (error) => console.error('Error fetching user data:', error),
     });
@@ -141,7 +141,7 @@ export class ModalUserSettingsComponent implements OnInit {
         },
       });
     } else {
-      console.log('Form is invalid');
+      //console.log('Form is invalid');
     }
   }
 

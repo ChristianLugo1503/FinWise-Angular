@@ -76,7 +76,7 @@ export class ModalNewGroupComponent {
   );
 
   sendForm() {
-    console.log('datos a enviar', this.form().value);
+    //console.log('datos a enviar', this.form().value);
     this.groupsSrv.createGroup(this.form().value).subscribe({
       next: () => {
         this.closeModal();

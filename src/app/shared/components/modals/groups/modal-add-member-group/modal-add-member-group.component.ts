@@ -81,7 +81,7 @@ export class ModalAddMemberGroupComponent {
     this.userSrv.getUserByEmail(this.form().get('email')?.value).subscribe({
       next: (data) => {
         if (data !== null) {
-          //console.log('datos del usuario a agg', data);
+          ////console.log('datos del usuario a agg', data);
           this.checkMember(data);
         } else {
           this.modalAlertSrv.openCustomDialog(

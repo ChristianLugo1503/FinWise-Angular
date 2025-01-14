@@ -13,7 +13,7 @@ export class TimePickerComponent implements OnInit {
   @Input() defaultTime!: string;
 
   ngOnInit(): void {
-    console.log('TimePickerComponent: ', this.defaultTime);
+    //console.log('TimePickerComponent: ', this.defaultTime);
     // Si `defaultTime` tiene los segundos (HH:mm:ss), quitar los segundos
     if (this.defaultTime) {
       this.defaultTime = this.defaultTime.substring(0, 5); // Tomar solo HH:mm
@@ -23,7 +23,7 @@ export class TimePickerComponent implements OnInit {
   onTimeSet(time: string): void {
     const timeIn24HourFormat = this.convertTo24HourFormat(time);
     this.selectedTimeChange.emit(timeIn24HourFormat);
-    console.log('holaa', timeIn24HourFormat);
+    //console.log('holaa', timeIn24HourFormat);
   }
 
   // Conversión de formato 12 horas (hh:mm AM/PM) a formato 24 horas (HH:mm)

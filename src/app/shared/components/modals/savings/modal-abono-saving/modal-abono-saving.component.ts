@@ -78,7 +78,7 @@ export class ModalAbonoSavingComponent {
     const updatedSaving =
       this.form().get('savedAmount')?.value + this.saving.savedAmount;
 
-    //console.log('ahorro actualizado', updatedSaving);
+    ////console.log('ahorro actualizado', updatedSaving);
 
     this.savingSrv.abonar(this.saving.id, updatedSaving).subscribe({
       next: () => {

@@ -69,19 +69,19 @@ export class ModalOpenGroupComponent {
     });
     this.getGroupById();
     this.membersGroup.getListMembersByGroupId(this.groupId.id).subscribe({
-      // next: (data) => console.log('Miembros que pertenecen al grupo', data),
+      // next: (data) => //console.log('Miembros que pertenecen al grupo', data),
       error: (error) => console.error(error),
     });
     this.membersGroup.getAllGroupMembers().subscribe({
-      // next: (data) => console.log('Miembros que pertenecen al grupo', data),
+      // next: (data) => //console.log('Miembros que pertenecen al grupo', data),
       error: (error) => console.error(error),
     });
-    console.log('group id', this.groupId);
+    //console.log('group id', this.groupId);
   }
 
   getGroupById() {
     this.groupsSrv.getGroupById(this.groupId.id).subscribe({
-      // next: (data) => console.log('data obtenida', data, 'data2', groupId.id),
+      // next: (data) => //console.log('data obtenida', data, 'data2', groupId.id),
       error: (error) => console.error(error),
     });
   }
@@ -104,7 +104,7 @@ export class ModalOpenGroupComponent {
           data.createdBy.image = URL.createObjectURL(blob);
         }
         this.group = data;
-        console.log('informacion del grupo', data);
+        //console.log('informacion del grupo', data);
         this.percent = this.calculatePercent(data.goalAmount, data.savedAmount);
       },
       error: (error) => console.error(error),
@@ -158,7 +158,7 @@ export class ModalOpenGroupComponent {
 
           // Asignar los miembros procesados a la variable
           this.miembros = data;
-          console.log('Miembros procesados con imágenes:', data);
+          //console.log('Miembros procesados con imágenes:', data);
         }
       },
       error: (error) => console.error(error),

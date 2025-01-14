@@ -1,5 +1,11 @@
-import { Component} from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,10 +23,10 @@ import { ModalAddTransactionComponent } from '../../transactions/modal-add-trans
     MatDialogModule,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './modal-new-category.component.html',
-  styleUrl: './modal-new-category.component.css'
+  styleUrl: './modal-new-category.component.css',
 })
 export class ModalNewCategoryComponent {
   categoryForm: FormGroup;
@@ -31,20 +37,20 @@ export class ModalNewCategoryComponent {
     public dialogRef: MatDialogRef<ModalAddTransactionComponent>,
     public categoriesSrv: CategoriesService,
     public userSrv: DataUserService,
-    public alert: ModalAlertService,
+    public alert: ModalAlertService
   ) {
     this.categoryForm = new FormGroup({
       description: new FormControl('', [Validators.required]),
       type: new FormControl('', [Validators.required]),
-      image: new FormControl('',[Validators.required]),
-      color: new FormControl('#FFFFFF')  
+      image: new FormControl('', [Validators.required]),
+      color: new FormControl('#FFFFFF'),
     });
 
     this.userSrv.getUserData().subscribe({
       next: (data) => {
         if (data) this.userData = data;
       },
-      error: (error) => console.error(error)
+      error: (error) => console.error(error),
     });
   }
 
@@ -61,22 +67,28 @@ export class ModalNewCategoryComponent {
       const type = this.categoryForm.value.type;
       const userId = this.userData.id;
       const image = this.image;
-      const color = this.categoryForm.value.color; 
+      const color = this.categoryForm.value.color;
 
       // Llamamos a la función para crear la categoría
-      this.categoriesSrv.createCategory(name, type, userId, image, color).subscribe({
-        next: (data) => {
-          console.log('Categoría creada:', data);
-          this.categoriesSrv.getCategoriesByUserId().subscribe(); // Actualizamos las categorías
-          this.alert.openCustomDialog('Categoría creada', 'La categoría se ha creado correctamente', 'success');
-          this.dialogRef.close();
-        },
-        error: (error) => {
-          console.error('Error al crear la categoría:', error);
-        }
-      });
+      this.categoriesSrv
+        .createCategory(name, type, userId, image, color)
+        .subscribe({
+          next: (data) => {
+            //console.log('Categoría creada:', data);
+            this.categoriesSrv.getCategoriesByUserId().subscribe(); // Actualizamos las categorías
+            this.alert.openCustomDialog(
+              'Categoría creada',
+              'La categoría se ha creado correctamente',
+              'success'
+            );
+            this.dialogRef.close();
+          },
+          error: (error) => {
+            console.error('Error al crear la categoría:', error);
+          },
+        });
     } else {
-      console.log('Formulario inválido');
+      //console.log('Formulario inválido');
     }
   }
 
@@ -87,7 +99,9 @@ export class ModalNewCategoryComponent {
 
       const reader = new FileReader();
       reader.onload = () => {
-        const previewElement = document.getElementById('image-preview') as HTMLElement;
+        const previewElement = document.getElementById(
+          'image-preview'
+        ) as HTMLElement;
         if (previewElement) {
           previewElement.style.backgroundImage = `url(${reader.result})`;
           previewElement.style.backgroundSize = 'cover';
@@ -102,7 +116,3 @@ export class ModalNewCategoryComponent {
     this.dialogRef.close();
   }
 }
-
-  
-
-

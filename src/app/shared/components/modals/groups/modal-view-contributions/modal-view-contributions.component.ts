@@ -58,7 +58,7 @@ export class ModalViewContributionsComponent {
       next: (data) => {
         if (data !== null) {
           this.contribuciones = data;
-          console.log('Contribuciones del grupo', data);
+          //console.log('Contribuciones del grupo', data);
         }
       },
       error: (error) => console.error(error),

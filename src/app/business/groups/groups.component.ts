@@ -38,7 +38,7 @@ export default class GroupsComponent {
       },
     });
     this.groupsMembersSrv.getMembersByGroupId().subscribe({
-      next: (data) => console.log(data),
+      // next: (data) => console.log(data),
       error: (error) => {
         console.error('Error al cargar los grupos:', error);
       },
@@ -70,7 +70,6 @@ export default class GroupsComponent {
       next: (data) => {
         if (data !== null) {
           this.mygroups = data;
-          console.log('MY Groups', this.groups);
         }
       },
       error: (error) => {
@@ -83,10 +82,8 @@ export default class GroupsComponent {
     this.groupsMembersSrv
       .getMembersData()
       .pipe(
-        // Usamos map para transformar los datos recibidos
         map((members) => {
           if (members !== null) {
-            // Extraemos solo los objetos del grupo (groupId) eliminando duplicados si es necesario
             return members.map((member: any) => member.groupId);
           }
           return [];
@@ -95,7 +92,6 @@ export default class GroupsComponent {
       .subscribe({
         next: (groups) => {
           this.groups = groups;
-          console.log('Groups', this.groups); // Aquí tendrás solo los datos de los grupos
         },
         error: (error) => {
           console.error('Error al cargar los grupos:', error);

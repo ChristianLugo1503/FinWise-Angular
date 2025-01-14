@@ -44,7 +44,7 @@ export class SpecsCategoriesComponent implements OnInit {
             }
             return true;
           });
-          //console.log('Transaction', this.transactions)
+          ////console.log('Transaction', this.transactions)
         }
       });
   }
@@ -65,14 +65,14 @@ export class SpecsCategoriesComponent implements OnInit {
       )
       .subscribe((result: boolean) => {
         if (result) {
-          //console.log('Transacción eliminada');
+          ////console.log('Transacción eliminada');
           this.deleteTrans(id);
         }
       });
   }
 
   deleteTrans(transID: number) {
-    console.log('id Transaccion:', transID);
+    //console.log('id Transaccion:', transID);
     this.transactionsSrv.deleteTransaction(transID).subscribe({
       next: () => {
         this.alert.openCustomDialog(

@@ -42,12 +42,12 @@ export default class ExpensesByCategoryComponent implements OnInit {
         this.categoriesData = data.categories;
         this.amountsData = data.amounts;
         this.transactionsIDs = data.transactionsIDs;
-        console.log(
-          'DATOS COMPLETOS',
-          this.categoriesData,
-          this.amountsData,
-          this.transactionsIDs
-        );
+        // console.log(
+        //   'DATOS COMPLETOS',
+        //   this.categoriesData,
+        //   this.amountsData,
+        //   this.transactionsIDs
+        // );
 
         // Obtener la lista completa de categorías desde el servicio
         this.categoriesSrv

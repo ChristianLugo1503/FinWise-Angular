@@ -30,7 +30,7 @@ export default class NotificationsComponent {
     private alert: ModalAlertService
   ) {
     this.notificationsSrv.getNotificationsByUserId().subscribe({
-      next: (data) => console.log(data),
+      // next: (data) => console.log(data),
       error: (error) => {
         console.error('Error al cargar las notificaciones:', error);
       },

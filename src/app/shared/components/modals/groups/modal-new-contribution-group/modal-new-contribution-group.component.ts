@@ -58,7 +58,7 @@ export class ModalNewContributionGroupComponent {
     this.userSrv.loadUserData().subscribe();
     this.userID = this.getUserId();
 
-    console.log('data contribuciones', this.group);
+    //console.log('data contribuciones', this.group);
   }
 
   getCurrentDate(): string {
@@ -96,7 +96,7 @@ export class ModalNewContributionGroupComponent {
   // ENVIAR FORMULARIO A LA API
   sendForm() {
     this.getUserId();
-    console.log('userrrrrrrrrrrrrrrrrrrr', this.user);
+    //console.log('userrrrrrrrrrrrrrrrrrrr', this.user);
     const updatedSaving =
       this.form().get('amount')?.value + this.group.savedAmount;
     this.contributionsSrv.createContribution(this.form().value).subscribe({
@@ -148,7 +148,7 @@ export class ModalNewContributionGroupComponent {
       next: (data) => {
         if (data !== null) {
           this.miembros = data;
-          console.log('miembros desde get members', data);
+          //console.log('miembros desde get members', data);
 
           // Itera sobre los miembros y crea una notificación para cada uno
           this.miembros.forEach((miembro: any) => {
@@ -193,7 +193,7 @@ export class ModalNewContributionGroupComponent {
   updateSavedAmount() {
     const updatedSaving =
       this.form().get('amount')?.value + this.group.savedAmount;
-    //console.log('ahorro actualizado', updatedSaving);
+    ////console.log('ahorro actualizado', updatedSaving);
     this.groupSrv.abonar(this.group.id, updatedSaving).subscribe({
       next: () => {
         this.closeModal();

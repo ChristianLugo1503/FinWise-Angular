@@ -76,7 +76,7 @@ export class SavingsService {
       .put<any>(`${this.BASE_URL}/saved/${id}`, amount)
       .pipe(
         tap((response) => {
-          //console.log('Respuesta exitosa:', response);
+          ////console.log('Respuesta exitosa:', response);
           // Refresca las transacciones después de editar una
           this.getSavingsByUserId().subscribe();
         })
@@ -84,12 +84,12 @@ export class SavingsService {
   }
 
   editSavingStatus(id: number, status: boolean) {
-    //console.log(id, status);
+    ////console.log(id, status);
     return this.httpClient
       .put<any>(`${this.BASE_URL}/status/${id}`, status)
       .pipe(
         tap((response) => {
-          console.log('Respuesta exitosa:', response);
+          //console.log('Respuesta exitosa:', response);
           // Refresca las transacciones después de editar una
           this.getSavingsByUserId().subscribe();
         })

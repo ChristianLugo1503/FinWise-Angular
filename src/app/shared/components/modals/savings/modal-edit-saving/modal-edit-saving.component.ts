@@ -62,13 +62,13 @@ export class ModalEditSavingComponent implements OnInit {
   onTimeSelected(data: any): void {
     this.time = data;
     this.form().patchValue({ goalTime: this.time });
-    console.log(data);
-    //console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
+    //console.log(data);
+    ////console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
   }
 
   getCategoryID(categoryID: any): void {
     this.form().patchValue({ categoryID: categoryID });
-    console.log('Categoria seleccionada:', categoryID);
+    //console.log('Categoria seleccionada:', categoryID);
   }
 
   getCurrentDate(): string {
@@ -93,7 +93,7 @@ export class ModalEditSavingComponent implements OnInit {
     this.form().patchValue({ goalTime: this.saving.goalTime });
     this.form().patchValue({ comment: this.saving.comment });
     this.form().patchValue({ frequency: this.saving.frequency });
-    // console.log('asdadsas', this.saving);
+    // //console.log('asdadsas', this.saving);
   }
 
   //FORMULARIO
@@ -124,7 +124,7 @@ export class ModalEditSavingComponent implements OnInit {
 
   //ENVIAR FORMULARIO A LA API
   sendForm() {
-    console.log(this.form().value);
+    //console.log(this.form().value);
     this.savingSrv.editSavings(this.saving.id, this.form().value).subscribe({
       next: (response) => {
         this.closeModal();

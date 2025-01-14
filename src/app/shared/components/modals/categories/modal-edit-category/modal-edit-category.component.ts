@@ -68,7 +68,7 @@ export class ModalEditCategoryComponent {
       }
     }
 
-    console.log('yaaaaaaaaaaaaaaaaaaa', this.data.category.image);
+    //console.log('yaaaaaaaaaaaaaaaaaaa', this.data.category.image);
 
     this.userSrv.getUserData().subscribe({
       next: (data) => {
@@ -77,7 +77,7 @@ export class ModalEditCategoryComponent {
       error: (error) => console.error(error),
     });
 
-    console.log('Data:', this.data);
+    //console.log('Data:', this.data);
   }
 
   // Método para comprobar si hay errores en los campos
@@ -99,7 +99,7 @@ export class ModalEditCategoryComponent {
         .editCategory(this.data.category.id, name, type, image, color)
         .subscribe({
           next: (data) => {
-            console.log('Categoría editada:', data);
+            //console.log('Categoría editada:', data);
             this.categoriesSrv.getCategoriesByUserId().subscribe(); // Actualizamos las categorías
             this.alert.openCustomDialog(
               'Categoría actualizada',
@@ -113,7 +113,7 @@ export class ModalEditCategoryComponent {
           },
         });
     } else {
-      console.log('Formulario inválido');
+      //console.log('Formulario inválido');
     }
   }
 

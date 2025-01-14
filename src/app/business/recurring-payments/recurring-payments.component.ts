@@ -27,7 +27,7 @@ export default class RecurringPaymentsComponent {
     private editPaymentModal: ModalEditPaymentService
   ) {
     this.recurrentPaymentsSrv.getPaymentsByUserId().subscribe({
-      next: (data) => console.log(data),
+      // next: (data) => console.log(data),
       error: (error) => {
         console.error('Error al cargar los pagos recurrentes:', error);
       },
@@ -60,7 +60,7 @@ export default class RecurringPaymentsComponent {
 
               return data;
             });
-          console.log(this.payments);
+          // console.log(this.payments);
         }
       },
       error: (error) => {
@@ -121,12 +121,12 @@ export default class RecurringPaymentsComponent {
   }
 
   changeStatus(id: number, actualStatus: boolean): void {
-    console.log('Cambiar estado', id, !actualStatus);
+    // console.log('Cambiar estado', id, !actualStatus);
     this.recurrentPaymentsSrv
       .editRecurringPaymentStatus(id, !actualStatus)
       .subscribe({
         next: () => {
-          console.log('Estado actualizado correctamente:');
+          // console.log('Estado actualizado correctamente:');
           this.alert.openCustomDialog(
             'Éxito',
             'Estado del pago recurrente actualizado correctamente',

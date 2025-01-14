@@ -61,13 +61,13 @@ export class ModalAddPaymentComponent {
   onTimeSelected(data: any): void {
     this.time = data;
     this.form().patchValue({ reminderTime: this.time });
-    console.log(data);
-    //console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
+    //console.log(data);
+    ////console.log('Hora seleccionadaaaaaaaaaaaaaaaaaaaaa:', this.time);
   }
 
   getCategoryID(categoryID: any): void {
     this.form().patchValue({ categoryID: categoryID });
-    console.log('Categoria seleccionada:', categoryID);
+    //console.log('Categoria seleccionada:', categoryID);
   }
 
   getCurrentDate(): string {
@@ -108,7 +108,7 @@ export class ModalAddPaymentComponent {
   //ENVIAR FORMULARIO A LA API
   sendForm() {
     this.form().patchValue({ type: this.data.type });
-    console.log(this.form().value);
+    //console.log(this.form().value);
     this.paymentsSrv.createRecurrentPayment(this.form().value).subscribe({
       next: (response) => {
         this.closeModal();

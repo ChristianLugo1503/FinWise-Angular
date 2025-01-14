@@ -56,14 +56,14 @@ export class ModalEditTransactionComponent {
 
   getCategoryID(categoryID: any): void {
     this.form().patchValue({ categoryID: categoryID });
-    console.log('Categoria seleccionada:', categoryID);
+    //console.log('Categoria seleccionada:', categoryID);
   }
 
   ngOnInit(): void {
     // Asignar valores directamente al formulario en el constructor
     if (this.data && this.data.transaction) {
       this.defaultCategory = this.data.transaction.categoryID.id;
-      //console.log(this.data);
+      ////console.log(this.data);
       this.form().patchValue({
         amount: this.data.transaction.amount,
         categoryID: this.data.transaction.categoryID.id,
@@ -100,7 +100,7 @@ export class ModalEditTransactionComponent {
   sendForm() {
     this.form().patchValue({ userId: this.getUserId() }); // Asignar el userId al formulario
     this.form().patchValue({ type: this.data.transaction.type });
-    console.log(this.form().value);
+    //console.log(this.form().value);
     this.transactionSrv
       .updateTransaction(this.data.transaction.id, this.form().value)
       .subscribe({

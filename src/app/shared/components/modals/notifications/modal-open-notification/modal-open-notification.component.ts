@@ -44,7 +44,7 @@ export class ModalOpenNotificationComponent {
   }
 
   ngOnInit(): void {
-    console.log(this.notification);
+    //console.log(this.notification);
   }
 
   nomalizarFecha(date: any): string {

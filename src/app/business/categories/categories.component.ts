@@ -29,7 +29,6 @@ export default class CategoriesComponent implements OnInit {
   ngOnInit() {
     this.categoriesSrv.getCategoriesData().subscribe({
       next: (data) => {
-        console.log('daraa', data.image);
         if (data !== null) {
           this.gastos = data
             .filter((data: any) => data.type === 'Gasto')
@@ -94,7 +93,6 @@ export default class CategoriesComponent implements OnInit {
                 'La categoría ha sido eliminada éxitosamente. :)',
                 'success'
               );
-              console.log(this.gastos, this.ingresos);
             },
             error: (error) => {
               this.alert.openCustomDialog('Error', error, 'error');

@@ -53,10 +53,10 @@ export class ModalViewUserContributionsComponent implements OnInit {
           this.contribuciones = data.filter(
             (contribution: any) => contribution.user.id === this.memberId
           );
-          console.log(
-            'Contribuciones filtradas del miembro:',
-            this.contribuciones
-          );
+          // //console.log(
+          //   'Contribuciones filtradas del miembro:',
+          //   this.contribuciones
+          // );
         }
       },
       error: (error) =>
