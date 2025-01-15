@@ -5,80 +5,30 @@ import { Observable, tap } from 'rxjs';
 import { DataUserService } from '../user/data-user.service';
 import { CategoriesService } from '../categories/api/categories.service';
 import { TransactionsService } from '../transactions/api/transactions.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private BASE_URL = 'http://localhost:8080/api/v1/auth';
-  
+  // private BASE_URL = 'http://localhost:8080/api/v1/auth';
+  private BASE_URL = `${environment.base_url}/auth`;
   private tokenKey = 'authToken';
   private refreshTokenKey = 'refreshToken';
 
   constructor(
-    private httpClient: HttpClient, 
+    private httpClient: HttpClient,
     private router: Router,
-    private categoriesSrv: CategoriesService, 
+    private categoriesSrv: CategoriesService,
     private dataUserSrv: DataUserService,
     private transactionSrv: TransactionsService
-  ) { }
+  ) {}
 
-  login(data:any): Observable<any>{
+  login(data: any): Observable<any> {
     return this.httpClient.post<any>(`${this.BASE_URL}/login`, data).pipe(
-      tap(response => {
-        if(response.token){
-          //console.log(response.token);
-          this.setToken(response.token);
-          this.setRefreshToken(response.refreshToken)
-          this.autoRefreshToken();
-        }
-      })
-    )
-  }
-
-  register(data: any): Observable<any>{
-    return this.httpClient.post<any>(`${this.BASE_URL}/register`, data).pipe(
-      tap(response => {
-        if(response.token){
-          //console.log(response.token);
-          this.setToken(response.token);
-          this.setRefreshToken(response.refreshToken)
-          this.autoRefreshToken();
-        }
-      })
-    )
-  }
-
-  private setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
-  } 
-
-  public getToken(): string | null {
-    if(typeof window !== 'undefined'){
-      return localStorage.getItem(this.tokenKey);
-    }else {
-      return null;
-    }
-  }
-
-  private setRefreshToken(token: string): void {
-    localStorage.setItem(this.refreshTokenKey, token);
-  } 
-
-  private getRefreshToken(): string | null {
-    if(typeof window !== 'undefined'){
-      return localStorage.getItem(this.refreshTokenKey);
-    }else {
-      return null;
-    }
-  }
-
-  refreshToken(): Observable<any> {
-    const refreshToken = this.getRefreshToken();
-    return this.httpClient.post<any>(`${this.BASE_URL}/refresh`, { refreshToken: refreshToken }).pipe(
-      tap(response => {
+      tap((response) => {
         if (response.token) {
-          //console.log('Refresh token'+response.token);
+          //console.log(response.token);
           this.setToken(response.token);
           this.setRefreshToken(response.refreshToken);
           this.autoRefreshToken();
@@ -87,25 +37,77 @@ export class AuthService {
     );
   }
 
+  register(data: any): Observable<any> {
+    return this.httpClient.post<any>(`${this.BASE_URL}/register`, data).pipe(
+      tap((response) => {
+        if (response.token) {
+          //console.log(response.token);
+          this.setToken(response.token);
+          this.setRefreshToken(response.refreshToken);
+          this.autoRefreshToken();
+        }
+      })
+    );
+  }
+
+  private setToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+  }
+
+  public getToken(): string | null {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(this.tokenKey);
+    } else {
+      return null;
+    }
+  }
+
+  private setRefreshToken(token: string): void {
+    localStorage.setItem(this.refreshTokenKey, token);
+  }
+
+  private getRefreshToken(): string | null {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(this.refreshTokenKey);
+    } else {
+      return null;
+    }
+  }
+
+  refreshToken(): Observable<any> {
+    const refreshToken = this.getRefreshToken();
+    return this.httpClient
+      .post<any>(`${this.BASE_URL}/refresh`, { refreshToken: refreshToken })
+      .pipe(
+        tap((response) => {
+          if (response.token) {
+            //console.log('Refresh token'+response.token);
+            this.setToken(response.token);
+            this.setRefreshToken(response.refreshToken);
+            this.autoRefreshToken();
+          }
+        })
+      );
+  }
+
   autoRefreshToken(): void {
     const token = this.getToken();
-    if(!token){
+    if (!token) {
       return;
     }
     const payload = JSON.parse(atob(token.split('.')[1]));
     const exp = payload.exp * 1000;
 
-    const timeout = exp - Date.now() - (60 * 1000);
+    const timeout = exp - Date.now() - 60 * 1000;
 
     setTimeout(() => {
-      this.refreshToken().subscribe()
+      this.refreshToken().subscribe();
     }, timeout);
-   
   }
 
   isAuthenticated(): boolean {
     const token = this.getToken();
-    if(!token){
+    if (!token) {
       return false;
     }
     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -113,11 +115,11 @@ export class AuthService {
     return Date.now() < exp;
   }
 
-  logout(): void{
+  logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.refreshTokenKey);
-    localStorage.removeItem('Email')
-    localStorage.removeItem('userData')
+    localStorage.removeItem('Email');
+    localStorage.removeItem('userData');
     this.categoriesSrv.clearData();
     this.dataUserSrv.clearUserData();
     this.transactionSrv.clearData();

@@ -9,12 +9,15 @@ import {
   of,
 } from 'rxjs';
 import { DataUserService } from '../../user/data-user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupsContributionsService {
-  private BASE_URL_CONTRIBUTIONS = 'http://localhost:8080/api/v1/contributions';
+  //private BASE_URL_CONTRIBUTIONS = 'http://localhost:8080/api/v1/contributions';
+  private BASE_URL_CONTRIBUTIONS = `${environment.base_url}/contributions`;
+
   private contributionsSubject: BehaviorSubject<any | null> =
     new BehaviorSubject<any | null>(null);
 

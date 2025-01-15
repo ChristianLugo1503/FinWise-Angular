@@ -10,12 +10,14 @@ import {
 } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DataUserService } from '../../user/data-user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
-  private BASE_URL = 'http://localhost:8080/api/v1/categories';
+  //private BASE_URL = 'http://localhost:8080/api/v1/categories';
+  private BASE_URL = `${environment.base_url}/categories`;
   private categoriesSubject: BehaviorSubject<any | null> = new BehaviorSubject<
     any | null
   >(null);

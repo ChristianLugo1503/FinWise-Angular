@@ -9,12 +9,15 @@ import {
   tap,
 } from 'rxjs';
 import { DataUserService } from '../../user/data-user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SavingsService {
-  private BASE_URL = 'http://localhost:8080/api/v1/savings';
+  //private BASE_URL = 'http://localhost:8080/api/v1/savings';
+  private BASE_URL = `${environment.base_url}/savings`;
+
   private SavingsSubject: BehaviorSubject<any | null> = new BehaviorSubject<
     any | null
   >(null);

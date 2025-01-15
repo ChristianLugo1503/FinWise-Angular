@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "config": "node ./config/set-env.config.js",
+    "start": "npm run config -- --environment=dev && ng serve",
+    "start:railway": "node server.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -22,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^19.0.1",
     "@angular/router": "^19.0.1",
     "apexcharts": "^4.1.0",
+    "dotenv": "^16.4.7",
     "flyonui": "^1.1.0",
     "luxon": "^3.5.0",
     "moment": "^2.30.1",
@@ -30,6 +33,7 @@
     "rxjs": "~7.8.0",
     "tailwindcss-animated": "^1.1.2",
     "tslib": "^2.3.0",
+    "yargs": "^17.7.2",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

@@ -9,12 +9,15 @@ import {
   tap,
 } from 'rxjs';
 import { DataUserService } from '../../user/data-user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupsService {
-  private BASE_URL_MY_GROUPS = 'http://localhost:8080/api/v1/groups';
+  //private BASE_URL_MY_GROUPS = 'http://localhost:8080/api/v1/groups';
+  private BASE_URL_MY_GROUPS = `${environment.base_url}/groups`;
+
   private MYGroupsSubject: BehaviorSubject<any | null> = new BehaviorSubject<
     any | null
   >(null);

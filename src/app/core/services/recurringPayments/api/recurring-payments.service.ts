@@ -9,12 +9,15 @@ import {
   tap,
 } from 'rxjs';
 import { DataUserService } from '../../user/data-user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecurringPaymentsService {
-  private BASE_URL = 'http://localhost:8080/api/v1/recurringPayments';
+  //private BASE_URL = 'http://localhost:8080/api/v1/recurringPayments';
+  private BASE_URL = `${environment.base_url}/recurringPayments`;
+
   private paymentsSubject: BehaviorSubject<any | null> = new BehaviorSubject<
     any | null
   >(null);

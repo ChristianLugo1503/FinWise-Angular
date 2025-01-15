@@ -9,12 +9,15 @@ import {
   tap,
 } from 'rxjs';
 import { DataUserService } from '../../user/data-user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationsService {
-  private BASE_URL = 'http://localhost:8080/api/v1/notifications';
+  //private BASE_URL = 'http://localhost:8080/api/v1/notifications';
+  private BASE_URL = `${environment.base_url}/notifications`;
+
   private NotificationSubject: BehaviorSubject<any | null> =
     new BehaviorSubject<any | null>(null);
 
